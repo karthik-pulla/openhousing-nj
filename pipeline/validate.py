@@ -21,6 +21,8 @@ Checks
   sources          every fetcher in the last run succeeded
   coverage         no score covers many fewer towns than the published dataset (error)
   jumps            towns whose score moved more than N points since last publish (warning)
+  summaries        every town has a template summary with no unfilled blanks, printed
+                   missing values or banned wording, and every sentence lists its sources
   freshness        mortgage rate and tax data not stale (warning)
 
 Outputs
@@ -223,6 +225,20 @@ def validate(df: pd.DataFrame, previous: pd.DataFrame | None, cfg: dict) -> Repo
             rep.add("coverage", "error", True, "no published dataset yet; nothing to compare")
             rep.add("jumps", "warning", True, "no published dataset yet; nothing to compare")
 
+    # summaries
+    with guard(rep, "summaries"):
+        from .summaries import OUT as SUMMARIES, check_text
+        if not SUMMARIES.exists():
+            rep.add("summaries", "error", False, "data/build/summaries.json missing")
+        else:
+            towns = json.loads(SUMMARIES.read_text())["towns"]
+            missing = sorted(set(df.geoid) - set(towns))
+            bad = [f"{t['name']}: {p}" for t in towns.values() for p in check_text(t["summary"])]
+            untraced = [t["name"] for t in towns.values() if any(not s["sources"] for s in t["sentences"])]
+            rep.add("summaries", "error", not (missing or bad or untraced),
+                    f"{len(towns)} summaries; {len(missing)} towns without one; {len(bad)} with problems; "
+                    f"{len(untraced)} with a sentence lacking sources", missing + bad + untraced)
+
     # freshness
     with guard(rep, "freshness"):
         stale = []
@@ -253,7 +269,8 @@ def build_manifest(df: pd.DataFrame, report: dict, published_at: str) -> dict:
         "published_at": published_at,
         "rows": len(df),
         "files": {"csv": str(PUBLISHED_CSV.relative_to(DATA.parent)),
-                  "index_meta": "data/published/index_meta.json"},
+                  "index_meta": "data/published/index_meta.json",
+                  "summaries": "data/published/summaries.json"},
         "scores": meta["scores"],
         "context_measures": meta["context_measures"],
         "assumptions": meta["assumptions"],
@@ -274,6 +291,7 @@ def publish(df: pd.DataFrame, report: dict) -> None:
     shutil.copy2(BUILD_CSV, tmp)
     tmp.replace(PUBLISHED_CSV)                       # atomic swap of the live file
     shutil.copy2(BUILD / "index_meta.json", PUBLISHED / "index_meta.json")
+    shutil.copy2(BUILD / "summaries.json", PUBLISHED / "summaries.json")
     write_json(PUBLISHED / "validation.json", report)
     write_json(MANIFEST, build_manifest(df, report, published_at))
     log.info("published %s (%d rows) and %s", PUBLISHED_CSV.name, len(df), MANIFEST.name)

@@ -1,5 +1,5 @@
 {
-  "validated_at": "2026-11-19T19:44:47+00:00",
+  "validated_at": "2026-11-19T20:02:01+00:00",
   "passed": true,
   "errors": 0,
   "warnings": 0,
@@ -69,6 +69,12 @@
       "level": "warning",
       "passed": true,
       "detail": "0 town score(s) moved more than 15 points"
+    },
+    {
+      "check": "summaries",
+      "level": "error",
+      "passed": true,
+      "detail": "564 summaries; 0 towns without one; 0 with problems; 0 with a sentence lacking sources"
     },
     {
       "check": "freshness",

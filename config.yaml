@@ -148,3 +148,14 @@ validation:
   # Source freshness (warnings).
   fred_max_age_days: 21
   property_tax_max_age_years: 2
+
+# --------------------------------------------------------------------------- summaries
+# Rules for the plain-English town summaries (pipeline/summaries.py,
+# wording in templates/summary_templates.yaml).
+summaries:
+  # Top / bottom share of ranked towns that get "one of the most / least affordable".
+  most_affordable_share: 0.10
+  least_affordable_share: 0.10
+  # A town gets the "most restrictive zoning" note when its NZLUD index is at or
+  # above this quantile among the NJ towns NZLUD covers.
+  restrictive_zoning_quantile: 0.75

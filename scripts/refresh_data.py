@@ -8,8 +8,9 @@ Steps
   2. One fetcher per source (pipeline/fetchers/), each writing a tidy table
      keyed on GEOID or county FIPS to data/interim/<name>.csv, plus
      <name>.meta.json with its vintage, source, attribution and coverage.
-  3. Index v2 (pipeline/index.py) -> data/build/openhousing_nj.csv, only if
-     every fetcher succeeded.
+  3. Index v2 (pipeline/index.py) -> data/build/openhousing_nj.csv, and the
+     template summaries (pipeline/summaries.py) -> data/build/summaries.json,
+     only if every fetcher succeeded.
   4. data/interim/run_summary.json: what ran, what failed, coverage.
   5. Validation (pipeline/validate.py). Only if it passes is the dataset copied
      to data/published/ and data/manifest.json written. If it fails, the last
@@ -32,7 +33,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from pipeline import geography, index, validate  # noqa: E402
+from pipeline import geography, index, summaries, validate  # noqa: E402
 from pipeline.common import log, prune_raw, redact, setup_logging, today, write_json  # noqa: E402
 from pipeline.fetchers import FETCHERS  # noqa: E402
 from pipeline.fetchers.base import INTERIM  # noqa: E402
@@ -88,6 +89,8 @@ def main(argv=None) -> int:
             index.BUILD.mkdir(parents=True, exist_ok=True)
             df.to_csv(index.BUILD / "openhousing_nj.csv", index=False)
             write_json(index.BUILD / "index_meta.json", meta)
+            # Phase 6: template summaries regenerate from the fresh build every run.
+            write_json(summaries.OUT, summaries.build(df))
             summary["steps"]["index"] = {"ok": True, "seconds": round(time.time() - t0, 1),
                                          "scores": meta["scores"]}
             for name, sm in meta["scores"].items():

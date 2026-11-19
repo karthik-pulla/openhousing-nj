@@ -223,6 +223,14 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
         df[f"{c}_confidence"] = comp_conf[c]
 
     # ---------------------------------------------------------------- scores
+    def topcoded_low(r, c) -> bool:
+        """Low because the ACS value is top-coded, not because of its margin of error."""
+        if c == "ownership_burden":
+            return r.home_value_source == "ACS median value" and r.acs_median_home_value_topcoded in (True, "True")
+        if c == "rent_burden":
+            return r.median_gross_rent_topcoded in (True, "True")
+        return False
+
     def reasons_for(r, used, score) -> str:
         why = []
         if pd.isna(score):
@@ -231,19 +239,19 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
             lvl = comp_conf.at[r.Index, c]
             if not isinstance(lvl, str):
                 why.append(f"{c.replace('_', ' ')} unavailable")
-            elif lvl == "low":
+            elif lvl == "low" and not topcoded_low(r, c):
                 why.append(f"{c.replace('_', ' ')} has a large ACS margin of error")
         if "ownership_burden" in used:
             if r.home_value_source == "ACS median value":
                 why.append("home value is the ACS 5-year owner-reported median, not a current market price")
-            if r.home_value_source == "ACS median value" and r.acs_median_home_value_topcoded is True:
-                why.append("ACS home value is top-coded (at least $2,000,000)")
+            if r.home_value_source == "ACS median value" and r.acs_median_home_value_topcoded in (True, "True"):
+                why.append("the Census reports only that the home value is at least $2,000,000")
             if isinstance(r.zillow_method, str) and r.zillow_method != "town region":
                 why.append("Zillow value is from community regions inside the town")
-            if r.value_sources_disagree is True:
+            if r.value_sources_disagree in (True, "True"):
                 why.append("Zillow and ACS home values disagree more than usual")
-        if "rent_burden" in used and r.median_gross_rent_topcoded is True:
-            why.append("ACS rent is top-coded (at least $3,500)")
+        if "rent_burden" in used and r.median_gross_rent_topcoded in (True, "True"):
+            why.append("the Census reports only that the median rent is at least $3,500")
         return "; ".join(why)
 
     score_meta = {}

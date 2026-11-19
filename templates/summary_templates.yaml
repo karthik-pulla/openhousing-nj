@@ -1,0 +1,61 @@
+# Sentence templates for the plain-English town summaries.
+#
+# These are fixed sentences with blanks. pipeline/summaries.py decides which
+# sentences apply to a town (the rules are in that file and in config.yaml
+# under `summaries`), fills the {blanks} with numbers from the published
+# dataset, and records which data columns and sources each sentence used.
+# No language model writes or edits these summaries.
+#
+# Editing: change the wording freely, but keep every {blank} that the
+# sentence needs. The build fails if a template uses a blank that doesn't exist
+# or leaves one unfilled.
+
+home_value: "In {name}, {county} County, the typical home is worth about {home_value}."
+home_value_topcoded: "In {name}, {county} County, the typical home is worth at least {home_value}."
+home_value_missing: "There isn't enough data to estimate the typical home value in {name}, {county} County."
+
+ownership_cost: >-
+  Owning it costs about {annual_ownership_cost} a year, including the average property tax bill of
+  {avg_property_tax_bill}, which is {ownership_burden} of the county's median household income.
+ownership_rank: >-
+  That ranks {ownership_rank} of {ownership_n} New Jersey municipalities for ownership affordability,
+  where 1st is the most affordable.
+ownership_most: "{name} is one of the most affordable municipalities in New Jersey in which to own a home."
+ownership_least: "{name} is one of the least affordable municipalities in New Jersey in which to own a home."
+
+rent: >-
+  The median rent is {median_gross_rent} a month, or {rent_burden} of the county's median household
+  income, which ranks {rental_rank} of {rental_n} for rental affordability.
+rent_most: "It is one of the most affordable municipalities in New Jersey in which to rent."
+rent_least: "It is one of the least affordable municipalities in New Jersey in which to rent."
+rent_missing: "There isn't enough rental data to estimate the median rent here."
+
+renters_burdened: "{renters_cost_burdened_share} of renter households here pay 30% or more of their income on rent."
+renters_burdened_unreliable: >-
+  The Census estimate of renter households paying 30% or more of their income on rent here
+  ({renters_cost_burdened_share}) comes from a very small sample and is not reliable.
+
+ami80: >-
+  A four-person household earning HUD's low-income limit for the area ({ami80_income_limit} a year)
+  {ami80_verdict}.
+ami80_own_only: >-
+  A four-person household earning HUD's low-income limit for the area ({ami80_income_limit} a year)
+  {own_verdict} the typical home's ownership costs.
+
+obligation: >-
+  {name}'s Fourth Round prospective need, as calculated by the state in October 2024, is
+  {prospective_need_capped} affordable {units_word} ({prospective_need_per_1000_hh} per 1,000 households),
+  plus a present need of {present_need}.
+obligation_urban_aid: >-
+  {name} is a Qualified Urban Aid municipality, so it has no prospective need obligation under the
+  state's Affordable Housing Law; its present need, as calculated by the state in October 2024, is
+  {present_need} {units_word}.
+
+zoning_restrictive: >-
+  Its zoning is among the most restrictive of the {nzlud_n} New Jersey municipalities in the
+  National Zoning and Land Use Database.
+
+limited_data: "Estimates for this town are based on limited data ({limited_reasons})."
+acs_value_note: >-
+  The home value is the Census Bureau's {acs_vintage} median of what owners estimate their homes are
+  worth, not a current market price.
