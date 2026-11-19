@@ -20,7 +20,7 @@ OpenHousing NJ is a free, open map and dataset that answers that question for ev
 | **Confidence flags** | High / medium / low / insufficient data for every score, with the reason. Small towns are flagged, never dropped. |
 | **Town summaries** | Plain-English paragraphs assembled from fixed templates and the town's numbers. No AI writes them. |
 
-The v2 site has a landing page with a live preview map of all 564 towns, and a map app with layer switching, a "New Jersey" reset button, an NJ snapshot, town profiles with sources and data periods, side-by-side comparison of up to three towns, favorites, CSV downloads, a sortable table view, keyboard navigation and a color-blind-safe palette. It is a static site with no accounts, no tracking and no backend.
+The v2 site has a landing page with a 564-square overview (one square per town, ranked or placed on the map), and a map app with layer switching, a "New Jersey" reset button, an NJ snapshot, town profiles with sources and data periods, side-by-side comparison of up to three towns, favorites, CSV downloads, a sortable table view, keyboard navigation and a color-blind-safe palette. It is a static site with no accounts, no tracking and no backend.
 
 ## Data sources
 

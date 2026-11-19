@@ -473,3 +473,19 @@ td.rk .dot,.cmp .dot{margin-right:6px;vertical-align:-1px}
 .k-line{width:16px;height:2.5px;border-radius:2px;background:#2a78d6;display:inline-block}
 .k-band{width:16px;height:10px;border-radius:3px;background:linear-gradient(180deg,rgba(57,135,229,.28),rgba(57,135,229,.08));display:inline-block}
 [data-theme="dark"] .k-line{background:#5598e7}
+
+/* graph: likely range as dashed edges + faint tint; smooth line */
+.hv-tint{fill:#3987e5;opacity:.06;stroke:none}
+.hv-edge{fill:none;stroke:#3987e5;stroke-width:1.1;stroke-dasharray:3 4;opacity:.55;stroke-linecap:round}
+.hv-sel{fill:#3987e5;opacity:.18}
+[data-theme="dark"] .hv-tint{fill:#5598e7;opacity:.1}
+[data-theme="dark"] .hv-edge,[data-theme="dark"] .hv-sel{stroke:#5598e7;fill:#5598e7}
+[data-theme="dark"] .hv-edge{fill:none}
+.hv-line{stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.k-band{background:none;border-top:1.5px dashed #3987e5;border-bottom:1.5px dashed #3987e5;height:8px;border-radius:0;opacity:.75}
+
+/* summary in short labelled sections */
+.summary{margin-top:0;font-size:13.5px;line-height:1.6;display:grid;gap:10px}
+.sum-sec{padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--text) 3.5%,transparent);border:1px solid var(--glass-border)}
+.sum-sec h4{font-size:12px;font-weight:650;color:var(--text);margin-bottom:3px;letter-spacing:-.005em}
+.sum-sec p{margin:0;color:var(--text)}

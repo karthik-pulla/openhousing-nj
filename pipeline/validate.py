@@ -317,7 +317,7 @@ def publish(df: pd.DataFrame, report: dict) -> None:
     full = json.loads((BUILD / "summaries.json").read_text())
     web = {"generated": full["generated"], "sources": full["sources"], "blanks": full.get("blanks", {}),
            "towns": {g: {"summary": t["summary"],
-                         "sentences": [[s["text"], s["sources"], s.get("segments", [s["text"]])] for s in t["sentences"]]}
+                         "sentences": [[s["text"], s["sources"], s.get("segments", [s["text"]]), s["id"]] for s in t["sentences"]]}
                      for g, t in full["towns"].items()}}
     (PUBLISHED / "summaries.web.json").write_text(json.dumps(web, separators=(",", ":")) + "\n")
     # Home value history (ACS 5-year releases) for the profile graph, plus a CSV for researchers.

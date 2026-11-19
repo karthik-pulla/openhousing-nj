@@ -1,6 +1,6 @@
 {
   "dataset": "OpenHousing NJ v2",
-  "published_at": "2026-11-19T21:34:23+00:00",
+  "published_at": "2026-11-19T21:57:37+00:00",
   "rows": 564,
   "files": {
     "csv": "data/published/openhousing_nj.csv",
@@ -232,7 +232,7 @@
     }
   ],
   "validation": {
-    "validated_at": "2026-11-19T21:34:23+00:00",
+    "validated_at": "2026-11-19T21:57:37+00:00",
     "passed": true,
     "errors": 0,
     "warnings": 0,

@@ -553,7 +553,7 @@
         a.down_payment_pct + "% down, " + a.loan_term_years + "-year fixed at " + num(a.mortgage_rate_pct, 2) + "%. Excludes " + (a.excluded_costs || []).join(", ") + ".", "How scores work") + "</p>";
     html += '<section class="chart-sec"><h3>Home value <span id="hv-range"></span> ' + info("Census ACS 5-year median value of owner-occupied homes (owners' own estimates). Each point pools five years and overlaps the next, in dollars of that period's final year, not adjusted to today. The shaded band is the survey's margin of error (90% confidence): the range the true value very likely falls in.", "About this graph") +
       '</h3><div id="hv-chart" class="hv"></div></section>';
-    html += '<p class="summary" id="p-summary">' + (D.summaries ? "" : "Loading summary…") + "</p>";
+    html += '<h3>In plain English</h3><div class="summary" id="p-summary">' + (D.summaries ? "" : "Loading summary…") + "</div>";
     SECTIONS.forEach(function (sec) {
       html += "<h3>" + esc(sec.title) + '</h3><dl class="kv">';
       sec.rows.forEach(function (row) {
@@ -571,26 +571,66 @@
     repaint(); markListSelection(); writeHash();
   }
 
+  // Summary sentence template id -> section heading
+  var SUMMARY_GROUP = {
+    home_value: "Owning", home_value_topcoded: "Owning", home_value_missing: "Owning", ownership_cost: "Owning",
+    ownership_rank: "Owning", ownership_most: "Owning", ownership_least: "Owning",
+    rent: "Renting", rent_most: "Renting", rent_least: "Renting", rent_missing: "Renting",
+    renters_burdened: "Renting", renters_burdened_unreliable: "Renting",
+    ami80: "A moderate-income family", ami80_own_only: "A moderate-income family",
+    obligation: "Obligations & zoning", obligation_urban_aid: "Obligations & zoning", zoning_restrictive: "Obligations & zoning",
+    limited_data: "Notes", acs_value_note: "Notes"
+  };
+  var SUMMARY_ORDER = ["Owning", "Renting", "A moderate-income family", "Obligations & zoning", "Notes"];
   function fillSummary(r) {
     var go = function () {
       var t = D.summaries.towns[r.geoid], el = $("p-summary");
       if (!el || S.selected !== r.geoid) return;
       if (!t) { el.textContent = "No summary available."; return; }
-      // Each statistic is underlined and colored; hover or focus shows its source and data period.
-      el.innerHTML = t.sentences.map(function (s) {
-        var segs = s[2] || [s[0]];
-        return segs.map(function (g) {
-          if (typeof g === "string") return esc(g);
-          return '<span class="stat" tabindex="0" data-stat="' + esc(g.f) + '" data-src="' + esc(g.s.join(",")) + '">' + esc(g.t) + "</span>";
-        }).join("");
-      }).join(" ");
+      // Sentences are grouped into short labelled sections. Each statistic is
+      // underlined and colored; hover or focus shows its source and data period.
+      var groups = [], byName = {};
+      t.sentences.forEach(function (s) {
+        var g = SUMMARY_GROUP[s[3]] || "Notes";
+        if (!byName[g]) { byName[g] = []; groups.push(g); }
+        byName[g].push((s[2] || [s[0]]).map(function (seg) {
+          if (typeof seg === "string") return esc(seg);
+          return '<span class="stat" tabindex="0" data-stat="' + esc(seg.f) + '" data-src="' + esc(seg.s.join(",")) + '">' + esc(seg.t) + "</span>";
+        }).join(""));
+      });
+      groups.sort(function (a, b) { return SUMMARY_ORDER.indexOf(a) - SUMMARY_ORDER.indexOf(b); });
+      el.innerHTML = groups.map(function (g) {
+        return '<div class="sum-sec"><h4>' + esc(g) + "</h4><p>" + byName[g].join(" ") + "</p></div>";
+      }).join("");
     };
     if (D.summaries) return go();
     getJSON(PATHS.summaries).then(function (s) { D.summaries = s; go(); })
       .catch(function () { var el = $("p-summary"); if (el) el.textContent = "The summary couldn't be loaded."; });
   }
 
-  // Home value graph: thin line, endpoints labelled, crosshair + readout on hover/keyboard.
+  // Smooth curve through points (monotone cubic: no overshoot, so it never
+  // invents a peak or dip that isn't in the data).
+  function smoothPath(P, move) {
+    var n = P.length; if (n < 2) return "";
+    var dx = [], dy = [], m = [], t = [];
+    for (var i = 0; i < n - 1; i++) { dx[i] = P[i + 1][0] - P[i][0]; dy[i] = P[i + 1][1] - P[i][1]; m[i] = dy[i] / dx[i]; }
+    t[0] = m[0]; t[n - 1] = m[n - 2];
+    for (i = 1; i < n - 1; i++) t[i] = (m[i - 1] * m[i] <= 0) ? 0 : (m[i - 1] + m[i]) / 2;
+    for (i = 0; i < n - 1; i++) {
+      if (m[i] === 0) { t[i] = t[i + 1] = 0; continue; }
+      var a = t[i] / m[i], b = t[i + 1] / m[i], h = a * a + b * b;
+      if (h > 9) { var k = 3 / Math.sqrt(h); t[i] = k * a * m[i]; t[i + 1] = k * b * m[i]; }
+    }
+    var d = (move === false ? "L" : "M") + P[0][0].toFixed(1) + " " + P[0][1].toFixed(1);
+    for (i = 0; i < n - 1; i++) {
+      var c = dx[i] / 3;
+      d += "C" + (P[i][0] + c).toFixed(1) + " " + (P[i][1] + c * t[i]).toFixed(1) + " " + (P[i + 1][0] - c).toFixed(1) + " " +
+           (P[i + 1][1] - c * t[i + 1]).toFixed(1) + " " + P[i + 1][0].toFixed(1) + " " + P[i + 1][1].toFixed(1);
+    }
+    return d;
+  }
+
+  // Home value graph: smooth line, endpoints labelled, crosshair + readout on hover/keyboard.
   function fillHistory(r) {
     var go = function () {
       var el = $("hv-chart"); if (!el || S.selected !== r.geoid) return;
@@ -604,15 +644,19 @@
       var x0 = pts[0].y, x1 = pts[pts.length - 1].y;
       var X = function (y) { return pl + (y - x0) / (x1 - x0) * (W - pl - pr); };
       var Y = function (v) { return pt + (1 - (v - lo) / ((hi - lo) || 1)) * (Ht - pt - pb); };
-      var line = pts.map(function (p, i) { return (i ? "L" : "M") + X(p.y).toFixed(1) + " " + Y(p.v).toFixed(1); }).join("");
-      // Likely range: each year's estimate ± its 90% margin of error.
-      var band = pts.map(function (p, i) { return (i ? "L" : "M") + X(p.y).toFixed(1) + " " + Y(p.v + (p.m || 0)).toFixed(1); }).join("") +
-        pts.slice().reverse().map(function (p) { return "L" + X(p.y).toFixed(1) + " " + Y(p.v - (p.m || 0)).toFixed(1); }).join("") + "Z";
+      var line = smoothPath(pts.map(function (p) { return [X(p.y), Y(p.v)]; }));
+      // Likely range (estimate ± 90% margin of error): dashed edges with a faint
+      // tint between them, instead of a solid filled band.
+      var upP = pts.map(function (p) { return [X(p.y), Y(p.v + (p.m || 0))]; });
+      var loP = pts.map(function (p) { return [X(p.y), Y(Math.max(0, p.v - (p.m || 0)))]; });
+      var upper = smoothPath(upP), lower = smoothPath(loP);
+      var area = upper + smoothPath(loP.slice().reverse(), false) + "Z";
       var first = pts[0], last = pts[pts.length - 1];
       el.innerHTML = '<svg viewBox="0 0 ' + W + " " + Ht + '" role="img" aria-label="Median home value from ' + (first.y - 4) + "–" + first.y + " (" + money(first.v) + ") to " +
         (last.y - 4) + "–" + last.y + " (" + money(last.v) + ')">' +
-        '<defs><linearGradient id="hvg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="hv-g1"/><stop offset="1" class="hv-g2"/></linearGradient></defs>' +
-        '<path class="hv-band" d="' + band + '" fill="url(#hvg)"/><path class="hv-line" d="' + line + '"/>' +
+        '<path class="hv-tint" d="' + area + '"/><path class="hv-edge" d="' + upper + '"/><path class="hv-edge" d="' + lower + '"/>' +
+        '<rect class="hv-sel" rx="5" width="10" x="0" y="0" height="0" visibility="hidden"/>' +
+        '<path class="hv-line" d="' + line + '"/>' +
         '<circle class="hv-end" cx="' + X(last.y) + '" cy="' + Y(last.v) + '" r="3.5"/>' +
         '<text class="hv-lbl" x="' + X(first.y) + '" y="12">' + money(first.v) + '</text>' +
         '<text class="hv-lbl" x="' + X(last.y) + '" y="12" text-anchor="end">' + money(last.v) + "</text>" +
@@ -621,16 +665,19 @@
         '<line class="hv-x" y1="' + pt + '" y2="' + (Ht - pb) + '" x1="0" x2="0" visibility="hidden"/><circle class="hv-dot" r="4" cx="0" cy="0" visibility="hidden"/></svg>' +
         '<div class="hv-read" aria-live="polite"></div>' +
         '<div class="hv-key"><span><i class="k-line"></i>Median home value</span><span data-tip="The Census estimates home values from a survey of some households, not every home. ' +
-        'The shaded band is the range the true value very likely falls in (90% confidence). A wider band means a smaller sample and a less certain estimate." tabindex="0">' +
+        'The dashed lines mark the range the true value very likely falls in (90% confidence). Hover a year to highlight it. A wider range means a smaller sample and a less certain estimate." tabindex="0">' +
         '<i class="k-band"></i>Likely range (survey margin of error)</span></div>';
-      var svg = el.querySelector("svg"), xl = el.querySelector(".hv-x"), dot = el.querySelector(".hv-dot"), read = el.querySelector(".hv-read");
+      var svg = el.querySelector("svg"), xl = el.querySelector(".hv-x"), dot = el.querySelector(".hv-dot"), read = el.querySelector(".hv-read"), sel = el.querySelector(".hv-sel");
       var showAt = function (i) {
         var p = pts[i]; xl.setAttribute("x1", X(p.y)); xl.setAttribute("x2", X(p.y)); dot.setAttribute("cx", X(p.y)); dot.setAttribute("cy", Y(p.v));
         xl.setAttribute("visibility", "visible"); dot.setAttribute("visibility", "visible");
+        // highlight that year's likely range as a rounded bar
+        var top = Y(p.v + (p.m || 0)), bot = Y(Math.max(0, p.v - (p.m || 0)));
+        sel.setAttribute("x", X(p.y) - 5); sel.setAttribute("y", top); sel.setAttribute("height", Math.max(4, bot - top)); sel.setAttribute("visibility", "visible");
         read.textContent = (p.y - 4) + "–" + p.y + ": " + (p.top ? "at least " : "") + money(p.v) +
           (p.m ? " · likely " + money(Math.max(0, p.v - p.m)) + "–" + money(p.v + p.m) : "");
       };
-      var clear = function () { xl.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); read.textContent = ""; };
+      var clear = function () { xl.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); sel.setAttribute("visibility", "hidden"); read.textContent = ""; };
       svg.addEventListener("mousemove", function (e) {
         var b = svg.getBoundingClientRect(), x = (e.clientX - b.left) / b.width * W, best = 0;
         pts.forEach(function (p, i) { if (Math.abs(X(p.y) - x) < Math.abs(X(pts[best].y) - x)) best = i; });
