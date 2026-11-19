@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from pipeline import geography, index, validate  # noqa: E402
-from pipeline.common import log, setup_logging, today, write_json  # noqa: E402
+from pipeline.common import log, prune_raw, redact, setup_logging, today, write_json  # noqa: E402
 from pipeline.fetchers import FETCHERS  # noqa: E402
 from pipeline.fetchers.base import INTERIM  # noqa: E402
 
@@ -71,9 +71,9 @@ def main(argv=None) -> int:
         except Exception as e:
             # Keep going so one broken source doesn't hide problems in the others;
             # the run still exits non-zero and Phase 4 validation won't publish.
-            log.error("%s failed: %s", name, e)
-            summary["steps"][name] = {"ok": False, "error": f"{type(e).__name__}: {e}",
-                                      "traceback": traceback.format_exc(limit=5)}
+            log.error("%s failed: %s", name, redact(str(e)))
+            summary["steps"][name] = {"ok": False, "error": redact(f"{type(e).__name__}: {e}"),
+                                      "traceback": redact(traceback.format_exc(limit=5))}
             failed.append(name)
 
     # Index (Phase 3): only from a complete set of fresh inputs.
@@ -107,6 +107,7 @@ def main(argv=None) -> int:
         published = validate.run(publish_if_ok=not args.no_publish and not failed)
         if not published:
             failed.append("validation")
+    prune_raw(keep=2)
     log.info("done. %d step(s) failed: %s; published: %s", len(failed), failed or "none", published)
     for step, info in summary["steps"].items():
         for out, cov in info.get("outputs", {}).items():

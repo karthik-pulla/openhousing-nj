@@ -62,6 +62,27 @@ def today() -> str:
     return dt.date.today().isoformat()
 
 
+def prune_raw(keep: int = 2) -> list[Path]:
+    """Delete all but the newest `keep` dated download folders per source.
+
+    Keeps the GitHub Actions cache small (one Zillow file is ~95 MB) while
+    leaving a previous copy for `download(..., reuse_if_unchanged=True)`.
+    """
+    import shutil
+    removed = []
+    if not RAW.exists():
+        return removed
+    for source in (p for p in RAW.iterdir() if p.is_dir()):
+        dated = sorted((d for d in source.iterdir() if d.is_dir() and re.fullmatch(r"\d{4}-\d{2}-\d{2}", d.name)),
+                       reverse=True)
+        for d in dated[keep:]:
+            shutil.rmtree(d)
+            removed.append(d)
+    if removed:
+        log.info("pruned %d old raw download folder(s)", len(removed))
+    return removed
+
+
 def latest_acs5_year(first_candidate: int | None = None, floor: int = 2024) -> int:
     """Newest ACS 5-year release the Census API serves (e.g. 2024 = ACS 2020-2024).
 
@@ -80,8 +101,10 @@ def latest_acs5_year(first_candidate: int | None = None, floor: int = 2024) -> i
     return floor
 
 
-def redact(url: str) -> str:
-    return re.sub(r"((?:api_)?key|token|access_token)=[^&]+", r"\1=REDACTED", url)
+def redact(text: str) -> str:
+    """Hide API keys/tokens in URLs or error messages (query strings and Bearer headers)."""
+    text = re.sub(r"((?:api_)?key|token|access_token)=[^&\s'\"]+", r"\1=REDACTED", str(text))
+    return re.sub(r"(Bearer\s+)[A-Za-z0-9._-]+", r"\1REDACTED", text)
 
 
 def raw_dir(source: str, date: str | None = None) -> Path:
@@ -151,9 +174,11 @@ def download(source: str, filename: str, url: str, *, params: dict | None = None
                 return out
         except (requests.RequestException, OSError) as e:
             last_err = e
-            log.warning("attempt %d/%d failed for %s: %s", attempt, retries, redact(url), e)
+            # Exception text can contain the full request URL, key included: redact it.
+            log.warning("attempt %d/%d failed for %s: %s", attempt, retries, redact(url), redact(str(e)))
             time.sleep(2 * attempt)
-    raise RuntimeError(f"Download failed after {retries} attempts: {redact(url)}") from last_err
+    raise RuntimeError(f"Download failed after {retries} attempts: {redact(url)}: "
+                       f"{redact(str(last_err))}") from None
 
 
 def census_get(dataset: str, variables: list[str], for_: str, in_: str | None,
