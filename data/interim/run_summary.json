@@ -3,11 +3,11 @@
   "steps": {
     "geography": {
       "ok": true,
-      "seconds": 0.5
+      "seconds": 0.6
     },
     "acs": {
       "ok": true,
-      "seconds": 5.2,
+      "seconds": 5.1,
       "outputs": {
         "acs_municipal": {
           "vintage": "ACS 2020-2024 5-year",
@@ -24,7 +24,7 @@
     },
     "zillow": {
       "ok": true,
-      "seconds": 2.1,
+      "seconds": 2.0,
       "outputs": {
         "zillow_municipal": {
           "vintage": "Zillow ZHVI Oct 2026",
@@ -53,7 +53,7 @@
     },
     "property_tax": {
       "ok": true,
-      "seconds": 0.4,
+      "seconds": 0.5,
       "outputs": {
         "property_tax_municipal": {
           "vintage": "NJ DCA 2025 Property Tax Tables (tax year 2025)",
@@ -86,7 +86,7 @@
     },
     "nzlud": {
       "ok": true,
-      "seconds": 0.3,
+      "seconds": 0.4,
       "outputs": {
         "nzlud_municipal": {
           "vintage": "NZLUD (municipal surveys 2019-2022; file 2023)",
@@ -115,7 +115,7 @@
     },
     "fourth_round": {
       "ok": true,
-      "seconds": 0.0,
+      "seconds": 0.1,
       "outputs": {
         "fourth_round_municipal": {
           "vintage": "DCA Fourth Round calculation, October 2024 (obligations for 2025-2035)",

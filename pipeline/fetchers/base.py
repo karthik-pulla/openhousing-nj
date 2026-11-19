@@ -1,6 +1,7 @@
 """The common output shape every fetcher returns."""
 from __future__ import annotations
 
+import datetime as dt
 from dataclasses import dataclass, field
 
 import pandas as pd
@@ -37,7 +38,9 @@ class FetchResult:
         if self.key in self.table and self.table[self.key].duplicated().any():
             raise RuntimeError(f"{self.name}: duplicate {self.key} values")
         self.table.to_csv(INTERIM / f"{self.name}.csv", index=False)
-        meta = {"name": self.name, "fetched": today(), "key": self.key, "vintage": self.vintage,
+        fetched_at = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+        meta = {"name": self.name, "fetched": today(), "fetched_at": fetched_at,
+                "key": self.key, "vintage": self.vintage,
                 "source": self.source, "url": self.url, "attribution": self.attribution,
                 "columns": list(self.table.columns), "coverage": self.coverage(),
                 "notes": self.notes, **self.extra}

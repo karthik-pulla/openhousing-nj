@@ -1,6 +1,7 @@
 {
   "name": "hud_county",
   "fetched": "2026-11-19",
+  "fetched_at": "2026-11-19T19:44:47+00:00",
   "key": "county_fips",
   "vintage": "HUD FY2026 Income Limits; FY2027 Fair Market Rents",
   "source": "U.S. Department of Housing and Urban Development, HUD USER API",

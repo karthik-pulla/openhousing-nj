@@ -102,3 +102,49 @@ confidence:
   # from the statewide median ratio by more than this factor (ACS is owner-reported
   # and averages 5 years, so it runs below Zillow everywhere).
   value_disagreement_factor: 1.30
+
+# --------------------------------------------------------------------------- validation
+# Checked before anything is published (pipeline/validate.py). Any "error"
+# blocks publishing and the last good dataset stays live; "warning"s are
+# reported but don't block.
+validation:
+  expected_rows: 564
+  # Must never be empty for any town.
+  required_non_null: [geoid, mun_code, name, county, county_fips, population, households,
+                      county_median_hh_income, avg_property_tax_bill, mortgage_rate_pct,
+                      ami80_income_limit, present_need, prospective_need_capped,
+                      qualified_urban_aid, ownership_confidence, rental_confidence]
+  # Allowed to be missing for a few towns, but more missing than this means
+  # something broke upstream. (Baseline Nov 2026: 3 / 3 / 16 / 16 / 3.)
+  max_missing:
+    home_value: 6
+    ownership_score: 6
+    median_gross_rent: 25
+    rental_score: 25
+    town_median_hh_income: 6
+  # Hard limits: a value outside these is treated as an error in the data,
+  # not a surprising fact. Set wide on purpose (observed ranges are far inside).
+  ranges:
+    mortgage_rate_pct: [1, 15]
+    home_value: [20000, 20000000]
+    avg_property_tax_bill: [200, 100000]
+    county_median_hh_income: [30000, 300000]
+    town_median_hh_income: [5000, 300000]
+    median_gross_rent: [200, 6000]
+    ownership_burden: [0.01, 5]
+    rent_burden: [0.01, 2]
+    renters_cost_burdened_share: [0, 1]
+    ami80_income_limit: [30000, 300000]
+    fmr_2br: [500, 8000]
+    present_need: [0, 20000]
+    prospective_need_capped: [0, 1000]
+    ownership_score: [0, 100]
+    rental_score: [0, 100]
+    ownership_burden_pctl: [0, 100]
+    rent_burden_pctl: [0, 100]
+  # Compared with the currently published dataset (warnings only, except coverage).
+  max_score_jump_points: 15          # warn when a town's score moves more than this
+  max_scored_drop: 10                # error if a score covers this many fewer towns than before
+  # Source freshness (warnings).
+  fred_max_age_days: 21
+  property_tax_max_age_years: 2

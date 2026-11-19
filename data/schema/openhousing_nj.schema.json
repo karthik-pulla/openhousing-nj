@@ -1,0 +1,317 @@
+{
+  "recorded": "2026-11-19",
+  "columns": [
+    {
+      "name": "geoid",
+      "kind": "number"
+    },
+    {
+      "name": "mun_code",
+      "kind": "number"
+    },
+    {
+      "name": "name",
+      "kind": "text"
+    },
+    {
+      "name": "mun_type",
+      "kind": "text"
+    },
+    {
+      "name": "county",
+      "kind": "text"
+    },
+    {
+      "name": "county_fips",
+      "kind": "number"
+    },
+    {
+      "name": "population",
+      "kind": "number"
+    },
+    {
+      "name": "households",
+      "kind": "number"
+    },
+    {
+      "name": "renter_households",
+      "kind": "number"
+    },
+    {
+      "name": "town_median_hh_income",
+      "kind": "number"
+    },
+    {
+      "name": "town_median_hh_income_moe",
+      "kind": "number"
+    },
+    {
+      "name": "town_median_hh_income_topcoded",
+      "kind": "bool"
+    },
+    {
+      "name": "acs_median_home_value",
+      "kind": "number"
+    },
+    {
+      "name": "acs_median_home_value_moe",
+      "kind": "number"
+    },
+    {
+      "name": "acs_median_home_value_topcoded",
+      "kind": "bool"
+    },
+    {
+      "name": "median_gross_rent",
+      "kind": "number"
+    },
+    {
+      "name": "median_gross_rent_moe",
+      "kind": "number"
+    },
+    {
+      "name": "median_gross_rent_topcoded",
+      "kind": "bool"
+    },
+    {
+      "name": "renters_cost_burdened_share",
+      "kind": "number"
+    },
+    {
+      "name": "renters_cost_burdened_share_moe",
+      "kind": "number"
+    },
+    {
+      "name": "county_median_hh_income",
+      "kind": "number"
+    },
+    {
+      "name": "county_median_hh_income_moe",
+      "kind": "number"
+    },
+    {
+      "name": "avg_property_tax_bill",
+      "kind": "number"
+    },
+    {
+      "name": "tax_year",
+      "kind": "number"
+    },
+    {
+      "name": "hud_area_name",
+      "kind": "text"
+    },
+    {
+      "name": "ami80_income_limit",
+      "kind": "number"
+    },
+    {
+      "name": "fmr_2br",
+      "kind": "number"
+    },
+    {
+      "name": "zhvi",
+      "kind": "empty"
+    },
+    {
+      "name": "zhvi_month",
+      "kind": "empty"
+    },
+    {
+      "name": "zillow_method",
+      "kind": "empty"
+    },
+    {
+      "name": "zillow_regions",
+      "kind": "empty"
+    },
+    {
+      "name": "zhvi_1yr_change",
+      "kind": "empty"
+    },
+    {
+      "name": "zhvi_5yr_change",
+      "kind": "empty"
+    },
+    {
+      "name": "home_value",
+      "kind": "number"
+    },
+    {
+      "name": "home_value_source",
+      "kind": "text"
+    },
+    {
+      "name": "home_value_vintage",
+      "kind": "text"
+    },
+    {
+      "name": "value_sources_disagree",
+      "kind": "empty"
+    },
+    {
+      "name": "mortgage_rate_pct",
+      "kind": "number"
+    },
+    {
+      "name": "annual_mortgage_pi",
+      "kind": "number"
+    },
+    {
+      "name": "annual_ownership_cost",
+      "kind": "number"
+    },
+    {
+      "name": "annual_rent",
+      "kind": "number"
+    },
+    {
+      "name": "ownership_burden",
+      "kind": "number"
+    },
+    {
+      "name": "rent_burden",
+      "kind": "number"
+    },
+    {
+      "name": "renters_cost_burdened",
+      "kind": "number"
+    },
+    {
+      "name": "ownership_burden_town_income",
+      "kind": "number"
+    },
+    {
+      "name": "rent_burden_town_income",
+      "kind": "number"
+    },
+    {
+      "name": "ownership_burden_ami80",
+      "kind": "number"
+    },
+    {
+      "name": "rent_burden_ami80",
+      "kind": "number"
+    },
+    {
+      "name": "ownership_affordable_at_ami80",
+      "kind": "bool"
+    },
+    {
+      "name": "rent_affordable_at_ami80",
+      "kind": "bool"
+    },
+    {
+      "name": "ownership_burden_pctl",
+      "kind": "number"
+    },
+    {
+      "name": "rent_burden_pctl",
+      "kind": "number"
+    },
+    {
+      "name": "renters_cost_burdened_pctl",
+      "kind": "number"
+    },
+    {
+      "name": "ownership_burden_confidence",
+      "kind": "text"
+    },
+    {
+      "name": "rent_burden_confidence",
+      "kind": "text"
+    },
+    {
+      "name": "renters_cost_burdened_confidence",
+      "kind": "text"
+    },
+    {
+      "name": "ownership_score",
+      "kind": "number"
+    },
+    {
+      "name": "ownership_rank",
+      "kind": "number"
+    },
+    {
+      "name": "ownership_confidence",
+      "kind": "text"
+    },
+    {
+      "name": "ownership_confidence_reasons",
+      "kind": "text"
+    },
+    {
+      "name": "rental_score",
+      "kind": "number"
+    },
+    {
+      "name": "rental_rank",
+      "kind": "number"
+    },
+    {
+      "name": "rental_confidence",
+      "kind": "text"
+    },
+    {
+      "name": "rental_confidence_reasons",
+      "kind": "text"
+    },
+    {
+      "name": "zri",
+      "kind": "number"
+    },
+    {
+      "name": "nzlud_min_lot_size",
+      "kind": "number"
+    },
+    {
+      "name": "nzlud_one_acre_more",
+      "kind": "number"
+    },
+    {
+      "name": "nzlud_inclusionary",
+      "kind": "number"
+    },
+    {
+      "name": "nzlud_open_space",
+      "kind": "number"
+    },
+    {
+      "name": "zoning_data_available",
+      "kind": "bool"
+    },
+    {
+      "name": "housing_region",
+      "kind": "number"
+    },
+    {
+      "name": "present_need",
+      "kind": "number"
+    },
+    {
+      "name": "prospective_need",
+      "kind": "number"
+    },
+    {
+      "name": "prospective_need_capped",
+      "kind": "number"
+    },
+    {
+      "name": "qualified_urban_aid",
+      "kind": "bool"
+    },
+    {
+      "name": "prospective_need_per_1000_hh",
+      "kind": "number"
+    },
+    {
+      "name": "total_need_per_1000_hh",
+      "kind": "number"
+    },
+    {
+      "name": "data_built",
+      "kind": "text"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "validated_at": "2026-11-19T19:44:47+00:00",
+  "passed": true,
+  "errors": 0,
+  "warnings": 0,
+  "results": [
+    {
+      "check": "rows",
+      "level": "error",
+      "passed": true,
+      "detail": "564 rows (expected 564)"
+    },
+    {
+      "check": "geoids",
+      "level": "error",
+      "passed": true,
+      "detail": "0 malformed, 0 duplicate, 0 unknown, 0 missing"
+    },
+    {
+      "check": "schema",
+      "level": "error",
+      "passed": true,
+      "detail": "added [], removed [], kind changed [], order ok True"
+    },
+    {
+      "check": "required",
+      "level": "error",
+      "passed": true,
+      "detail": "nulls in required fields: none; absent columns: none"
+    },
+    {
+      "check": "missing",
+      "level": "error",
+      "passed": true,
+      "detail": "fields missing for more towns than allowed: none (limits {'home_value': 6, 'ownership_score': 6, 'median_gross_rent': 25, 'rental_score': 25, 'town_median_hh_income': 6})"
+    },
+    {
+      "check": "ranges",
+      "level": "error",
+      "passed": true,
+      "detail": "0 value(s) outside hard limits"
+    },
+    {
+      "check": "consistency",
+      "level": "error",
+      "passed": true,
+      "detail": "ok"
+    },
+    {
+      "check": "zillow_terms",
+      "level": "error",
+      "passed": true,
+      "detail": "ok (cleared_for_publication=False)"
+    },
+    {
+      "check": "sources",
+      "level": "error",
+      "passed": true,
+      "detail": "failed steps in last run: none"
+    },
+    {
+      "check": "coverage",
+      "level": "error",
+      "passed": true,
+      "detail": "towns scored, change vs published: {'ownership': 0, 'rental': 0} (error if a drop exceeds 10)"
+    },
+    {
+      "check": "jumps",
+      "level": "warning",
+      "passed": true,
+      "detail": "0 town score(s) moved more than 15 points"
+    },
+    {
+      "check": "freshness",
+      "level": "warning",
+      "passed": true,
+      "detail": "ok"
+    }
+  ]
+}

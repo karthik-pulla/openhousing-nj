@@ -11,6 +11,9 @@ Steps
   3. Index v2 (pipeline/index.py) -> data/build/openhousing_nj.csv, only if
      every fetcher succeeded.
   4. data/interim/run_summary.json: what ran, what failed, coverage.
+  5. Validation (pipeline/validate.py). Only if it passes is the dataset copied
+     to data/published/ and data/manifest.json written. If it fails, the last
+     good published dataset stays as it is and this script exits 1.
 
 Raw downloads are cached in data/raw/<source>/<date>/ (gitignored), so
 rerunning on the same day doesn't hit the sources again.
@@ -29,7 +32,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from pipeline import geography, index  # noqa: E402
+from pipeline import geography, index, validate  # noqa: E402
 from pipeline.common import log, setup_logging, today, write_json  # noqa: E402
 from pipeline.fetchers import FETCHERS  # noqa: E402
 from pipeline.fetchers.base import INTERIM  # noqa: E402
@@ -39,6 +42,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Rebuild OpenHousing data")
     ap.add_argument("--only", nargs="+", choices=sorted(FETCHERS), help="run only these fetchers")
     ap.add_argument("--skip-geography", action="store_true", help="reuse data/geo/municipalities.csv")
+    ap.add_argument("--no-publish", action="store_true", help="validate but don't publish")
     args = ap.parse_args(argv)
     setup_logging()
 
@@ -95,7 +99,15 @@ def main(argv=None) -> int:
             failed.append("index")
 
     write_json(INTERIM / "run_summary.json", summary)
-    log.info("done. %d step(s) failed: %s", len(failed), failed or "none")
+
+    # Validation + publish (Phase 4). Runs even after a failure, so the
+    # validation report records why nothing was published.
+    published = False
+    if not args.only and (index.BUILD / "openhousing_nj.csv").exists():
+        published = validate.run(publish_if_ok=not args.no_publish and not failed)
+        if not published:
+            failed.append("validation")
+    log.info("done. %d step(s) failed: %s; published: %s", len(failed), failed or "none", published)
     for step, info in summary["steps"].items():
         for out, cov in info.get("outputs", {}).items():
             log.info("  %-24s %-60s %s", out, cov.get("vintage", ""),
