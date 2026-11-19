@@ -8,6 +8,7 @@ from pipeline.common import DATA, ROOT
 
 V2 = ROOT / "v2"
 APP = (V2 / "app.js").read_text()
+LANDING = (V2 / "landing.js").read_text()
 SCHEMA_COLS = {c["name"] for c in json.loads((DATA / "schema" / "openhousing_nj.schema.json").read_text())["columns"]}
 
 
@@ -27,7 +28,7 @@ def test_every_column_the_site_reads_exists():
 
 
 def test_site_reads_only_published_files():
-    paths = set(re.findall(r'"(\.\./data/[^"]+|data/[^"]+)"', APP))
+    paths = set(re.findall(r'"(\.\./data/[^"]+|data/[^"]+)"', APP + LANDING))
     assert paths, "no data paths found"
     for p in paths:
         assert p.startswith(("../data/published/", "../data/manifest.json", "data/boundaries.geojson")), p
@@ -35,7 +36,8 @@ def test_site_reads_only_published_files():
         assert target.exists(), f"{p} does not exist (run the pipeline / build_boundaries.py)"
 
 
-@pytest.mark.parametrize("page", ["index.html", "methodology.html", "app.js", "app.css"])
+@pytest.mark.parametrize("page", ["index.html", "map.html", "methodology.html", "app.js", "app.css",
+                                  "landing.js", "landing.css"])
 def test_no_secrets_or_private_terms_in_site(page):
     text = (V2 / page).read_text()
     assert not re.search(r"sk\.eyJ", text), "Mapbox SECRET token in public site"      # public pk. tokens are fine
@@ -52,11 +54,24 @@ def test_boundaries_join_on_geoid():
     assert len(gj["features"]) == 564 and ids == munis
 
 
-def test_localstorage_is_guarded():
+@pytest.mark.parametrize("src", [APP, LANDING], ids=["app.js", "landing.js"])
+def test_localstorage_is_guarded(src):
     """Every localStorage access is inside try/catch (private mode, blocked storage)."""
-    for m in re.finditer(r"localStorage\.(getItem|setItem)", APP):
-        before = APP[max(0, m.start() - 120):m.start()]
-        assert "try" in before, APP[m.start() - 80:m.end() + 20]
+    for m in re.finditer(r"localStorage\.(getItem|setItem|removeItem)", src):
+        before = src[max(0, m.start() - 120):m.start()]
+        assert "try" in before, src[m.start() - 80:m.end() + 20]
+
+
+def test_pages_link_to_each_other():
+    landing, mapp, meth = ((V2 / f).read_text() for f in ("index.html", "map.html", "methodology.html"))
+    assert 'href="map.html"' in landing and 'href="methodology.html"' in landing
+    assert 'href="./"' in mapp and 'href="methodology.html"' in mapp
+    assert 'href="map.html"' in meth
+
+
+def test_reduced_motion_respected():
+    for css in ("app.css", "landing.css"):
+        assert "prefers-reduced-motion" in (V2 / css).read_text(), css
 
 
 def test_v1_pages_untouched():

@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OpenHousing NJ (v2 preview)</title>
-<meta name="description" content="How affordable is it to own or rent a home in each of New Jersey's 564 municipalities? Interactive map, town profiles, comparisons and downloadable data.">
+<title>OpenHousing NJ: housing affordability in every New Jersey town</title>
+<meta name="description" content="How affordable is it to own or rent a home in each of New Jersey's 564 municipalities? Free map, town profiles and downloadable data, with every number sourced.">
+<meta name="theme-color" content="#0a0d13" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <script>
-  // Apply the saved theme before first paint (same key as v1).
   (function () {
     var t = null;
     try { t = localStorage.getItem("oh-theme"); } catch (e) {}
@@ -14,129 +15,196 @@
     document.documentElement.dataset.theme = t;
   })();
 </script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
 <link href="app.css" rel="stylesheet">
+<link href="landing.css" rel="stylesheet">
 </head>
-<body>
-<a class="skip" href="#table-view" data-view-link="table">Skip to the table of all municipalities</a>
+<body class="landing">
+<a class="skip" href="#main">Skip to content</a>
 
-<header class="bar">
-  <a class="logo" href="./" aria-label="OpenHousing NJ v2 home">
-    <img class="lt" src="../OpenHousing_Normal.png" alt="OpenHousing">
-    <img class="dk" src="../OpenHousing_White.png" alt="OpenHousing">
-  </a>
-  <span class="tag">v2 preview</span>
-  <nav class="views" aria-label="Views">
-    <button type="button" class="tab" data-view="map" aria-pressed="true">Map</button>
-    <button type="button" class="tab" data-view="table" aria-pressed="false">Table</button>
-    <button type="button" class="tab" data-view="compare" aria-pressed="false">Compare <span class="count" id="compare-count">0</span></button>
-  </nav>
-  <span class="sp"></span>
-  <a class="btn ghost hide-sm" href="methodology.html">Methodology</a>
-  <div class="pop-wrap">
-    <button type="button" class="btn ghost" id="sources-btn" aria-expanded="false" aria-controls="sources-pop">Sources</button>
-    <div class="popover" id="sources-pop" role="dialog" aria-label="Data sources and vintages">
-      <h2 class="pop-h">Data sources</h2>
-      <p class="updated" id="updated-pop"></p>
-      <ul class="srclist" id="source-list"></ul>
-      <p class="notices" id="notices"></p>
-      <p><a href="methodology.html#sources">Full source list and methodology</a></p>
-    </div>
+<header class="lbar" id="lbar">
+  <div class="wrap lbar-in">
+    <a class="logo" href="./" aria-label="OpenHousing NJ home">
+      <img class="lt" src="../OpenHousing_Normal.png" alt="OpenHousing">
+      <img class="dk" src="../OpenHousing_White.png" alt="OpenHousing">
+    </a>
+    <nav class="lnav" aria-label="Main">
+      <a href="map.html">Map</a>
+      <a href="#how">How it works</a>
+      <a href="methodology.html">Methodology</a>
+      <a href="../data/published/openhousing_nj.csv" download>Data</a>
+    </nav>
+    <span class="sp"></span>
+    <button type="button" class="iconbtn" id="theme-btn" aria-label="Switch between light and dark theme">
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+    </button>
+    <a class="btn primary sm" href="map.html">Open the map</a>
   </div>
-  <button type="button" class="iconbtn" id="theme-btn" aria-label="Switch between light and dark theme">
-    <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-    <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
-  </button>
 </header>
 
-<div class="status" id="status" role="status" aria-live="polite">Loading data…</div>
-
-<main class="app" id="app">
-  <!-- MAP VIEW -->
-  <section class="view" id="map-view" aria-label="Map view">
-    <aside class="side" aria-label="Layer and town list">
-      <div class="side-top">
-        <label class="lbl" for="search">Find a municipality</label>
-        <input id="search" class="input" type="search" placeholder="Town or county" autocomplete="off">
-
-        <label class="lbl" for="layer">Map layer</label>
-        <select id="layer" class="input"></select>
-        <p class="layer-desc" id="layer-desc"></p>
-
-        <div class="row">
-          <div class="seg" role="group" aria-label="Sort order">
-            <button type="button" class="segb" id="sort-best" aria-pressed="true"></button>
-            <button type="button" class="segb" id="sort-worst" aria-pressed="false"></button>
-          </div>
-          <label class="chk"><input type="checkbox" id="fav-only"> Favorites</label>
+<main id="main">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="bg" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><i class="grid"></i></div>
+    <div class="wrap hero-in">
+      <div class="hero-copy">
+        <p class="eyebrow rise" style="--i:0"><span class="dot" aria-hidden="true"></span><span id="eyebrow">564 municipalities · updated monthly</span></p>
+        <h1 class="rise" style="--i:1">How affordable is <span class="grad">home</span> in New&nbsp;Jersey?</h1>
+        <p class="lead rise" style="--i:2">See what it costs to own or to rent the typical home in every one of the state's 564 towns, measured against what households in the region earn. Every number comes with its source.</p>
+        <div class="ctas rise" style="--i:3">
+          <a class="btn primary lg" href="map.html">Explore the map
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn lg" href="#how">How it works</a>
         </div>
-        <p class="listcount" id="listcount"></p>
+        <p class="trust rise" style="--i:4">Built from U.S. Census, HUD, NJ Department of Community Affairs and Freddie Mac data. No ads, no accounts, no tracking.</p>
       </div>
-      <ol class="list" id="list" aria-label="Municipalities, ranked by the selected layer"></ol>
-      <footer class="side-foot">
-        <a class="btn sm" id="dl-all" href="../data/published/openhousing_nj.csv" download>Download all data (CSV)</a>
-        <p class="updated" id="updated"></p>
-      </footer>
-    </aside>
 
-    <div class="mapwrap">
-      <div id="map" role="region" aria-label="Map of New Jersey municipalities colored by the selected layer. Use the list or the table view for keyboard access."></div>
-      <div class="legend" id="legend" aria-label="Map legend"></div>
-      <div class="tip" id="tip" aria-hidden="true"></div>
-      <p class="map-error" id="map-error" hidden></p>
+      <figure class="mapcard rise" style="--i:2">
+        <div class="mc-head">
+          <div class="seg" role="group" aria-label="Color the map by">
+            <button type="button" class="segb" data-score="ownership" aria-pressed="true">Owning</button>
+            <button type="button" class="segb" data-score="rental" aria-pressed="false">Renting</button>
+          </div>
+          <span class="mc-legend" aria-hidden="true"><span>Less</span><i class="mc-ramp"></i><span>More affordable</span></span>
+        </div>
+        <div class="mc-stage">
+          <svg id="njmap" role="img" aria-label="Map of New Jersey's 564 municipalities, colored by ownership affordability score" preserveAspectRatio="xMidYMid meet"></svg>
+          <div class="mc-loading" id="mc-loading"><span class="spin" aria-hidden="true"></span> Drawing 564 towns…</div>
+        </div>
+        <figcaption class="mc-read" id="mc-read" aria-live="polite">
+          <span class="mc-k">Hover a town</span>
+          <span class="mc-v">Each shape is a municipality. Darker blue means more affordable.</span>
+        </figcaption>
+      </figure>
     </div>
   </section>
 
-  <!-- TABLE VIEW -->
-  <section class="view" id="table-view" aria-label="Table of all municipalities" hidden>
-    <div class="tv-head">
-      <h1 class="h1">All 564 municipalities</h1>
-      <label class="lbl sr" for="tsearch">Filter the table</label>
-      <input id="tsearch" class="input" type="search" placeholder="Filter by town or county" autocomplete="off">
-      <span class="sp"></span>
-      <a class="btn sm" href="../data/published/openhousing_nj.csv" download>Download all data (CSV)</a>
+  <!-- STATS -->
+  <section class="stats wrap" aria-label="Key figures">
+    <div class="stat reveal"><b data-count="564">564</b><span>municipalities, none left out</span></div>
+    <div class="stat reveal"><b data-count="2" >2</b><span>separate scores: owning and renting</span></div>
+    <div class="stat reveal"><b id="stat-rate">–</b><span>30-year mortgage rate used</span></div>
+    <div class="stat reveal"><b data-count="7">7</b><span>public data sources, refreshed monthly</span></div>
+  </section>
+
+  <!-- TWO MARKETS -->
+  <section class="sec wrap" id="markets">
+    <div class="sec-head reveal">
+      <p class="kicker">Two markets, scored separately</p>
+      <h2>Owning and renting tell different stories.</h2>
+      <p class="sub">A town can be cheap to rent and expensive to own, or the reverse. So each gets its own score, measured against county income rather than the town's own, so a wealthy town can't look affordable just because its residents are wealthy.</p>
     </div>
-    <p class="hint">Select a column heading to sort. Select a town's name to open its profile. Missing values are shown as "Unavailable".</p>
-    <div class="tablewrap" tabindex="0" aria-label="Scrollable table">
-      <table class="dt" id="table">
-        <caption class="sr">Affordability scores, measures and barriers for every New Jersey municipality</caption>
-        <thead></thead><tbody></tbody>
-      </table>
+    <div class="markets">
+      <article class="mk reveal">
+        <div class="mk-top"><span class="mk-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span>
+          <div><h3>Owning</h3><p>Mortgage on the typical home plus the town's average property tax bill, as a share of county income.</p></div></div>
+        <div class="mk-lists">
+          <div><h4>Most affordable</h4><ol class="mini" id="own-best"></ol></div>
+          <div><h4>Least affordable</h4><ol class="mini" id="own-worst"></ol></div>
+        </div>
+      </article>
+      <article class="mk reveal">
+        <div class="mk-top"><span class="mk-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/></svg></span>
+          <div><h3>Renting</h3><p>Twelve months of the median rent, as a share of county income.</p></div></div>
+        <div class="mk-lists">
+          <div><h4>Most affordable</h4><ol class="mini" id="rent-best"></ol></div>
+          <div><h4>Least affordable</h4><ol class="mini" id="rent-worst"></ol></div>
+        </div>
+      </article>
     </div>
   </section>
 
-  <!-- COMPARE VIEW -->
-  <section class="view" id="compare-view" aria-label="Compare municipalities" hidden>
-    <div class="tv-head">
-      <h1 class="h1">Compare municipalities</h1>
-      <span class="sp"></span>
-      <button type="button" class="btn sm" id="dl-compare">Download comparison (CSV)</button>
+  <!-- HOW IT WORKS -->
+  <section class="sec wrap" id="how">
+    <div class="sec-head reveal">
+      <p class="kicker">How it works</p>
+      <h2>Public data in, plain answers out.</h2>
     </div>
-    <p class="hint" id="compare-hint">Add up to three municipalities from a town profile (select "Compare").</p>
-    <div class="tablewrap" id="compare-wrap"></div>
+    <ol class="steps">
+      <li class="step reveal"><span class="num">1</span><h3>Gather</h3><p>Every month the data refreshes from the Census Bureau, HUD, the NJ Department of Community Affairs and Freddie Mac, matched to towns by official ID, never by name.</p></li>
+      <li class="step reveal"><span class="num">2</span><h3>Measure</h3><p>Yearly housing costs are divided by county median income, then ranked across all towns as a 0–100 score with a confidence flag.</p></li>
+      <li class="step reveal"><span class="num">3</span><h3>Check</h3><p>Nothing is published until it passes validation: exactly 564 towns, no unexpected gaps, values in plausible ranges.</p></li>
+    </ol>
+    <div class="formula reveal" aria-label="Ownership burden formula">
+      <span class="f-l">Ownership burden</span><span class="f-eq">=</span>
+      <span class="f-frac"><span>12 × mortgage payment + property tax</span><span>county median household income</span></span>
+      <span class="f-note" id="f-note">20% down · 30-year fixed</span>
+    </div>
   </section>
 
-  <!-- TOWN PROFILE -->
-  <aside class="drawer" id="drawer" aria-labelledby="p-name" hidden>
-    <div class="d-head">
-      <div>
-        <h2 class="p-name" id="p-name" tabindex="-1"></h2>
-        <p class="p-sub" id="p-sub"></p>
+  <!-- FEATURES -->
+  <section class="sec wrap" id="features">
+    <div class="sec-head reveal">
+      <p class="kicker">Built for checking, not just looking</p>
+      <h2>Everything an advocate or researcher needs to cite it.</h2>
+    </div>
+    <div class="features">
+      <div class="feat reveal"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span><h3>Town profiles</h3><p>Every measure with its source, data period, percentile and confidence badge, plus a plain-English summary.</p></div>
+      <div class="feat reveal"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><rect x="17" y="4" width="4" height="16" rx="1.5"/></svg></span><h3>Side-by-side compare</h3><p>Put up to three towns next to each other on every measure.</p></div>
+      <div class="feat reveal"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 21h16"/></svg></span><h3>Download the data</h3><p>The full dataset, a single town or your comparison as CSV, plus a manifest of every source and check.</p></div>
+      <div class="feat reveal"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 5h18M3 12h18M3 19h18"/></svg></span><h3>Accessible table</h3><p>A sortable table of all 564 towns, keyboard-friendly, as an alternative to the map.</p></div>
+      <div class="feat reveal"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg></span><h3>Summaries without AI</h3><p>Written from fixed templates filled with each town's numbers, so every sentence traces back to a source.</p></div>
+      <div class="feat reveal"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span><h3>Honest about uncertainty</h3><p>Small towns are flagged, never dropped. Missing data says "Unavailable", and nothing is filled in.</p></div>
+    </div>
+  </section>
+
+  <!-- BARRIERS -->
+  <section class="sec wrap" id="barriers">
+    <div class="barriers reveal">
+      <div class="b-copy">
+        <p class="kicker">Beyond price</p>
+        <h2>The barriers behind the numbers.</h2>
+        <p class="sub">Zoning rules and the state's affordable-housing obligations are shown alongside the scores, as context. They never change a town's score, and a town is never labelled as having "met" or "failed" its obligation.</p>
+        <a class="btn" href="map.html#layer=prospective_need_per_1000_hh">See the barriers layers</a>
       </div>
-      <button type="button" class="iconbtn" id="close-drawer" aria-label="Close town profile">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
+      <div class="b-stats">
+        <div><b id="b-prosp">–</b><span>units of Fourth Round prospective need statewide, as calculated by the state (Oct 2024)</span></div>
+        <div><b id="b-qua">–</b><span>Qualified Urban Aid towns, which have no prospective obligation by law</span></div>
+        <div><b id="b-zri">–</b><span>towns covered by the National Zoning and Land Use Database</span></div>
+      </div>
     </div>
-    <div class="d-actions">
-      <button type="button" class="btn sm" id="fav-btn" aria-pressed="false"></button>
-      <button type="button" class="btn sm" id="cmp-btn"></button>
-      <button type="button" class="btn sm" id="dl-town">Download (CSV)</button>
+  </section>
+
+  <!-- SOURCES -->
+  <section class="sec wrap" id="sources">
+    <div class="sec-head reveal">
+      <p class="kicker">Every number has a source</p>
+      <h2>Public, documented, refreshed monthly.</h2>
+      <p class="sub" id="updated-line"></p>
     </div>
-    <div class="d-body" id="d-body"></div>
-  </aside>
+    <ul class="pills reveal" id="source-pills"></ul>
+  </section>
+
+  <!-- CTA -->
+  <section class="wrap">
+    <div class="cta reveal">
+      <h2>See where your town stands.</h2>
+      <p>Search any of New Jersey's 564 municipalities, open its profile, and compare it with its neighbors.</p>
+      <div class="ctas"><a class="btn primary lg on-dark" href="map.html">Open the map</a><a class="btn lg ghost-light" href="methodology.html">Read the methodology</a></div>
+    </div>
+  </section>
 </main>
 
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
-<script src="app.js"></script>
+<footer class="lfoot">
+  <div class="wrap lfoot-in">
+    <div>
+      <a class="logo" href="./" aria-label="OpenHousing NJ home">
+        <img class="lt" src="../OpenHousing_Normal.png" alt="OpenHousing">
+        <img class="dk" src="../OpenHousing_White.png" alt="OpenHousing">
+      </a>
+      <p class="foot-note">A free, open tool for understanding housing affordability across New Jersey.</p>
+    </div>
+    <nav aria-label="Footer">
+      <a href="map.html">Map</a>
+      <a href="methodology.html">Methodology</a>
+      <a href="methodology.html#sources">Sources</a>
+      <a href="../data/published/openhousing_nj.csv" download>Download data (CSV)</a>
+      <a href="../data/manifest.json">Data manifest</a>
+    </nav>
+  </div>
+  <p class="wrap notices" id="foot-notices"></p>
+</footer>
+
+<script src="landing.js"></script>
 </body>
 </html>

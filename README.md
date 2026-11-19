@@ -5,7 +5,7 @@
 OpenHousing NJ is a free, open map and dataset that answers that question for every municipality in the state, with every number traceable to its source. It is built for housing advocates, researchers, policy analysts and residents.
 
 - **Live site (v1):** https://karthik-pulla.github.io/nj-housing-index/
-- **v2 preview:** `/v2/` on the same site once published (this branch)
+- **v2 preview:** `/v2/` (landing page) and `/v2/map.html` (the map) on the same site once published (this branch)
 - **How it's calculated:** [METHODOLOGY.md](METHODOLOGY.md), or the plain-English [v2 methodology page](v2/methodology.html)
 - **Download the data:** [data/published/openhousing_nj.csv](data/published/openhousing_nj.csv), one row per municipality
 
@@ -20,7 +20,7 @@ OpenHousing NJ is a free, open map and dataset that answers that question for ev
 | **Confidence flags** | High / medium / low / insufficient data for every score, with the reason. Small towns are flagged, never dropped. |
 | **Town summaries** | Plain-English paragraphs assembled from fixed templates and the town's numbers. No AI writes them. |
 
-The v2 site adds layer switching, town profiles with sources and data periods, side-by-side comparison of up to three towns, favorites, CSV downloads, a sortable table view, keyboard navigation and a color-blind-safe palette. It is a static site with no accounts, no tracking and no backend.
+The v2 site has a landing page with a live preview map of all 564 towns, and a map app with layer switching, a "New Jersey" reset button, an NJ snapshot, town profiles with sources and data periods, side-by-side comparison of up to three towns, favorites, CSV downloads, a sortable table view, keyboard navigation and a color-blind-safe palette. It is a static site with no accounts, no tracking and no backend.
 
 ## Data sources
 
@@ -49,7 +49,8 @@ data/
   published/                 the validated, live dataset (CSV, web JSON, summaries)
   manifest.json              sources, vintages, fetch times, coverage, validation results
   raw/                       cached downloads (gitignored)
-v2/                          the v2 website (index.html, methodology.html, app.js, app.css, boundaries)
+v2/                          the v2 website: index.html (landing), map.html (map app), methodology.html,
+                             app.js/app.css (map + shared styles), landing.js/landing.css, data/boundaries.geojson
 tests/                       pytest suite
 docs/                        AUTOMATION.md, SOURCES_VERIFICATION.md
 legacy/                      the first prototype, kept for reference

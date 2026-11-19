@@ -130,7 +130,7 @@
   var D = { rows: [], byId: {}, cols: [], manifest: null, summaries: null, sources: {} };
   var S = { layer: "ownership_score", bestFirst: true, query: "", favOnly: false, selected: null,
             view: "map", compare: [], sortCol: "ownership_rank", sortAsc: true, tquery: "" };
-  var map = null, mapReady = false, bounds = null, hoverId = null;
+  var map = null, mapReady = false, bounds = null, hoverId = null, styleOk = false;
   var classCache = {};
 
   function store(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
@@ -185,6 +185,7 @@
       (D.manifest.sources || []).forEach(function (s) { D.sources[s.name] = s; });
       setStatus("");
       renderMeta();
+      renderSnapshot();
       fillLayerSelect();
       readHash();
       renderAll();
@@ -214,6 +215,27 @@
       .filter(function (a) { return /not endorsed/.test(a || ""); })
       .map(function (a) { var i = a.indexOf("This product uses"); return i >= 0 ? a.slice(i) : a; });
     $("notices").textContent = notices.join(" ");
+  }
+
+  function median(a) { a = a.filter(has).map(Number).sort(function (x, y) { return x - y; }); var n = a.length;
+    return n ? (n % 2 ? a[(n - 1) / 2] : (a[n / 2 - 1] + a[n / 2]) / 2) : null; }
+  function renderSnapshot() {
+    var R = D.rows, col = function (k) { return R.map(function (r) { return r[k]; }); };
+    var sum = function (k) { return R.reduce(function (s, r) { return s + (has(r[k]) ? Number(r[k]) : 0); }, 0); };
+    var ownOk = R.filter(function (r) { return isTrue(r.ownership_affordable_at_ami80); }).length;
+    var ownN = R.filter(function (r) { return has(r.ownership_affordable_at_ami80); }).length;
+    var a = D.manifest.assumptions || {};
+    var cells = [
+      [money(median(col("home_value"))), "Median home value (typical town)"],
+      [rentMoney(median(col("median_gross_rent"))), "Median monthly rent (typical town)"],
+      [pct(median(col("ownership_burden"))), "Owning ÷ county income (typical town)"],
+      [num(a.mortgage_rate_pct, 2) + "%", "30-year mortgage rate used"],
+      [ownOk + " of " + ownN, "Towns where a moderate-income family could afford to own"],
+      [num(sum("prospective_need_capped")), "Fourth Round prospective need (units)"]
+    ];
+    $("snapgrid").innerHTML = cells.map(function (c) { return "<div><b>" + esc(c[0]) + "</b><span>" + esc(c[1]) + "</span></div>"; }).join("");
+    $("snap-note").textContent = "Each municipality counts once (medians across towns, not across homes). Sources: Census ACS 2020-2024, NJ DCA, HUD, Freddie Mac. " +
+      "Moderate-income = HUD's 80% income limit, 4-person household, costs at most 30% of income.";
   }
 
   function fillLayerSelect() {
@@ -266,9 +288,13 @@
       var rankTxt = L.rank && has(r[L.rank]) ? "#" + r[L.rank] : (i + 1);
       var c = colorFor(L, r[L.key]);
       var star = favorites.indexOf(r.geoid) >= 0 ? " ★" : "";
+      var cls = classesFor(L), w = 0, v = r[L.key];
+      if (has(v) && !L.categorical && cls.max > cls.min) w = Math.max(4, Math.round(100 * (v - cls.min) / (cls.max - cls.min)));
+      else if (L.categorical) w = isTrue(v) ? 100 : 0;
       b.innerHTML = '<span class="n">' + rankTxt + '</span><span class="nm">' + esc(r.name) + star +
-        '<span class="ct">' + esc(r.county) + ' County</span></span><span class="v">' +
-        (c ? '<i class="sw" style="background:' + c + '" aria-hidden="true"></i>' : "") + esc(L.fmt(r[L.key])) + "</span>";
+        '<span class="ct">' + esc(r.county) + ' County</span>' +
+        '<span class="bar-track" aria-hidden="true"><span class="bar-fill" style="width:' + w + '%;background:' + (c || "transparent") + '"></span></span></span>' +
+        '<span class="v">' + esc(L.fmt(v)) + "</span>";
       b.setAttribute("aria-label", r.name + ", " + r.county + " County: " + L.label + " " + L.fmt(r[L.key]));
       li.appendChild(b);
       frag.appendChild(li);
@@ -312,17 +338,46 @@
     });
     // Track style readiness ourselves: map.isStyleLoaded() stays false while
     // base tiles are still loading, which could skip adding our layers.
-    var styleOk = false;
     map.on("style.load", function () { styleOk = true; addLayers(); });
-    getJSON(PATHS.bounds).then(function (gj) { bounds = gj; if (styleOk) addLayers(); })
-      .catch(function (e) { mapFailed("Boundaries didn't load (" + e.message + ")."); });
+    loadBounds();
     wireMapEvents();
   }
   function styleUrl() { return isDark() ? "mapbox://styles/mapbox/dark-v11" : "mapbox://styles/mapbox/light-v11"; }
+  function mapStatus(msg) {
+    var el = $("map-status");
+    if (!msg) { el.classList.add("done"); return; }
+    el.classList.remove("done");
+    $("map-status-txt").textContent = msg;
+  }
   function mapFailed(msg) {
-    var el = $("map-error");
-    el.hidden = false;
-    el.textContent = msg + " Everything else works: use the list or the Table view.";
+    mapStatus("");
+    $("map-error").hidden = false;
+    $("map-error-txt").textContent = msg + " Everything else works: use the list or the Table view.";
+  }
+  function loadBounds() {
+    $("map-error").hidden = true;
+    mapStatus("Loading town boundaries…");
+    var slow = setTimeout(function () { mapStatus("Still loading town boundaries…"); }, 5000);
+    return getJSON(PATHS.bounds).then(function (gj) { clearTimeout(slow); bounds = gj; if (styleOk) addLayers(); })
+      .catch(function (e) { clearTimeout(slow); mapFailed("Town boundaries didn't load (" + e.message + ")."); });
+  }
+  function resetView() {
+    if (!$("drawer").hidden) closeProfile();
+    if (map) map.fitBounds(NJ_BOUNDS, { padding: 24, duration: 700 });
+  }
+  function showHint() {
+    var seen = false;
+    try { seen = localStorage.getItem("oh_v2_hint") === "1"; } catch (e) {}
+    if (seen || window.matchMedia("(hover: none)").matches) return;
+    var h = $("hint");
+    h.hidden = false;
+    setTimeout(function () { hideHint(); }, 7000);
+  }
+  function hideHint() {
+    var h = $("hint"); if (h.hidden) return;
+    h.classList.add("out");
+    setTimeout(function () { h.hidden = true; }, 400);
+    try { localStorage.setItem("oh_v2_hint", "1"); } catch (e) {}
   }
 
   function paintedData() {
@@ -349,6 +404,8 @@
     map.addLayer({ id: "muni-sel", type: "line", source: "munis", filter: ["==", ["get", "geoid"], S.selected || ""],
       paint: { "line-color": "#3F6AFF", "line-width": 3 } });
     mapReady = true;
+    mapStatus("");
+    showHint();
   }
 
   function repaint() {
@@ -380,7 +437,7 @@
       if (hoverId !== null) map.setFeatureState({ source: "munis", id: hoverId }, { hover: false });
       hoverId = null; tip.style.display = "none";
     });
-    map.on("click", "muni-fill", function (e) { var f = e.features && e.features[0]; if (f) openProfile(f.properties.geoid, false); });
+    map.on("click", "muni-fill", function (e) { var f = e.features && e.features[0]; hideHint(); if (f) openProfile(f.properties.geoid, false); });
   }
 
   function zoomTo(geoid) {
@@ -450,8 +507,10 @@
     writeHash();
   }
   function card(title, score, rank, n, conf) {
+    var gauge = has(score) ? '<div class="gauge" aria-hidden="true"><span style="left:' + Math.min(100, Math.max(0, score)) + '%"></span></div>' +
+      '<div class="gauge-l" aria-hidden="true"><span>Less</span><span>More affordable</span></div>' : "";
     return '<div class="card"><div class="k">' + esc(title) + '</div><div class="big">' + (has(score) ? num(score, 1) : "–") +
-      '</div><div class="sub">' + (has(rank) ? "Ranks " + ordinal(rank) + " of " + n : "Not scored") + "</div>" + badge(conf) + "</div>";
+      '<small>/100</small></div>' + gauge + '<div class="sub">' + (has(rank) ? "Ranks " + ordinal(rank) + " of " + n : "Not scored") + "</div>" + badge(conf) + "</div>";
   }
   function assumptionText() {
     var a = (D.manifest && D.manifest.assumptions) || {};
@@ -662,12 +721,16 @@
       var rm = e.target.closest("button[data-remove]"); if (rm) { toggleCompare(rm.dataset.remove); return; }
       var o = e.target.closest("button[data-open]"); if (o) openProfile(o.dataset.open, false);
     });
+    $("reset-view").addEventListener("click", resetView);
+    $("retry").addEventListener("click", function () { if (!map) initMap(); else loadBounds(); });
+    wirePopover("snap-btn", "snap-pop");
     var pop = $("sources-pop"), pb = $("sources-btn");
     pb.addEventListener("click", function (e) { e.stopPropagation(); var open = !pop.classList.contains("open"); pop.classList.toggle("open", open); pb.setAttribute("aria-expanded", String(open)); });
     document.addEventListener("click", function (e) { if (!pop.contains(e.target) && e.target !== pb) { pop.classList.remove("open"); pb.setAttribute("aria-expanded", "false"); } });
     document.addEventListener("keydown", function (e) {
       if (e.key !== "Escape") return;
-      if (pop.classList.contains("open")) { pop.classList.remove("open"); pb.setAttribute("aria-expanded", "false"); pb.focus(); }
+      var open = document.querySelector(".popover.open");
+      if (open) { open.classList.remove("open"); var b = document.querySelector('[aria-controls="' + open.id + '"]'); if (b) { b.setAttribute("aria-expanded", "false"); b.focus(); } }
       else if (!$("drawer").hidden) closeProfile();
     });
     $("theme-btn").addEventListener("click", function () {
@@ -675,8 +738,19 @@
       document.documentElement.dataset.theme = t;
       try { localStorage.setItem("oh-theme", t); } catch (e) {}
       if (D.rows.length) { renderList(); renderLegend(); }
-      if (map) { mapReady = false; map.setStyle(styleUrl()); }   // style.load re-adds the layers
+      if (map) { mapReady = false; styleOk = false; map.setStyle(styleUrl()); }   // style.load re-adds the layers
+      if (D.rows.length) renderSnapshot();
     });
+  }
+
+  function wirePopover(btnId, popId) {
+    var b = $(btnId), p = $(popId);
+    b.addEventListener("click", function (e) {
+      e.stopPropagation();
+      document.querySelectorAll(".popover.open").forEach(function (o) { if (o !== p) o.classList.remove("open"); });
+      var open = !p.classList.contains("open"); p.classList.toggle("open", open); b.setAttribute("aria-expanded", String(open));
+    });
+    document.addEventListener("click", function (e) { if (!p.contains(e.target) && e.target !== b) { p.classList.remove("open"); b.setAttribute("aria-expanded", "false"); } });
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
