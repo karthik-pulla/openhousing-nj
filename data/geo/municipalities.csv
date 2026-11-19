@@ -1,0 +1,565 @@
+geoid,mun_code,name,census_name,mun_type,county,county_fips,cousub_fips,gnis,pop_acs,pop_acs_moe,acs_vintage,pop_2020_census
+3400100100,0101,Absecon City,Absecon city,City,Atlantic,34001,00100,885134,9170,27,ACS 2020-2024 5-year,9137
+3400102080,0102,Atlantic City,Atlantic City city,City,Atlantic,34001,02080,885142,38632,47,ACS 2020-2024 5-year,38497
+3400107810,0103,Brigantine City,Brigantine city,City,Atlantic,34001,07810,885171,7674,30,ACS 2020-2024 5-year,7716
+3400108680,0104,Buena Borough,Buena borough,Borough,Atlantic,34001,08680,885173,4520,24,ACS 2020-2024 5-year,4501
+3400108710,0105,Buena Vista Township,Buena Vista township,Township,Atlantic,34001,08710,882048,7103,21,ACS 2020-2024 5-year,7033
+3400115160,0106,Corbin City,Corbin City city,City,Atlantic,34001,15160,885192,662,226,ACS 2020-2024 5-year,471
+3400120290,0108,Egg Harbor Township,Egg Harbor township,Township,Atlantic,34001,20290,882051,48073,50,ACS 2020-2024 5-year,47842
+3400120350,0107,Egg Harbor City,Egg Harbor City city,City,Atlantic,34001,20350,885204,4400,21,ACS 2020-2024 5-year,4396
+3400121870,0109,Estell Manor City,Estell Manor city,City,Atlantic,34001,21870,885212,1565,300,ACS 2020-2024 5-year,1668
+3400123940,0110,Folsom Borough,Folsom borough,Borough,Atlantic,34001,23940,885222,1773,204,ACS 2020-2024 5-year,1811
+3400125560,0111,Galloway Township,Galloway township,Township,Atlantic,34001,25560,882052,37996,35,ACS 2020-2024 5-year,37813
+3400129280,0112,Hamilton Township,Hamilton township,Township,Atlantic,34001,29280,882049,28204,50,ACS 2020-2024 5-year,27484
+3400129430,0113,Hammonton Town,Hammonton town,Town,Atlantic,34001,29430,885242,14840,40,ACS 2020-2024 5-year,14711
+3400140530,0114,Linwood City,Linwood city,City,Atlantic,34001,40530,885280,6992,27,ACS 2020-2024 5-year,6971
+3400141370,0115,Longport Borough,Longport borough,Borough,Atlantic,34001,41370,885286,901,164,ACS 2020-2024 5-year,893
+3400143890,0116,Margate City,Margate City city,City,Atlantic,34001,43890,885292,5234,21,ACS 2020-2024 5-year,5317
+3400149410,0117,Mullica Township,Mullica township,Township,Atlantic,34001,49410,882053,5832,15,ACS 2020-2024 5-year,5816
+3400152950,0118,Northfield City,Northfield city,City,Atlantic,34001,52950,885324,8456,39,ACS 2020-2024 5-year,8434
+3400159640,0119,Pleasantville City,Pleasantville city,City,Atlantic,34001,59640,885356,20712,26,ACS 2020-2024 5-year,20629
+3400160600,0120,Port Republic City,Port Republic city,City,Atlantic,34001,60600,885360,1076,246,ACS 2020-2024 5-year,1101
+3400168430,0121,Somers Point City,Somers Point city,City,Atlantic,34001,68430,885397,10515,25,ACS 2020-2024 5-year,10469
+3400175620,0122,Ventnor City,Ventnor City city,City,Atlantic,34001,75620,885426,9265,25,ACS 2020-2024 5-year,9210
+3400180330,0123,Weymouth Township,Weymouth township,Township,Atlantic,34001,80330,882050,2675,15,ACS 2020-2024 5-year,2614
+3400300700,0201,Allendale Borough,Allendale borough,Borough,Bergen,34003,00700,885135,6865,44,ACS 2020-2024 5-year,6848
+3400301090,0202,Alpine Borough,Alpine borough,Borough,Bergen,34003,01090,885139,1588,246,ACS 2020-2024 5-year,1762
+3400305170,0203,Bergenfield Borough,Bergenfield borough,Borough,Bergen,34003,05170,885157,28450,66,ACS 2020-2024 5-year,28321
+3400306490,0204,Bogota Borough,Bogota borough,Borough,Bergen,34003,06490,885163,9360,23,ACS 2020-2024 5-year,8778
+3400310480,0205,Carlstadt Borough,Carlstadt borough,Borough,Bergen,34003,10480,885180,6378,14,ACS 2020-2024 5-year,6372
+3400313570,0206,Cliffside Park Borough,Cliffside Park borough,Borough,Bergen,34003,13570,885187,25781,30,ACS 2020-2024 5-year,25693
+3400313810,0207,Closter Borough,Closter borough,Borough,Bergen,34003,13810,885190,8606,26,ACS 2020-2024 5-year,8594
+3400315820,0208,Cresskill Borough,Cresskill borough,Borough,Bergen,34003,15820,885193,9174,26,ACS 2020-2024 5-year,9155
+3400317530,0209,Demarest Borough,Demarest borough,Borough,Bergen,34003,17530,885195,4911,18,ACS 2020-2024 5-year,4981
+3400318400,0210,Dumont Borough,Dumont borough,Borough,Bergen,34003,18400,885197,18279,55,ACS 2020-2024 5-year,17863
+3400319510,0212,East Rutherford Borough,East Rutherford borough,Borough,Bergen,34003,19510,885201,10313,29,ACS 2020-2024 5-year,10022
+3400320020,0213,Edgewater Borough,Edgewater borough,Borough,Bergen,34003,20020,885203,14759,25,ACS 2020-2024 5-year,14336
+3400321300,0211,Elmwood Park Borough,Elmwood Park borough,Borough,Bergen,34003,21300,885207,21412,42,ACS 2020-2024 5-year,21422
+3400321450,0214,Emerson Borough,Emerson borough,Borough,Bergen,34003,21450,885208,7305,21,ACS 2020-2024 5-year,7290
+3400321480,0215,Englewood City,Englewood city,City,Bergen,34003,21480,885209,29638,38,ACS 2020-2024 5-year,29308
+3400321510,0216,Englewood Cliffs Borough,Englewood Cliffs borough,Borough,Bergen,34003,21510,885210,5362,27,ACS 2020-2024 5-year,5342
+3400322470,0217,Fair Lawn Borough,Fair Lawn borough,Borough,Bergen,34003,22470,885214,35610,78,ACS 2020-2024 5-year,34927
+3400322560,0218,Fairview Borough,Fairview borough,Borough,Bergen,34003,22560,885215,15099,32,ACS 2020-2024 5-year,15025
+3400324420,0219,Fort Lee Borough,Fort Lee borough,Borough,Bergen,34003,24420,885223,40067,75,ACS 2020-2024 5-year,40191
+3400324990,0220,Franklin Lakes Borough,Franklin Lakes borough,Borough,Bergen,34003,24990,885225,11084,24,ACS 2020-2024 5-year,11079
+3400325770,0221,Garfield City,Garfield city,City,Bergen,34003,25770,885228,32783,46,ACS 2020-2024 5-year,32655
+3400326640,0222,Glen Rock Borough,Glen Rock borough,Borough,Bergen,34003,26640,885233,12154,32,ACS 2020-2024 5-year,12133
+3400328680,0223,Hackensack City,Hackensack city,City,Bergen,34003,28680,885236,46057,38,ACS 2020-2024 5-year,46030
+3400330150,0224,Harrington Park Borough,Harrington Park borough,Borough,Bergen,34003,30150,885244,4954,28,ACS 2020-2024 5-year,4741
+3400330420,0225,Hasbrouck Heights Borough,Hasbrouck Heights borough,Borough,Bergen,34003,30420,885247,12115,27,ACS 2020-2024 5-year,12125
+3400330540,0226,Haworth Borough,Haworth borough,Borough,Bergen,34003,30540,885248,3363,28,ACS 2020-2024 5-year,3343
+3400331920,0227,Hillsdale Borough,Hillsdale borough,Borough,Bergen,34003,31920,885255,10144,24,ACS 2020-2024 5-year,10143
+3400332310,0228,Ho-Ho-Kus Borough,Ho-Ho-Kus borough,Borough,Bergen,34003,32310,885258,4270,30,ACS 2020-2024 5-year,4258
+3400340020,0229,Leonia Borough,Leonia borough,Borough,Bergen,34003,40020,885276,9336,45,ACS 2020-2024 5-year,9304
+3400340680,0230,Little Ferry Borough,Little Ferry borough,Borough,Bergen,34003,40680,885281,10996,24,ACS 2020-2024 5-year,10987
+3400341100,0231,Lodi Borough,Lodi borough,Borough,Bergen,34003,41100,885284,26082,41,ACS 2020-2024 5-year,26206
+3400342090,0232,Lyndhurst Township,Lyndhurst township,Township,Bergen,34003,42090,882225,22463,34,ACS 2020-2024 5-year,22519
+3400342750,0233,Mahwah Township,Mahwah township,Township,Bergen,34003,42750,882312,25491,40,ACS 2020-2024 5-year,25487
+3400344880,0234,Maywood Borough,Maywood borough,Borough,Bergen,34003,44880,885294,10093,27,ACS 2020-2024 5-year,10080
+3400346110,0235,Midland Park Borough,Midland Park borough,Borough,Bergen,34003,46110,885300,7019,23,ACS 2020-2024 5-year,7014
+3400347610,0236,Montvale Borough,Montvale borough,Borough,Bergen,34003,47610,885306,8901,23,ACS 2020-2024 5-year,8436
+3400347700,0237,Moonachie Borough,Moonachie borough,Borough,Bergen,34003,47700,885307,3126,21,ACS 2020-2024 5-year,3133
+3400351660,0238,New Milford Borough,New Milford borough,Borough,Bergen,34003,51660,885320,16995,34,ACS 2020-2024 5-year,16923
+3400352320,0239,North Arlington Borough,North Arlington borough,Borough,Bergen,34003,52320,885323,16461,34,ACS 2020-2024 5-year,16457
+3400353430,0240,Northvale Borough,Northvale borough,Borough,Bergen,34003,53430,885327,4829,24,ACS 2020-2024 5-year,4761
+3400353610,0241,Norwood Borough,Norwood borough,Borough,Bergen,34003,53610,885329,5724,28,ACS 2020-2024 5-year,5641
+3400353850,0242,Oakland Borough,Oakland borough,Borough,Bergen,34003,53850,885330,12768,27,ACS 2020-2024 5-year,12748
+3400354870,0243,Old Tappan Borough,Old Tappan borough,Borough,Bergen,34003,54870,885336,6008,23,ACS 2020-2024 5-year,5888
+3400354990,0244,Oradell Borough,Oradell borough,Borough,Bergen,34003,54990,885337,8235,34,ACS 2020-2024 5-year,8244
+3400355770,0245,Palisades Park Borough,Palisades Park borough,Borough,Bergen,34003,55770,885338,20290,27,ACS 2020-2024 5-year,20292
+3400355950,0246,Paramus Borough,Paramus borough,Borough,Bergen,34003,55950,885340,26568,34,ACS 2020-2024 5-year,26698
+3400356130,0247,Park Ridge Borough,Park Ridge borough,Borough,Bergen,34003,56130,885341,9406,71,ACS 2020-2024 5-year,8883
+3400361680,0248,Ramsey Borough,Ramsey borough,Borough,Bergen,34003,61680,885364,14805,23,ACS 2020-2024 5-year,14798
+3400362910,0249,Ridgefield Borough,Ridgefield borough,Borough,Bergen,34003,62910,885367,11498,30,ACS 2020-2024 5-year,11501
+3400362940,0250,Ridgefield Park Village,Ridgefield Park village,Village,Bergen,34003,62940,885368,13235,28,ACS 2020-2024 5-year,13224
+3400363000,0251,Ridgewood Village,Ridgewood village,Village,Bergen,34003,63000,885369,26308,33,ACS 2020-2024 5-year,25979
+3400363360,0252,River Edge Borough,River Edge borough,Borough,Bergen,34003,63360,885372,12091,25,ACS 2020-2024 5-year,12049
+3400363690,0253,River Vale Township,River Vale township,Township,Bergen,34003,63690,882310,10058,25,ACS 2020-2024 5-year,9909
+3400363990,0254,Rochelle Park Township,Rochelle Park township,Township,Bergen,34003,63990,882307,5869,17,ACS 2020-2024 5-year,5814
+3400364170,0255,Rockleigh Borough,Rockleigh borough,Borough,Bergen,34003,64170,885375,459,76,ACS 2020-2024 5-year,407
+3400365280,0256,Rutherford Borough,Rutherford borough,Borough,Bergen,34003,65280,885383,18894,25,ACS 2020-2024 5-year,18834
+3400365340,0257,Saddle Brook Township,Saddle Brook township,Township,Bergen,34003,65340,882308,14419,27,ACS 2020-2024 5-year,14294
+3400365400,0258,Saddle River Borough,Saddle River borough,Borough,Bergen,34003,65400,885384,3389,18,ACS 2020-2024 5-year,3372
+3400368970,0259,South Hackensack Township,South Hackensack township,Township,Bergen,34003,68970,882226,2770,271,ACS 2020-2024 5-year,2701
+3400372360,0260,Teaneck Township,Teaneck township,Township,Bergen,34003,72360,882227,41876,36,ACS 2020-2024 5-year,41246
+3400372420,0261,Tenafly Borough,Tenafly borough,Borough,Bergen,34003,72420,885417,15319,32,ACS 2020-2024 5-year,15409
+3400372480,0262,Teterboro Borough,Teterboro borough,Borough,Bergen,34003,72480,885418,136,93,ACS 2020-2024 5-year,61
+3400375140,0263,Upper Saddle River Borough,Upper Saddle River borough,Borough,Bergen,34003,75140,885425,8439,24,ACS 2020-2024 5-year,8353
+3400376400,0264,Waldwick Borough,Waldwick borough,Borough,Bergen,34003,76400,885429,10164,34,ACS 2020-2024 5-year,10058
+3400376490,0265,Wallington Borough,Wallington borough,Borough,Bergen,34003,76490,885430,11889,44,ACS 2020-2024 5-year,11868
+3400377135,0266,Washington Township,Washington township,Township,Bergen,34003,77135,882311,9323,22,ACS 2020-2024 5-year,9285
+3400380270,0267,Westwood Borough,Westwood borough,Borough,Bergen,34003,80270,885442,11283,35,ACS 2020-2024 5-year,11282
+3400382300,0268,Woodcliff Lake Borough,Woodcliff Lake borough,Borough,Bergen,34003,82300,885449,6152,38,ACS 2020-2024 5-year,6128
+3400382570,0269,Wood-Ridge Borough,Wood-Ridge borough,Borough,Bergen,34003,82570,885451,10218,23,ACS 2020-2024 5-year,10137
+3400383050,0270,Wyckoff Township,Wyckoff township,Township,Bergen,34003,83050,882309,17050,27,ACS 2020-2024 5-year,16585
+3400503370,0301,Bass River Township,Bass River township,Township,Burlington,34005,03370,882086,988,177,ACS 2020-2024 5-year,1355
+3400505740,0302,Beverly City,Beverly city,City,Burlington,34005,05740,885160,2514,15,ACS 2020-2024 5-year,2499
+3400506670,0303,Bordentown City,Bordentown city,City,Burlington,34005,06670,885165,4026,24,ACS 2020-2024 5-year,3993
+3400506700,0304,Bordentown Township,Bordentown township,Township,Burlington,34005,06700,882110,12120,36,ACS 2020-2024 5-year,11791
+3400508920,0305,Burlington City,Burlington city,City,Burlington,34005,08920,885174,9993,36,ACS 2020-2024 5-year,9743
+3400508950,0306,Burlington Township,Burlington township,Township,Burlington,34005,08950,882102,24127,37,ACS 2020-2024 5-year,23983
+3400512670,0307,Chesterfield Township,Chesterfield township,Township,Burlington,34005,12670,882109,9150,29,ACS 2020-2024 5-year,9422
+3400512940,0308,Cinnaminson Township,Cinnaminson township,Township,Burlington,34005,12940,882096,17415,28,ACS 2020-2024 5-year,17064
+3400517080,0309,Delanco Township,Delanco township,Township,Burlington,34005,17080,882100,4872,20,ACS 2020-2024 5-year,4824
+3400517440,0310,Delran Township,Delran township,Township,Burlington,34005,17440,882097,18148,25,ACS 2020-2024 5-year,17882
+3400518790,0311,Eastampton Township,Eastampton township,Township,Burlington,34005,18790,882105,6352,20,ACS 2020-2024 5-year,6191
+3400520050,0312,Edgewater Park Township,Edgewater Park township,Township,Burlington,34005,20050,882101,9003,25,ACS 2020-2024 5-year,8930
+3400522110,0313,Evesham Township,Evesham township,Township,Burlington,34005,22110,882082,48179,54,ACS 2020-2024 5-year,46826
+3400523250,0314,Fieldsboro Borough,Fieldsboro borough,Borough,Burlington,34005,23250,885219,649,198,ACS 2020-2024 5-year,526
+3400523850,0315,Florence Township,Florence township,Township,Burlington,34005,23850,882107,12935,27,ACS 2020-2024 5-year,12812
+3400529010,0316,Hainesport Township,Hainesport township,Township,Burlington,34005,29010,882092,6065,18,ACS 2020-2024 5-year,6035
+3400542060,0317,Lumberton Township,Lumberton township,Township,Burlington,34005,42060,882091,12882,28,ACS 2020-2024 5-year,12803
+3400543290,0318,Mansfield Township,Mansfield township,Township,Burlington,34005,43290,882108,8974,23,ACS 2020-2024 5-year,8897
+3400543740,0319,Maple Shade Township,Maple Shade township,Township,Burlington,34005,43740,882094,20076,49,ACS 2020-2024 5-year,19980
+3400545120,0320,Medford Township,Medford township,Township,Burlington,34005,45120,882083,24812,28,ACS 2020-2024 5-year,24497
+3400545210,0321,Medford Lakes Borough,Medford Lakes borough,Borough,Burlington,34005,45210,885295,4297,19,ACS 2020-2024 5-year,4264
+3400547880,0322,Moorestown Township,Moorestown township,Township,Burlington,34005,47880,882095,21548,32,ACS 2020-2024 5-year,21355
+3400548900,0323,Mount Holly Township,Mount Holly township,Township,Burlington,34005,48900,882104,10056,33,ACS 2020-2024 5-year,9981
+3400549020,0324,Mount Laurel Township,Mount Laurel township,Township,Burlington,34005,49020,882093,46026,45,ACS 2020-2024 5-year,44633
+3400551510,0325,New Hanover Township,New Hanover township,Township,Burlington,34005,51510,882088,7231,312,ACS 2020-2024 5-year,6367
+3400553070,0326,North Hanover Township,North Hanover township,Township,Burlington,34005,53070,882087,8011,26,ACS 2020-2024 5-year,7963
+3400555800,0327,Palmyra Borough,Palmyra borough,Borough,Burlington,34005,55800,885339,7485,47,ACS 2020-2024 5-year,7438
+3400557480,0328,Pemberton Borough,Pemberton borough,Borough,Burlington,34005,57480,885346,1312,155,ACS 2020-2024 5-year,1371
+3400557510,0329,Pemberton Township,Pemberton township,Township,Burlington,34005,57510,882089,27030,37,ACS 2020-2024 5-year,26903
+3400563510,0330,Riverside Township,Riverside township,Township,Burlington,34005,63510,882098,8055,31,ACS 2020-2024 5-year,8003
+3400563660,0331,Riverton Borough,Riverton borough,Borough,Burlington,34005,63660,885373,2770,34,ACS 2020-2024 5-year,2764
+3400566810,0332,Shamong Township,Shamong township,Township,Burlington,34005,66810,882084,6497,19,ACS 2020-2024 5-year,6460
+3400568610,0333,Southampton Township,Southampton township,Township,Burlington,34005,68610,882090,10372,41,ACS 2020-2024 5-year,10317
+3400569990,0334,Springfield Township,Springfield township,Township,Burlington,34005,69990,882106,3257,19,ACS 2020-2024 5-year,3245
+3400572060,0335,Tabernacle Township,Tabernacle township,Township,Burlington,34005,72060,882081,6854,21,ACS 2020-2024 5-year,6776
+3400577150,0336,Washington Township,Washington township,Township,Burlington,34005,77150,882085,489,103,ACS 2020-2024 5-year,693
+3400578200,0337,Westampton Township,Westampton township,Township,Burlington,34005,78200,882103,9198,20,ACS 2020-2024 5-year,9121
+3400581440,0338,Willingboro Township,Willingboro township,Township,Burlington,34005,81440,882099,32103,36,ACS 2020-2024 5-year,31889
+3400582420,0339,Woodland Township,Woodland township,Township,Burlington,34005,82420,882080,1486,293,ACS 2020-2024 5-year,1544
+3400582960,0340,Wrightstown Borough,Wrightstown borough,Borough,Burlington,34005,82960,885453,448,198,ACS 2020-2024 5-year,720
+3400702200,0401,Audubon Borough,Audubon borough,Borough,Camden,34007,02200,885144,8730,26,ACS 2020-2024 5-year,8707
+3400702230,0402,Audubon Park Borough,Audubon Park borough,Borough,Camden,34007,02230,885145,1001,206,ACS 2020-2024 5-year,991
+3400703250,0403,Barrington Borough,Barrington borough,Borough,Camden,34007,03250,885149,7076,17,ACS 2020-2024 5-year,7075
+3400704750,0404,Bellmawr Borough,Bellmawr borough,Borough,Camden,34007,04750,885154,11737,34,ACS 2020-2024 5-year,11707
+3400705440,0405,Berlin Borough,Berlin borough,Borough,Camden,34007,05440,885158,7539,20,ACS 2020-2024 5-year,7489
+3400705470,0406,Berlin Township,Berlin township,Township,Camden,34007,05470,882152,5963,24,ACS 2020-2024 5-year,5867
+3400708170,0407,Brooklawn Borough,Brooklawn borough,Borough,Camden,34007,08170,885172,1780,229,ACS 2020-2024 5-year,1815
+3400710000,0408,Camden City,Camden city,City,Camden,34007,10000,885177,71496,93,ACS 2020-2024 5-year,71791
+3400712280,0409,Cherry Hill Township,Cherry Hill township,Township,Camden,34007,12280,882155,76725,38,ACS 2020-2024 5-year,74553
+3400712550,0410,Chesilhurst Borough,Chesilhurst borough,Borough,Camden,34007,12550,885183,1409,253,ACS 2020-2024 5-year,1536
+3400713420,0411,Clementon Borough,Clementon borough,Borough,Camden,34007,13420,885186,5410,14,ACS 2020-2024 5-year,5338
+3400714260,0412,Collingswood Borough,Collingswood borough,Borough,Camden,34007,14260,885191,14205,57,ACS 2020-2024 5-year,14186
+3400726070,0413,Gibbsboro Borough,Gibbsboro borough,Borough,Camden,34007,26070,885230,2435,226,ACS 2020-2024 5-year,2189
+3400726760,0415,Gloucester Township,Gloucester township,Township,Camden,34007,26760,882154,66282,43,ACS 2020-2024 5-year,66034
+3400726820,0414,Gloucester City,Gloucester City city,City,Camden,34007,26820,885234,11509,33,ACS 2020-2024 5-year,11484
+3400728740,0416,Haddon Township,Haddon township,Township,Camden,34007,28740,882156,15469,25,ACS 2020-2024 5-year,15407
+3400728770,0417,Haddonfield Borough,Haddonfield borough,Borough,Camden,34007,28770,885238,12595,28,ACS 2020-2024 5-year,12550
+3400728800,0418,Haddon Heights Borough,Haddon Heights borough,Borough,Camden,34007,28800,885239,7516,23,ACS 2020-2024 5-year,7495
+3400732220,0419,Hi-Nella Borough,Hi-Nella borough,Borough,Camden,34007,32220,885256,855,223,ACS 2020-2024 5-year,927
+3400739210,0420,Laurel Springs Borough,Laurel Springs borough,Borough,Camden,34007,39210,885272,2044,231,ACS 2020-2024 5-year,1978
+3400739420,0421,Lawnside Borough,Lawnside borough,Borough,Camden,34007,39420,885274,3200,30,ACS 2020-2024 5-year,2955
+3400740440,0422,Lindenwold Borough,Lindenwold borough,Borough,Camden,34007,40440,885279,21719,23,ACS 2020-2024 5-year,21641
+3400742630,0423,Magnolia Borough,Magnolia borough,Borough,Camden,34007,42630,885288,4354,21,ACS 2020-2024 5-year,4352
+3400745510,0424,Merchantville Borough,Merchantville borough,Borough,Camden,34007,45510,885297,3905,21,ACS 2020-2024 5-year,3820
+3400748750,0425,Mount Ephraim Borough,Mount Ephraim borough,Borough,Camden,34007,48750,885313,4669,35,ACS 2020-2024 5-year,4651
+3400753880,0426,Oaklyn Borough,Oaklyn borough,Borough,Camden,34007,53880,885331,3947,19,ACS 2020-2024 5-year,3930
+3400757660,0427,Pennsauken Township,Pennsauken township,Township,Camden,34007,57660,882157,37275,89,ACS 2020-2024 5-year,37074
+3400758770,0428,Pine Hill Borough,Pine Hill borough,Borough,Camden,34007,58770,885352,10802,29,ACS 2020-2024 5-year,10764
+3400765160,0430,Runnemede Borough,Runnemede borough,Borough,Camden,34007,65160,885382,8355,28,ACS 2020-2024 5-year,8324
+3400768340,0431,Somerdale Borough,Somerdale borough,Borough,Camden,34007,68340,885396,5581,41,ACS 2020-2024 5-year,5566
+3400771220,0432,Stratford Borough,Stratford borough,Borough,Camden,34007,71220,885411,7018,34,ACS 2020-2024 5-year,6981
+3400772240,0433,Tavistock Borough,Tavistock borough,Borough,Camden,34007,72240,885416,4,12,ACS 2020-2024 5-year,9
+3400776220,0434,Voorhees Township,Voorhees township,Township,Camden,34007,76220,882153,31191,55,ACS 2020-2024 5-year,31069
+3400777630,0435,Waterford Township,Waterford township,Township,Camden,34007,77630,882151,10451,22,ACS 2020-2024 5-year,10421
+3400781740,0436,Winslow Township,Winslow township,Township,Camden,34007,81740,882150,40090,42,ACS 2020-2024 5-year,39907
+3400782450,0437,Woodlynne Borough,Woodlynne borough,Borough,Camden,34007,82450,885450,2920,27,ACS 2020-2024 5-year,2902
+3400902320,0501,Avalon Borough,Avalon borough,Borough,Cape May,34009,02320,885146,1488,158,ACS 2020-2024 5-year,1243
+3400910270,0502,Cape May City,Cape May city,City,Cape May,34009,10270,885178,2767,15,ACS 2020-2024 5-year,2768
+3400910330,0503,Cape May Point Borough,Cape May Point borough,Borough,Cape May,34009,10330,885179,138,46,ACS 2020-2024 5-year,305
+3400917560,0504,Dennis Township,Dennis township,Township,Cape May,34009,17560,882046,6205,22,ACS 2020-2024 5-year,6285
+3400941610,0505,Lower Township,Lower township,Township,Cape May,34009,41610,882044,21956,56,ACS 2020-2024 5-year,22057
+3400945810,0506,Middle Township,Middle township,Township,Cape May,34009,45810,882045,20277,42,ACS 2020-2024 5-year,20380
+3400953490,0507,North Wildwood City,North Wildwood city,City,Cape May,34009,53490,885328,3602,14,ACS 2020-2024 5-year,3621
+3400954360,0508,Ocean City,Ocean City city,City,Cape May,34009,54360,885332,11261,25,ACS 2020-2024 5-year,11229
+3400966390,0509,Sea Isle City,Sea Isle City city,City,Cape May,34009,66390,885389,2000,231,ACS 2020-2024 5-year,2104
+3400971010,0510,Stone Harbor Borough,Stone Harbor borough,Borough,Cape May,34009,71010,885410,893,131,ACS 2020-2024 5-year,796
+3400974810,0511,Upper Township,Upper township,Township,Cape May,34009,74810,882047,12525,23,ACS 2020-2024 5-year,12539
+3400978530,0512,West Cape May Borough,West Cape May borough,Borough,Cape May,34009,78530,885435,1011,199,ACS 2020-2024 5-year,1010
+3400980210,0513,West Wildwood Borough,West Wildwood borough,Borough,Cape May,34009,80210,885441,588,175,ACS 2020-2024 5-year,540
+3400981170,0514,Wildwood City,Wildwood city,City,Cape May,34009,81170,885444,5130,17,ACS 2020-2024 5-year,5157
+3400981200,0515,Wildwood Crest Borough,Wildwood Crest borough,Borough,Cape May,34009,81200,885445,3077,14,ACS 2020-2024 5-year,3101
+3400981890,0516,Woodbine Borough,Woodbine borough,Borough,Cape May,34009,81890,885446,2023,238,ACS 2020-2024 5-year,2128
+3401107600,0601,Bridgeton City,Bridgeton city,City,Cumberland,34011,07600,885169,27001,31,ACS 2020-2024 5-year,27263
+3401114710,0602,Commercial Township,Commercial township,Township,Cumberland,34011,14710,882062,4674,23,ACS 2020-2024 5-year,4669
+3401116900,0603,Deerfield Township,Deerfield township,Township,Cumberland,34011,16900,882054,3160,23,ACS 2020-2024 5-year,3136
+3401118220,0604,Downe Township,Downe township,Township,Cumberland,34011,18220,882061,1638,190,ACS 2020-2024 5-year,1399
+3401122350,0605,Fairfield Township,Fairfield township,Township,Cumberland,34011,22350,882059,5422,56,ACS 2020-2024 5-year,5546
+3401128170,0606,Greenwich Township,Greenwich township,Township,Cumberland,34011,28170,882058,731,105,ACS 2020-2024 5-year,771
+3401133120,0607,Hopewell Township,Hopewell township,Township,Cumberland,34011,33120,882056,4386,21,ACS 2020-2024 5-year,4391
+3401139450,0608,Lawrence Township,Lawrence township,Township,Cumberland,34011,39450,882060,3087,22,ACS 2020-2024 5-year,3087
+3401144580,0609,Maurice River Township,Maurice River township,Township,Cumberland,34011,44580,882063,5350,13,ACS 2020-2024 5-year,6218
+3401146680,0610,Millville City,Millville city,City,Cumberland,34011,46680,885304,27511,36,ACS 2020-2024 5-year,27491
+3401167020,0611,Shiloh Borough,Shiloh borough,Borough,Cumberland,34011,67020,885393,228,88,ACS 2020-2024 5-year,444
+3401171160,0612,Stow Creek Township,Stow Creek township,Township,Cumberland,34011,71160,882057,1312,191,ACS 2020-2024 5-year,1312
+3401174870,0613,Upper Deerfield Township,Upper Deerfield township,Township,Cumberland,34011,74870,882055,7799,22,ACS 2020-2024 5-year,7645
+3401176070,0614,Vineland City,Vineland city,City,Cumberland,34011,76070,885428,61006,42,ACS 2020-2024 5-year,60780
+3401304695,0701,Belleville Township,Belleville township,Township,Essex,34013,04695,1729713,38065,44,ACS 2020-2024 5-year,38222
+3401306260,0702,Bloomfield Township,Bloomfield township,Township,Essex,34013,06260,1729714,53793,39,ACS 2020-2024 5-year,53105
+3401309250,0703,Caldwell Borough,Caldwell borough,Borough,Essex,34013,09250,2381010,9003,26,ACS 2020-2024 5-year,9027
+3401311200,0704,Cedar Grove Township,Cedar Grove township,Township,Essex,34013,11200,882222,13475,38,ACS 2020-2024 5-year,12980
+3401313045,0717,City of Orange Township,City of Orange township,City,Essex,34013,13045,1729742,34281,40,ACS 2020-2024 5-year,34447
+3401319390,0705,East Orange City,East Orange city,City,Essex,34013,19390,885200,70090,73,ACS 2020-2024 5-year,69612
+3401321840,0706,Essex Fells Borough,Essex Fells borough,Borough,Essex,34013,21840,2390558,2361,318,ACS 2020-2024 5-year,2244
+3401322385,0707,Fairfield Township,Fairfield township,Township,Essex,34013,22385,1729722,7824,317,ACS 2020-2024 5-year,7872
+3401326610,0708,Glen Ridge Borough,Glen Ridge borough,Borough,Essex,34013,26610,2390559,7943,19,ACS 2020-2024 5-year,7802
+3401334450,0709,Irvington Township,Irvington township,Township,Essex,34013,34450,877363,60867,34,ACS 2020-2024 5-year,61176
+3401340890,0710,Livingston Township,Livingston township,Township,Essex,34013,40890,882219,31488,28,ACS 2020-2024 5-year,31330
+3401343800,0711,Maplewood Township,Maplewood township,Township,Essex,34013,43800,882220,25613,56,ACS 2020-2024 5-year,25684
+3401346380,0712,Millburn Township,Millburn township,Township,Essex,34013,46380,882221,22145,34,ACS 2020-2024 5-year,21710
+3401347500,0713,Montclair Township,Montclair township,Township,Essex,34013,47500,1729720,40341,57,ACS 2020-2024 5-year,40921
+3401351000,0714,Newark City,Newark city,City,Essex,34013,51000,885317,310178,77,ACS 2020-2024 5-year,311549
+3401352620,0715,North Caldwell Borough,North Caldwell borough,Borough,Essex,34013,52620,878839,6656,20,ACS 2020-2024 5-year,6694
+3401353680,0716,Nutley Township,Nutley township,Township,Essex,34013,53680,1729715,30012,43,ACS 2020-2024 5-year,30143
+3401364590,0718,Roseland Borough,Roseland borough,Borough,Essex,34013,64590,885378,6268,19,ACS 2020-2024 5-year,6299
+3401369274,0719,South Orange Village,South Orange Village township,Village,Essex,34013,69274,880741,18474,34,ACS 2020-2024 5-year,18484
+3401375815,0720,Verona Township,Verona township,Township,Essex,34013,75815,1729716,14545,22,ACS 2020-2024 5-year,14572
+3401378510,0721,West Caldwell Township,West Caldwell township,Township,Essex,34013,78510,1729717,10995,31,ACS 2020-2024 5-year,11012
+3401379800,0722,West Orange Township,West Orange township,Township,Essex,34013,79800,1729718,48585,51,ACS 2020-2024 5-year,48843
+3401513360,0801,Clayton Borough,Clayton borough,Borough,Gloucester,34015,13360,885185,8921,35,ACS 2020-2024 5-year,8807
+3401517710,0802,Deptford Township,Deptford township,Township,Gloucester,34015,17710,882149,32263,37,ACS 2020-2024 5-year,31977
+3401519180,0803,East Greenwich Township,East Greenwich township,Township,Gloucester,34015,19180,882141,12187,22,ACS 2020-2024 5-year,11706
+3401521060,0804,Elk Township,Elk township,Township,Gloucester,34015,21060,882139,4450,22,ACS 2020-2024 5-year,4424
+3401524840,0805,Franklin Township,Franklin township,Township,Gloucester,34015,24840,882138,16490,40,ACS 2020-2024 5-year,16380
+3401526340,0806,Glassboro Borough,Glassboro borough,Borough,Gloucester,34015,26340,885231,23717,29,ACS 2020-2024 5-year,23149
+3401528185,0807,Greenwich Township,Greenwich township,Township,Gloucester,34015,28185,882142,4984,42,ACS 2020-2024 5-year,4917
+3401530180,0808,Harrison Township,Harrison township,Township,Gloucester,34015,30180,882146,13790,48,ACS 2020-2024 5-year,13641
+3401541160,0809,Logan Township,Logan township,Township,Gloucester,34015,41160,882143,6055,19,ACS 2020-2024 5-year,6000
+3401543440,0810,Mantua Township,Mantua township,Township,Gloucester,34015,43440,882147,15404,27,ACS 2020-2024 5-year,15235
+3401547250,0811,Monroe Township,Monroe township,Township,Gloucester,34015,47250,882137,37648,27,ACS 2020-2024 5-year,37117
+3401549680,0812,National Park Borough,National Park borough,Borough,Gloucester,34015,49680,885314,3044,43,ACS 2020-2024 5-year,3026
+3401551390,0813,Newfield Borough,Newfield borough,Borough,Gloucester,34015,51390,885319,1844,192,ACS 2020-2024 5-year,1774
+3401557150,0814,Paulsboro Borough,Paulsboro borough,Borough,Gloucester,34015,57150,885344,6248,15,ACS 2020-2024 5-year,6196
+3401559070,0815,Pitman Borough,Pitman borough,Borough,Gloucester,34015,59070,885354,8856,20,ACS 2020-2024 5-year,8780
+3401569030,0816,South Harrison Township,South Harrison township,Township,Gloucester,34015,69030,882145,3428,28,ACS 2020-2024 5-year,3395
+3401571850,0817,Swedesboro Borough,Swedesboro borough,Borough,Gloucester,34015,71850,885415,2733,19,ACS 2020-2024 5-year,2711
+3401577180,0818,Washington Township,Washington township,Township,Gloucester,34015,77180,882140,49220,33,ACS 2020-2024 5-year,48677
+3401578110,0819,Wenonah Borough,Wenonah borough,Borough,Gloucester,34015,78110,885434,2261,198,ACS 2020-2024 5-year,2283
+3401578800,0820,West Deptford Township,West Deptford township,Township,Gloucester,34015,78800,882148,22416,28,ACS 2020-2024 5-year,22197
+3401580120,0821,Westville Borough,Westville borough,Borough,Gloucester,34015,80120,885440,4310,28,ACS 2020-2024 5-year,4264
+3401582120,0822,Woodbury City,Woodbury city,City,Gloucester,34015,82120,885447,10042,25,ACS 2020-2024 5-year,9963
+3401582180,0823,Woodbury Heights Borough,Woodbury Heights borough,Borough,Gloucester,34015,82180,885448,3117,21,ACS 2020-2024 5-year,3098
+3401582840,0824,Woolwich Township,Woolwich township,Township,Gloucester,34015,82840,882144,13526,28,ACS 2020-2024 5-year,12577
+3401703580,0901,Bayonne City,Bayonne city,City,Hudson,34017,03580,885151,71553,58,ACS 2020-2024 5-year,71686
+3401719360,0902,East Newark Borough,East Newark borough,Borough,Hudson,34017,19360,885199,2497,23,ACS 2020-2024 5-year,2594
+3401728650,0903,Guttenberg Town,Guttenberg town,Town,Hudson,34017,28650,885235,11754,33,ACS 2020-2024 5-year,12017
+3401730210,0904,Harrison Town,Harrison town,Town,Hudson,34017,30210,885245,20369,49,ACS 2020-2024 5-year,19450
+3401732250,0905,Hoboken City,Hoboken city,City,Hudson,34017,32250,885257,58668,56,ACS 2020-2024 5-year,60419
+3401736000,0906,Jersey City,Jersey City city,City,Hudson,34017,36000,885264,294078,90,ACS 2020-2024 5-year,292449
+3401736510,0907,Kearny Town,Kearny town,Town,Hudson,34017,36510,885266,40614,55,ACS 2020-2024 5-year,41999
+3401752470,0908,North Bergen Township,North Bergen township,Township,Hudson,34017,52470,882223,61250,56,ACS 2020-2024 5-year,63361
+3401766570,0909,Secaucus Town,Secaucus town,Town,Hudson,34017,66570,885392,21778,32,ACS 2020-2024 5-year,22181
+3401774630,0910,Union City,Union City city,City,Hudson,34017,74630,885424,66463,59,ACS 2020-2024 5-year,68589
+3401777930,0911,Weehawken Township,Weehawken township,Township,Hudson,34017,77930,882224,17295,61,ACS 2020-2024 5-year,17197
+3401779610,0912,West New York Town,West New York town,Town,Hudson,34017,79610,885438,52004,42,ACS 2020-2024 5-year,52912
+3401900550,1001,Alexandria Township,Alexandria township,Township,Hunterdon,34019,00550,882186,4824,24,ACS 2020-2024 5-year,4809
+3401905650,1002,Bethlehem Township,Bethlehem township,Township,Hunterdon,34019,05650,882189,3760,21,ACS 2020-2024 5-year,3745
+3401906370,1003,Bloomsbury Borough,Bloomsbury borough,Borough,Hunterdon,34019,06370,885162,841,153,ACS 2020-2024 5-year,792
+3401909280,1004,Califon Borough,Califon borough,Borough,Hunterdon,34019,09280,885176,930,156,ACS 2020-2024 5-year,1005
+3401913720,1005,Clinton Town,Clinton town,Town,Hunterdon,34019,13720,885189,2789,21,ACS 2020-2024 5-year,2773
+3401913750,1006,Clinton Township,Clinton township,Township,Hunterdon,34019,13750,882177,13350,25,ACS 2020-2024 5-year,13505
+3401917170,1007,Delaware Township,Delaware township,Township,Hunterdon,34019,17170,882182,4577,19,ACS 2020-2024 5-year,4560
+3401918820,1008,East Amwell Township,East Amwell township,Township,Hunterdon,34019,18820,882180,3940,41,ACS 2020-2024 5-year,3917
+3401923700,1009,Flemington Borough,Flemington borough,Borough,Hunterdon,34019,23700,885220,4896,20,ACS 2020-2024 5-year,4876
+3401924870,1010,Franklin Township,Franklin township,Township,Hunterdon,34019,24870,882184,3283,18,ACS 2020-2024 5-year,3267
+3401925350,1011,Frenchtown Borough,Frenchtown borough,Borough,Hunterdon,34019,25350,885227,1752,257,ACS 2020-2024 5-year,1370
+3401926550,1012,Glen Gardner Borough,Glen Gardner borough,Borough,Hunterdon,34019,26550,885232,1916,249,ACS 2020-2024 5-year,1682
+3401929460,1013,Hampton Borough,Hampton borough,Borough,Hunterdon,34019,29460,885243,1020,160,ACS 2020-2024 5-year,1438
+3401931320,1014,High Bridge Borough,High Bridge borough,Borough,Hunterdon,34019,31320,885251,3580,27,ACS 2020-2024 5-year,3546
+3401932460,1015,Holland Township,Holland township,Township,Hunterdon,34019,32460,882185,5204,17,ACS 2020-2024 5-year,5177
+3401937065,1016,Kingwood Township,Kingwood township,Township,Hunterdon,34019,37065,882183,3835,19,ACS 2020-2024 5-year,3802
+3401938610,1017,Lambertville City,Lambertville city,City,Hunterdon,34019,38610,885271,4153,28,ACS 2020-2024 5-year,4139
+3401939630,1018,Lebanon Borough,Lebanon borough,Borough,Hunterdon,34019,39630,885275,1675,310,ACS 2020-2024 5-year,1665
+3401939660,1019,Lebanon Township,Lebanon township,Township,Hunterdon,34019,39660,882191,6234,46,ACS 2020-2024 5-year,6195
+3401946260,1020,Milford Borough,Milford borough,Borough,Hunterdon,34019,46260,885301,1166,238,ACS 2020-2024 5-year,1232
+3401961920,1021,Raritan Township,Raritan township,Township,Hunterdon,34019,61920,882179,24361,44,ACS 2020-2024 5-year,23447
+3401962250,1022,Readington Township,Readington township,Township,Hunterdon,34019,62250,882178,16278,42,ACS 2020-2024 5-year,16128
+3401970980,1023,Stockton Borough,Stockton borough,Borough,Hunterdon,34019,70980,885409,446,124,ACS 2020-2024 5-year,495
+3401972510,1024,Tewksbury Township,Tewksbury township,Township,Hunterdon,34019,72510,882190,5893,14,ACS 2020-2024 5-year,5870
+3401974420,1025,Union Township,Union township,Township,Hunterdon,34019,74420,882188,6430,19,ACS 2020-2024 5-year,6507
+3401978230,1026,West Amwell Township,West Amwell township,Township,Hunterdon,34019,78230,882181,3027,21,ACS 2020-2024 5-year,3005
+3402119780,1101,East Windsor Township,East Windsor township,Township,Mercer,34021,19780,882123,30062,63,ACS 2020-2024 5-year,30045
+3402122185,1102,Ewing Township,Ewing township,Township,Mercer,34021,22185,882128,35604,31,ACS 2020-2024 5-year,37264
+3402129310,1103,Hamilton Township,Hamilton township,Township,Mercer,34021,29310,882127,92506,80,ACS 2020-2024 5-year,92297
+3402131620,1104,Hightstown Borough,Hightstown borough,Borough,Mercer,34021,31620,885254,5920,34,ACS 2020-2024 5-year,5900
+3402133150,1105,Hopewell Borough,Hopewell borough,Borough,Mercer,34021,33150,885260,1823,258,ACS 2020-2024 5-year,1918
+3402133180,1106,Hopewell Township,Hopewell township,Township,Mercer,34021,33180,882129,17595,48,ACS 2020-2024 5-year,17491
+3402139510,1107,Lawrence Township,Lawrence township,Township,Mercer,34021,39510,882126,32313,59,ACS 2020-2024 5-year,33077
+3402157600,1108,Pennington Borough,Pennington borough,Borough,Mercer,34021,57600,885347,2827,26,ACS 2020-2024 5-year,2802
+3402160900,1114,Princeton,Princeton,Borough,Mercer,34021,60900,2743608,30756,72,ACS 2020-2024 5-year,30681
+3402163850,1112,Robbinsville Township,Robbinsville township,Township,Mercer,34021,63850,882122,15641,260,ACS 2020-2024 5-year,15476
+3402174000,1111,Trenton City,Trenton city,City,Mercer,34021,74000,885421,90338,38,ACS 2020-2024 5-year,90871
+3402180240,1113,West Windsor Township,West Windsor township,Township,Mercer,34021,80240,882124,30479,48,ACS 2020-2024 5-year,29518
+3402310750,1201,Carteret Borough,Carteret borough,Borough,Middlesex,34023,10750,885181,25496,46,ACS 2020-2024 5-year,25326
+3402315550,1202,Cranbury Township,Cranbury township,Township,Middlesex,34023,15550,882160,4012,27,ACS 2020-2024 5-year,3842
+3402318490,1203,Dunellen Borough,Dunellen borough,Borough,Middlesex,34023,18490,885198,7911,29,ACS 2020-2024 5-year,7637
+3402319000,1204,East Brunswick Township,East Brunswick township,Township,Middlesex,34023,19000,882163,49945,42,ACS 2020-2024 5-year,49715
+3402320230,1205,Edison Township,Edison township,Township,Middlesex,34023,20230,882166,108164,89,ACS 2020-2024 5-year,107588
+3402330840,1206,Helmetta Borough,Helmetta borough,Borough,Middlesex,34023,30840,885250,2459,21,ACS 2020-2024 5-year,2455
+3402331470,1207,Highland Park Borough,Highland Park borough,Borough,Middlesex,34023,31470,885252,15121,33,ACS 2020-2024 5-year,15072
+3402334890,1208,Jamesburg Borough,Jamesburg borough,Borough,Middlesex,34023,34890,885263,5770,18,ACS 2020-2024 5-year,5783
+3402345690,1209,Metuchen Borough,Metuchen borough,Borough,Middlesex,34023,45690,885298,15144,39,ACS 2020-2024 5-year,15049
+3402345900,1210,Middlesex Borough,Middlesex borough,Borough,Middlesex,34023,45900,885299,14645,29,ACS 2020-2024 5-year,14636
+3402346620,1211,Milltown Borough,Milltown borough,Borough,Middlesex,34023,46620,885303,7059,23,ACS 2020-2024 5-year,7037
+3402347280,1212,Monroe Township,Monroe township,Township,Middlesex,34023,47280,882159,49032,28,ACS 2020-2024 5-year,48594
+3402351210,1213,New Brunswick City,New Brunswick city,City,Middlesex,34023,51210,885318,56345,62,ACS 2020-2024 5-year,55266
+3402352560,1214,North Brunswick Township,North Brunswick township,Township,Middlesex,34023,52560,882164,44375,43,ACS 2020-2024 5-year,43905
+3402354705,1215,Old Bridge Township,Old Bridge township,Township,Middlesex,34023,54705,882158,68406,51,ACS 2020-2024 5-year,66876
+3402358200,1216,Perth Amboy City,Perth Amboy city,City,Middlesex,34023,58200,885349,55855,61,ACS 2020-2024 5-year,55436
+3402359010,1217,Piscataway Township,Piscataway township,Township,Middlesex,34023,59010,882167,61297,67,ACS 2020-2024 5-year,60804
+3402359280,1218,Plainsboro Township,Plainsboro township,Township,Middlesex,34023,59280,882161,24167,40,ACS 2020-2024 5-year,24084
+3402365790,1219,Sayreville Borough,Sayreville borough,Borough,Middlesex,34023,65790,885386,45838,57,ACS 2020-2024 5-year,45345
+3402368550,1220,South Amboy City,South Amboy city,City,Middlesex,34023,68550,885399,9989,23,ACS 2020-2024 5-year,9411
+3402368790,1221,South Brunswick Township,South Brunswick township,Township,Middlesex,34023,68790,882162,47137,34,ACS 2020-2024 5-year,47043
+3402369390,1222,South Plainfield Borough,South Plainfield borough,Borough,Middlesex,34023,69390,885402,24473,44,ACS 2020-2024 5-year,24338
+3402369420,1223,South River Borough,South River borough,Borough,Middlesex,34023,69420,885403,16124,27,ACS 2020-2024 5-year,16118
+3402369810,1224,Spotswood Borough,Spotswood borough,Borough,Middlesex,34023,69810,885405,8171,23,ACS 2020-2024 5-year,8163
+3402382000,1225,Woodbridge Township,Woodbridge township,Township,Middlesex,34023,82000,882165,104355,64,ACS 2020-2024 5-year,103639
+3402500070,1301,Aberdeen Township,Aberdeen township,Township,Monmouth,34025,00070,882121,19332,30,ACS 2020-2024 5-year,19329
+3402500730,1302,Allenhurst Borough,Allenhurst borough,Borough,Monmouth,34025,00730,885136,376,112,ACS 2020-2024 5-year,472
+3402500760,1303,Allentown Borough,Allentown borough,Borough,Monmouth,34025,00760,885137,1702,199,ACS 2020-2024 5-year,1734
+3402501960,1304,Asbury Park City,Asbury Park city,City,Monmouth,34025,01960,885141,15295,23,ACS 2020-2024 5-year,15188
+3402502110,1305,Atlantic Highlands Borough,Atlantic Highlands borough,Borough,Monmouth,34025,02110,885143,4410,15,ACS 2020-2024 5-year,4414
+3402502440,1306,Avon-by-the-Sea Borough,Avon-by-the-Sea borough,Borough,Monmouth,34025,02440,885147,2030,259,ACS 2020-2024 5-year,1933
+3402504930,1307,Belmar Borough,Belmar borough,Borough,Monmouth,34025,04930,885155,5869,21,ACS 2020-2024 5-year,5907
+3402506970,1308,Bradley Beach Borough,Bradley Beach borough,Borough,Monmouth,34025,06970,885167,4158,21,ACS 2020-2024 5-year,4282
+3402507750,1309,Brielle Borough,Brielle borough,Borough,Monmouth,34025,07750,885170,4956,21,ACS 2020-2024 5-year,4982
+3402514560,1310,Colts Neck Township,Colts Neck township,Township,Monmouth,34025,14560,882602,9953,24,ACS 2020-2024 5-year,9957
+3402516660,1311,Deal Borough,Deal borough,Borough,Monmouth,34025,16660,885194,686,181,ACS 2020-2024 5-year,900
+3402519840,1312,Eatontown Borough,Eatontown borough,Borough,Monmouth,34025,19840,885202,13575,37,ACS 2020-2024 5-year,13597
+3402521570,1313,Englishtown Borough,Englishtown borough,Borough,Monmouth,34025,21570,885211,1989,215,ACS 2020-2024 5-year,2346
+3402522440,1314,Fair Haven Borough,Fair Haven borough,Borough,Monmouth,34025,22440,885213,6170,19,ACS 2020-2024 5-year,6269
+3402522950,1315,Farmingdale Borough,Farmingdale borough,Borough,Monmouth,34025,22950,885218,1449,302,ACS 2020-2024 5-year,1504
+3402525200,1316,Freehold Borough,Freehold borough,Borough,Monmouth,34025,25200,885226,12507,30,ACS 2020-2024 5-year,12538
+3402525230,1317,Freehold Township,Freehold township,Township,Monmouth,34025,25230,882116,35651,26,ACS 2020-2024 5-year,35369
+3402530690,1318,Hazlet Township,Hazlet township,Township,Monmouth,34025,30690,882120,20470,23,ACS 2020-2024 5-year,20125
+3402531500,1319,Highlands Borough,Highlands borough,Borough,Monmouth,34025,31500,885253,4518,30,ACS 2020-2024 5-year,4621
+3402532640,1320,Holmdel Township,Holmdel township,Township,Monmouth,34025,32640,882119,17436,49,ACS 2020-2024 5-year,17400
+3402533300,1321,Howell Township,Howell township,Township,Monmouth,34025,33300,882113,53926,41,ACS 2020-2024 5-year,53537
+3402534200,1322,Interlaken Borough,Interlaken borough,Borough,Monmouth,34025,34200,885261,939,127,ACS 2020-2024 5-year,828
+3402536480,1323,Keansburg Borough,Keansburg borough,Borough,Monmouth,34025,36480,885265,9719,26,ACS 2020-2024 5-year,9755
+3402536810,1324,Keyport Borough,Keyport borough,Borough,Monmouth,34025,36810,885268,7171,23,ACS 2020-2024 5-year,7204
+3402537560,1346,Lake Como Borough,Lake Como borough,Borough,Monmouth,34025,37560,885400,1619,212,ACS 2020-2024 5-year,1697
+3402540770,1325,Little Silver Borough,Little Silver borough,Borough,Monmouth,34025,40770,885282,6105,16,ACS 2020-2024 5-year,6131
+3402541010,1326,Loch Arbour Village,Loch Arbour village,Village,Monmouth,34025,41010,885283,185,70,ACS 2020-2024 5-year,224
+3402541310,1327,Long Branch City,Long Branch city,City,Monmouth,34025,41310,885285,32530,33,ACS 2020-2024 5-year,31667
+3402542990,1328,Manalapan Township,Manalapan township,Township,Monmouth,34025,42990,882117,40693,94,ACS 2020-2024 5-year,40905
+3402543050,1329,Manasquan Borough,Manasquan borough,Borough,Monmouth,34025,43050,885289,5922,21,ACS 2020-2024 5-year,5938
+3402544070,1330,Marlboro Township,Marlboro township,Township,Monmouth,34025,44070,882118,41648,54,ACS 2020-2024 5-year,41502
+3402544520,1331,Matawan Borough,Matawan borough,Borough,Monmouth,34025,44520,885293,9710,76,ACS 2020-2024 5-year,9565
+3402545990,1332,Middletown Township,Middletown township,Township,Monmouth,34025,45990,882604,66883,36,ACS 2020-2024 5-year,67106
+3402546560,1333,Millstone Township,Millstone township,Township,Monmouth,34025,46560,882115,10385,43,ACS 2020-2024 5-year,10376
+3402547130,1334,Monmouth Beach Borough,Monmouth Beach borough,Borough,Monmouth,34025,47130,885305,3207,18,ACS 2020-2024 5-year,3174
+3402549890,1335,Neptune Township,Neptune township,Township,Monmouth,34025,49890,882111,28265,52,ACS 2020-2024 5-year,28061
+3402549920,1336,Neptune City Borough,Neptune City borough,Borough,Monmouth,34025,49920,885315,4606,17,ACS 2020-2024 5-year,4626
+3402554270,1337,Ocean Township,Ocean township,Township,Monmouth,34025,54270,882601,27896,29,ACS 2020-2024 5-year,27672
+3402554570,1338,Oceanport Borough,Oceanport borough,Borough,Monmouth,34025,54570,885334,6195,17,ACS 2020-2024 5-year,6150
+3402562430,1339,Red Bank Borough,Red Bank borough,Borough,Monmouth,34025,62430,885366,12862,25,ACS 2020-2024 5-year,12936
+3402564410,1340,Roosevelt Borough,Roosevelt borough,Borough,Monmouth,34025,64410,885377,996,358,ACS 2020-2024 5-year,808
+3402565130,1341,Rumson Borough,Rumson borough,Borough,Monmouth,34025,65130,885381,7241,20,ACS 2020-2024 5-year,7343
+3402566240,1342,Sea Bright Borough,Sea Bright borough,Borough,Monmouth,34025,66240,885387,1718,280,ACS 2020-2024 5-year,1449
+3402566330,1343,Sea Girt Borough,Sea Girt borough,Borough,Monmouth,34025,66330,885388,1980,268,ACS 2020-2024 5-year,1866
+3402567350,1344,Shrewsbury Borough,Shrewsbury borough,Borough,Monmouth,34025,67350,885395,4179,28,ACS 2020-2024 5-year,4184
+3402567365,1345,Shrewsbury Township,Shrewsbury township,Township,Monmouth,34025,67365,882603,1156,440,ACS 2020-2024 5-year,1076
+3402570110,1347,Spring Lake Borough,Spring Lake borough,Borough,Monmouth,34025,70110,885406,2779,16,ACS 2020-2024 5-year,2789
+3402570140,1348,Spring Lake Heights Borough,Spring Lake Heights borough,Borough,Monmouth,34025,70140,885407,4861,31,ACS 2020-2024 5-year,4890
+3402573020,1349,Tinton Falls Borough,Tinton Falls borough,Borough,Monmouth,34025,73020,885419,19361,53,ACS 2020-2024 5-year,19181
+3402574540,1350,Union Beach Borough,Union Beach borough,Borough,Monmouth,34025,74540,885423,5707,22,ACS 2020-2024 5-year,5723
+3402574900,1351,Upper Freehold Township,Upper Freehold township,Township,Monmouth,34025,74900,882114,7250,23,ACS 2020-2024 5-year,7273
+3402576460,1352,Wall Township,Wall township,Township,Monmouth,34025,76460,882112,26541,38,ACS 2020-2024 5-year,26525
+3402579310,1353,West Long Branch Borough,West Long Branch borough,Borough,Monmouth,34025,79310,885437,8586,22,ACS 2020-2024 5-year,8587
+3402706610,1401,Boonton Town,Boonton town,Town,Morris,34027,06610,885164,8854,35,ACS 2020-2024 5-year,8815
+3402706640,1402,Boonton Township,Boonton township,Township,Morris,34027,06640,882205,4423,26,ACS 2020-2024 5-year,4380
+3402709040,1403,Butler Borough,Butler borough,Borough,Morris,34027,09040,885175,8133,19,ACS 2020-2024 5-year,8047
+3402712100,1404,Chatham Borough,Chatham borough,Borough,Morris,34027,12100,885182,9407,45,ACS 2020-2024 5-year,9212
+3402712130,1405,Chatham Township,Chatham township,Township,Morris,34027,12130,882194,11102,33,ACS 2020-2024 5-year,10983
+3402712580,1406,Chester Borough,Chester borough,Borough,Morris,34027,12580,885184,1512,183,ACS 2020-2024 5-year,1681
+3402712610,1407,Chester Township,Chester township,Township,Morris,34027,12610,882199,7748,45,ACS 2020-2024 5-year,7713
+3402717650,1408,Denville Township,Denville township,Township,Morris,34027,17650,882204,17205,51,ACS 2020-2024 5-year,17107
+3402718070,1409,Dover Town,Dover town,Town,Morris,34027,18070,885196,18563,40,ACS 2020-2024 5-year,18460
+3402719210,1410,East Hanover Township,East Hanover township,Township,Morris,34027,19210,882192,11152,40,ACS 2020-2024 5-year,11105
+3402723910,1411,Florham Park Borough,Florham Park borough,Borough,Morris,34027,23910,885221,13564,42,ACS 2020-2024 5-year,12585
+3402729550,1412,Hanover Township,Hanover township,Township,Morris,34027,29550,882187,14769,32,ACS 2020-2024 5-year,14677
+3402729700,1413,Harding Township,Harding township,Township,Morris,34027,29700,882195,3896,29,ACS 2020-2024 5-year,3871
+3402734980,1414,Jefferson Township,Jefferson township,Township,Morris,34027,34980,882210,20587,27,ACS 2020-2024 5-year,20538
+3402737110,1415,Kinnelon Borough,Kinnelon borough,Borough,Morris,34027,37110,885269,10013,49,ACS 2020-2024 5-year,9966
+3402740290,1416,Lincoln Park Borough,Lincoln Park borough,Borough,Morris,34027,40290,885277,10957,23,ACS 2020-2024 5-year,10915
+3402741362,1430,Long Hill Township,Long Hill township,Township,Morris,34027,41362,882196,8652,35,ACS 2020-2024 5-year,8629
+3402742510,1417,Madison Borough,Madison borough,Borough,Morris,34027,42510,885287,16447,39,ACS 2020-2024 5-year,16937
+3402745330,1418,Mendham Borough,Mendham borough,Borough,Morris,34027,45330,885296,4973,17,ACS 2020-2024 5-year,4981
+3402745360,1419,Mendham Township,Mendham township,Township,Morris,34027,45360,882200,6018,45,ACS 2020-2024 5-year,6016
+3402746860,1420,Mine Hill Township,Mine Hill township,Township,Morris,34027,46860,882202,4048,23,ACS 2020-2024 5-year,4015
+3402747670,1421,Montville Township,Montville township,Township,Morris,34027,47670,882207,22876,40,ACS 2020-2024 5-year,22450
+3402748090,1422,Morris Township,Morris township,Township,Morris,34027,48090,882193,23424,41,ACS 2020-2024 5-year,22974
+3402748210,1423,Morris Plains Borough,Morris Plains borough,Borough,Morris,34027,48210,885308,6315,27,ACS 2020-2024 5-year,6153
+3402748300,1424,Morristown Town,Morristown town,Town,Morris,34027,48300,885309,20453,27,ACS 2020-2024 5-year,20180
+3402748480,1425,Mountain Lakes Borough,Mountain Lakes borough,Borough,Morris,34027,48480,885310,4585,20,ACS 2020-2024 5-year,4472
+3402748690,1426,Mount Arlington Borough,Mount Arlington borough,Borough,Morris,34027,48690,885312,5935,18,ACS 2020-2024 5-year,5909
+3402749080,1427,Mount Olive Township,Mount Olive township,Township,Morris,34027,49080,882197,29149,54,ACS 2020-2024 5-year,28886
+3402750130,1428,Netcong Borough,Netcong borough,Borough,Morris,34027,50130,885316,3659,18,ACS 2020-2024 5-year,3375
+3402756460,1429,Parsippany-Troy Hills Township,Parsippany-Troy Hills township,Township,Morris,34027,56460,882206,56397,73,ACS 2020-2024 5-year,56162
+3402758110,1431,Pequannock Township,Pequannock township,Township,Morris,34027,58110,882208,15641,31,ACS 2020-2024 5-year,15571
+3402761890,1432,Randolph Township,Randolph township,Township,Morris,34027,61890,882201,26604,52,ACS 2020-2024 5-year,26504
+3402763300,1433,Riverdale Borough,Riverdale borough,Borough,Morris,34027,63300,885371,4112,29,ACS 2020-2024 5-year,4107
+3402764050,1434,Rockaway Borough,Rockaway borough,Borough,Morris,34027,64050,885374,6613,18,ACS 2020-2024 5-year,6598
+3402764080,1435,Rockaway Township,Rockaway township,Township,Morris,34027,64080,882209,26189,35,ACS 2020-2024 5-year,25341
+3402764980,1436,Roxbury Township,Roxbury township,Township,Morris,34027,64980,882203,23211,47,ACS 2020-2024 5-year,22950
+3402775890,1437,Victory Gardens Borough,Victory Gardens borough,Borough,Morris,34027,75890,885427,1759,181,ACS 2020-2024 5-year,1582
+3402777240,1438,Washington Township,Washington township,Township,Morris,34027,77240,882198,18265,48,ACS 2020-2024 5-year,18197
+3402780390,1439,Wharton Borough,Wharton borough,Borough,Morris,34027,80390,885443,7318,19,ACS 2020-2024 5-year,7241
+3402903050,1501,Barnegat Township,Barnegat township,Township,Ocean,34029,03050,882070,25165,42,ACS 2020-2024 5-year,24296
+3402903130,1502,Barnegat Light Borough,Barnegat Light borough,Borough,Ocean,34029,03130,885148,500,147,ACS 2020-2024 5-year,640
+3402903520,1503,Bay Head Borough,Bay Head borough,Borough,Ocean,34029,03520,885150,1205,191,ACS 2020-2024 5-year,930
+3402903940,1504,Beach Haven Borough,Beach Haven borough,Borough,Ocean,34029,03940,885152,1055,142,ACS 2020-2024 5-year,1027
+3402904180,1505,Beachwood Borough,Beachwood borough,Borough,Ocean,34029,04180,885153,11088,23,ACS 2020-2024 5-year,10859
+3402905305,1506,Berkeley Township,Berkeley township,Township,Ocean,34029,05305,882073,44634,25,ACS 2020-2024 5-year,43754
+3402907420,1507,Brick Township,Brick township,Township,Ocean,34029,07420,882075,75482,41,ACS 2020-2024 5-year,73620
+3402918670,1509,Eagleswood Township,Eagleswood township,Township,Ocean,34029,18670,882068,1647,141,ACS 2020-2024 5-year,1722
+3402930390,1510,Harvey Cedars Borough,Harvey Cedars borough,Borough,Ocean,34029,30390,885246,487,75,ACS 2020-2024 5-year,391
+3402934530,1511,Island Heights Borough,Island Heights borough,Borough,Ocean,34029,34530,885262,1720,204,ACS 2020-2024 5-year,1650
+3402934680,1512,Jackson Township,Jackson township,Township,Ocean,34029,34680,882079,59980,33,ACS 2020-2024 5-year,58544
+3402937380,1513,Lacey Township,Lacey township,Township,Ocean,34029,37380,882072,29508,27,ACS 2020-2024 5-year,28655
+3402937770,1514,Lakehurst Borough,Lakehurst borough,Borough,Ocean,34029,37770,885270,2681,18,ACS 2020-2024 5-year,2636
+3402938550,1515,Lakewood Township,Lakewood township,Township,Ocean,34029,38550,882076,139019,39,ACS 2020-2024 5-year,135158
+3402939390,1516,Lavallette Borough,Lavallette borough,Borough,Ocean,34029,39390,885273,1865,449,ACS 2020-2024 5-year,1787
+3402940560,1517,Little Egg Harbor Township,Little Egg Harbor township,Township,Ocean,34029,40560,882067,21285,25,ACS 2020-2024 5-year,20784
+3402941250,1518,Long Beach Township,Long Beach township,Township,Ocean,34029,41250,882066,3143,47,ACS 2020-2024 5-year,3153
+3402943140,1519,Manchester Township,Manchester township,Township,Ocean,34029,43140,882077,45880,33,ACS 2020-2024 5-year,45115
+3402943380,1520,Mantoloking Borough,Mantoloking borough,Borough,Ocean,34029,43380,885290,481,110,ACS 2020-2024 5-year,331
+3402954300,1521,Ocean Township,Ocean township,Township,Ocean,34029,54300,882071,9014,16,ACS 2020-2024 5-year,8835
+3402954450,1522,Ocean Gate Borough,Ocean Gate borough,Borough,Ocean,34029,54450,885333,1599,300,ACS 2020-2024 5-year,1932
+3402958590,1523,Pine Beach Borough,Pine Beach borough,Borough,Ocean,34029,58590,885351,2306,437,ACS 2020-2024 5-year,2139
+3402959790,1524,Plumsted Township,Plumsted township,Township,Ocean,34029,59790,882078,8659,17,ACS 2020-2024 5-year,8072
+3402959880,1525,Point Pleasant Borough,Point Pleasant borough,Borough,Ocean,34029,59880,885357,19334,40,ACS 2020-2024 5-year,18941
+3402959910,1526,Point Pleasant Beach Borough,Point Pleasant Beach borough,Borough,Ocean,34029,59910,885358,4855,30,ACS 2020-2024 5-year,4766
+3402966450,1527,Seaside Heights Borough,Seaside Heights borough,Borough,Ocean,34029,66450,885390,2478,18,ACS 2020-2024 5-year,2440
+3402966480,1528,Seaside Park Borough,Seaside Park borough,Borough,Ocean,34029,66480,885391,1793,250,ACS 2020-2024 5-year,1436
+3402967110,1529,Ship Bottom Borough,Ship Bottom borough,Borough,Ocean,34029,67110,885394,957,143,ACS 2020-2024 5-year,1098
+3402969510,1530,South Toms River Borough,South Toms River borough,Borough,Ocean,34029,69510,885404,3716,23,ACS 2020-2024 5-year,3643
+3402970320,1531,Stafford Township,Stafford township,Township,Ocean,34029,70320,882069,29834,36,ACS 2020-2024 5-year,28617
+3402971640,1532,Surf City Borough,Surf City borough,Borough,Ocean,34029,71640,885413,1195,145,ACS 2020-2024 5-year,1243
+3402973125,1508,Toms River Township,Toms River township,Township,Ocean,34029,73125,882074,98143,43,ACS 2020-2024 5-year,95438
+3402974210,1533,Tuckerton Borough,Tuckerton borough,Borough,Ocean,34029,74210,885422,3654,17,ACS 2020-2024 5-year,3577
+3403106340,1601,Bloomingdale Borough,Bloomingdale borough,Borough,Passaic,34031,06340,885161,7716,17,ACS 2020-2024 5-year,7777
+3403113690,1602,Clifton City,Clifton city,City,Passaic,34031,13690,885188,89379,57,ACS 2020-2024 5-year,90296
+3403129070,1603,Haledon Borough,Haledon borough,Borough,Passaic,34031,29070,885240,8980,20,ACS 2020-2024 5-year,9052
+3403130570,1604,Hawthorne Borough,Hawthorne borough,Borough,Passaic,34031,30570,885249,19628,28,ACS 2020-2024 5-year,19637
+3403140620,1605,Little Falls Township,Little Falls township,Township,Passaic,34031,40620,882313,14790,27,ACS 2020-2024 5-year,13360
+3403153040,1606,North Haledon Borough,North Haledon borough,Borough,Passaic,34031,53040,885325,8778,35,ACS 2020-2024 5-year,8927
+3403156550,1607,Passaic City,Passaic city,City,Passaic,34031,56550,885342,70002,40,ACS 2020-2024 5-year,70537
+3403157000,1608,Paterson City,Paterson city,City,Passaic,34031,57000,885343,158735,87,ACS 2020-2024 5-year,159732
+3403160090,1609,Pompton Lakes Borough,Pompton Lakes borough,Borough,Passaic,34031,60090,885359,11047,22,ACS 2020-2024 5-year,11127
+3403161170,1610,Prospect Park Borough,Prospect Park borough,Borough,Passaic,34031,61170,885362,6319,21,ACS 2020-2024 5-year,6372
+3403163150,1611,Ringwood Borough,Ringwood borough,Borough,Passaic,34031,63150,885370,11657,50,ACS 2020-2024 5-year,11735
+3403173140,1612,Totowa Borough,Totowa borough,Borough,Passaic,34031,73140,885420,10959,36,ACS 2020-2024 5-year,11065
+3403176730,1613,Wanaque Borough,Wanaque borough,Borough,Passaic,34031,76730,885431,11206,24,ACS 2020-2024 5-year,11317
+3403177840,1614,Wayne Township,Wayne township,Township,Passaic,34031,77840,882314,53756,41,ACS 2020-2024 5-year,54838
+3403179460,1615,West Milford Township,West Milford township,Township,Passaic,34031,79460,882315,24705,43,ACS 2020-2024 5-year,24862
+3403182423,1616,Woodland Park Borough,Woodland Park borough,Borough,Passaic,34031,82423,885439,13355,22,ACS 2020-2024 5-year,13484
+3403300880,1701,Alloway Township,Alloway township,Township,Salem,34033,00880,882131,3299,17,ACS 2020-2024 5-year,3283
+3403310610,1702,Carneys Point Township,Carneys Point township,Township,Salem,34033,10610,882135,8665,32,ACS 2020-2024 5-year,8637
+3403321240,1703,Elmer Borough,Elmer borough,Borough,Salem,34033,21240,885206,1176,172,ACS 2020-2024 5-year,1347
+3403321330,1704,Elsinboro Township,Elsinboro township,Township,Salem,34033,21330,882064,841,109,ACS 2020-2024 5-year,1001
+3403341640,1705,Lower Alloways Creek Township,Lower Alloways Creek township,Township,Salem,34033,41640,882065,1714,193,ACS 2020-2024 5-year,1717
+3403343200,1706,Mannington Township,Mannington township,Township,Salem,34033,43200,882133,1913,217,ACS 2020-2024 5-year,1475
+3403354810,1707,Oldmans Township,Oldmans township,Township,Salem,34033,54810,882136,1839,185,ACS 2020-2024 5-year,1910
+3403357750,1708,Penns Grove Borough,Penns Grove borough,Borough,Salem,34033,57750,885348,4882,20,ACS 2020-2024 5-year,4837
+3403357870,1709,Pennsville Township,Pennsville township,Township,Salem,34033,57870,882134,12754,23,ACS 2020-2024 5-year,12684
+3403358530,1710,Pilesgrove Township,Pilesgrove township,Township,Salem,34033,58530,882132,4220,19,ACS 2020-2024 5-year,4183
+3403359130,1711,Pittsgrove Township,Pittsgrove township,Township,Salem,34033,59130,1729723,8854,24,ACS 2020-2024 5-year,8777
+3403361470,1712,Quinton Township,Quinton township,Township,Salem,34033,61470,882130,2615,18,ACS 2020-2024 5-year,2580
+3403365490,1713,Salem City,Salem city,City,Salem,34033,65490,885385,5322,38,ACS 2020-2024 5-year,5296
+3403375110,1714,Upper Pittsgrove Township,Upper Pittsgrove township,Township,Salem,34033,75110,1723212,3466,24,ACS 2020-2024 5-year,3432
+3403382720,1715,Woodstown Borough,Woodstown borough,Borough,Salem,34033,82720,885452,3715,19,ACS 2020-2024 5-year,3678
+3403504450,1801,Bedminster Township,Bedminster township,Township,Somerset,34035,04450,882176,8283,61,ACS 2020-2024 5-year,8272
+3403505560,1802,Bernards Township,Bernards township,Township,Somerset,34035,05560,882174,28114,38,ACS 2020-2024 5-year,27830
+3403505590,1803,Bernardsville Borough,Bernardsville borough,Borough,Somerset,34035,05590,885159,7916,22,ACS 2020-2024 5-year,7893
+3403506790,1804,Bound Brook Borough,Bound Brook borough,Borough,Somerset,34035,06790,885166,12219,31,ACS 2020-2024 5-year,11988
+3403507180,1805,Branchburg Township,Branchburg township,Township,Somerset,34035,07180,882175,15140,26,ACS 2020-2024 5-year,14940
+3403507720,1806,Bridgewater Township,Bridgewater township,Township,Somerset,34035,07720,882171,46268,40,ACS 2020-2024 5-year,45977
+3403522890,1807,Far Hills Borough,Far Hills borough,Borough,Somerset,34035,22890,885217,948,145,ACS 2020-2024 5-year,924
+3403524900,1808,Franklin Township,Franklin township,Township,Somerset,34035,24900,882170,68907,47,ACS 2020-2024 5-year,68364
+3403527510,1809,Green Brook Township,Green Brook township,Township,Somerset,34035,27510,882172,7028,280,ACS 2020-2024 5-year,7281
+3403531890,1810,Hillsborough Township,Hillsborough township,Township,Somerset,34035,31890,882169,44091,54,ACS 2020-2024 5-year,43276
+3403543620,1811,Manville Borough,Manville borough,Borough,Somerset,34035,43620,885291,10921,33,ACS 2020-2024 5-year,10953
+3403546590,1812,Millstone Borough,Millstone borough,Borough,Somerset,34035,46590,885302,655,232,ACS 2020-2024 5-year,448
+3403547580,1813,Montgomery Township,Montgomery township,Township,Somerset,34035,47580,882168,23841,50,ACS 2020-2024 5-year,23690
+3403553280,1814,North Plainfield Borough,North Plainfield borough,Borough,Somerset,34035,53280,885326,22809,31,ACS 2020-2024 5-year,22808
+3403557300,1815,Peapack-Gladstone Borough,Peapack and Gladstone borough,Borough,Somerset,34035,57300,885345,2571,31,ACS 2020-2024 5-year,2558
+3403561980,1816,Raritan Borough,Raritan borough,Borough,Somerset,34035,61980,885365,8368,33,ACS 2020-2024 5-year,7835
+3403564320,1817,Rocky Hill Borough,Rocky Hill borough,Borough,Somerset,34035,64320,885376,819,152,ACS 2020-2024 5-year,743
+3403568460,1818,Somerville Borough,Somerville borough,Borough,Somerset,34035,68460,885398,13410,30,ACS 2020-2024 5-year,12346
+3403568730,1819,South Bound Brook Borough,South Bound Brook borough,Borough,Somerset,34035,68730,885401,4867,36,ACS 2020-2024 5-year,4863
+3403576940,1820,Warren Township,Warren township,Township,Somerset,34035,76940,882173,16186,32,ACS 2020-2024 5-year,15923
+3403577600,1821,Watchung Borough,Watchung borough,Borough,Somerset,34035,77600,885433,6485,27,ACS 2020-2024 5-year,6449
+3403701330,1901,Andover Borough,Andover borough,Borough,Sussex,34037,01330,885140,728,217,ACS 2020-2024 5-year,595
+3403701360,1902,Andover Township,Andover township,Township,Sussex,34037,01360,882266,5801,20,ACS 2020-2024 5-year,5996
+3403707300,1903,Branchville Borough,Branchville borough,Borough,Sussex,34037,07300,885168,814,273,ACS 2020-2024 5-year,791
+3403709160,1904,Byram Township,Byram township,Township,Sussex,34037,09160,882263,8119,24,ACS 2020-2024 5-year,8028
+3403724810,1905,Frankford Township,Frankford township,Township,Sussex,34037,24810,882267,5322,21,ACS 2020-2024 5-year,5302
+3403724930,1906,Franklin Borough,Franklin borough,Borough,Sussex,34037,24930,885224,4968,40,ACS 2020-2024 5-year,4912
+3403725140,1907,Fredon Township,Fredon township,Township,Sussex,34037,25140,882268,3281,22,ACS 2020-2024 5-year,3235
+3403727420,1908,Green Township,Green township,Township,Sussex,34037,27420,882264,3657,26,ACS 2020-2024 5-year,3627
+3403729220,1909,Hamburg Borough,Hamburg borough,Borough,Sussex,34037,29220,885241,3308,15,ACS 2020-2024 5-year,3266
+3403729490,1910,Hampton Township,Hampton township,Township,Sussex,34037,29490,882261,4912,18,ACS 2020-2024 5-year,4893
+3403729850,1911,Hardyston Township,Hardyston township,Township,Sussex,34037,29850,882269,8322,27,ACS 2020-2024 5-year,8125
+3403732910,1912,Hopatcong Borough,Hopatcong borough,Borough,Sussex,34037,32910,885259,14565,49,ACS 2020-2024 5-year,14362
+3403737440,1913,Lafayette Township,Lafayette township,Township,Sussex,34037,37440,882260,2344,244,ACS 2020-2024 5-year,2358
+3403747430,1914,Montague Township,Montague township,Township,Sussex,34037,47430,882256,3833,15,ACS 2020-2024 5-year,3792
+3403751930,1915,Newton Town,Newton town,Town,Sussex,34037,51930,885322,8369,25,ACS 2020-2024 5-year,8374
+3403754660,1916,Ogdensburg Borough,Ogdensburg borough,Borough,Sussex,34037,54660,885335,2160,209,ACS 2020-2024 5-year,2258
+3403765700,1917,Sandyston Township,Sandyston township,Township,Sussex,34037,65700,882255,1928,297,ACS 2020-2024 5-year,1977
+3403769690,1918,Sparta Township,Sparta township,Township,Sussex,34037,69690,882265,20077,37,ACS 2020-2024 5-year,19600
+3403770380,1919,Stanhope Borough,Stanhope borough,Borough,Sussex,34037,70380,885408,3552,29,ACS 2020-2024 5-year,3526
+3403770890,1920,Stillwater Township,Stillwater township,Township,Sussex,34037,70890,882262,4052,24,ACS 2020-2024 5-year,4004
+3403771670,1921,Sussex Borough,Sussex borough,Borough,Sussex,34037,71670,885414,2145,202,ACS 2020-2024 5-year,2024
+3403775740,1922,Vernon Township,Vernon township,Township,Sussex,34037,75740,882258,22605,30,ACS 2020-2024 5-year,22358
+3403776640,1923,Walpack Township,Walpack township,Township,Sussex,34037,76640,882259,4,6,ACS 2020-2024 5-year,7
+3403776790,1924,Wantage Township,Wantage township,Township,Sussex,34037,76790,882257,10941,26,ACS 2020-2024 5-year,10811
+3403905320,2001,Berkeley Heights Township,Berkeley Heights township,Township,Union,34039,05320,882218,13426,194,ACS 2020-2024 5-year,13285
+3403913150,2002,Clark Township,Clark township,Township,Union,34039,13150,882216,15622,28,ACS 2020-2024 5-year,15544
+3403915640,2003,Cranford Township,Cranford township,Township,Union,34039,15640,882214,24074,28,ACS 2020-2024 5-year,23847
+3403921000,2004,Elizabeth City,Elizabeth city,City,Union,34039,21000,885205,137302,45,ACS 2020-2024 5-year,137298
+3403922860,2005,Fanwood Borough,Fanwood borough,Borough,Union,34039,22860,885216,7799,56,ACS 2020-2024 5-year,7774
+3403925800,2006,Garwood Borough,Garwood borough,Borough,Union,34039,25800,885229,4885,27,ACS 2020-2024 5-year,4454
+3403931980,2007,Hillside Township,Hillside township,Township,Union,34039,31980,882211,22349,32,ACS 2020-2024 5-year,22456
+3403936690,2008,Kenilworth Borough,Kenilworth borough,Borough,Union,34039,36690,885267,8401,24,ACS 2020-2024 5-year,8427
+3403940350,2009,Linden City,Linden city,City,Union,34039,40350,885278,44192,85,ACS 2020-2024 5-year,43738
+3403948510,2010,Mountainside Borough,Mountainside borough,Borough,Union,34039,48510,885311,7049,18,ACS 2020-2024 5-year,7020
+3403951810,2011,New Providence Borough,New Providence borough,Borough,Union,34039,51810,885321,13727,32,ACS 2020-2024 5-year,13650
+3403959190,2012,Plainfield City,Plainfield city,City,Union,34039,59190,885355,55236,56,ACS 2020-2024 5-year,54586
+3403961530,2013,Rahway City,Rahway city,City,Union,34039,61530,885363,30109,33,ACS 2020-2024 5-year,29556
+3403964620,2014,Roselle Borough,Roselle borough,Borough,Union,34039,64620,885379,22646,58,ACS 2020-2024 5-year,22695
+3403964650,2015,Roselle Park Borough,Roselle Park borough,Borough,Union,34039,64650,885380,14093,53,ACS 2020-2024 5-year,13967
+3403966060,2016,Scotch Plains Township,Scotch Plains township,Township,Union,34039,66060,882217,24843,33,ACS 2020-2024 5-year,24968
+3403970020,2017,Springfield Township,Springfield township,Township,Union,34039,70020,882213,17171,29,ACS 2020-2024 5-year,17178
+3403971430,2018,Summit City,Summit city,City,Union,34039,71430,885412,22705,45,ACS 2020-2024 5-year,22719
+3403974480,2019,Union Township,Union township,Township,Union,34039,74480,882212,61071,75,ACS 2020-2024 5-year,59728
+3403979040,2020,Westfield Town,Westfield town,Town,Union,34039,79040,885436,31111,47,ACS 2020-2024 5-year,31032
+3403981650,2021,Winfield Township,Winfield township,Township,Union,34039,81650,882215,1479,196,ACS 2020-2024 5-year,1423
+3404100670,2101,Allamuchy Township,Allamuchy township,Township,Warren,34041,00670,882243,5427,23,ACS 2020-2024 5-year,5335
+3404101030,2102,Alpha Borough,Alpha borough,Borough,Warren,34041,01030,885138,2436,206,ACS 2020-2024 5-year,2328
+3404104990,2103,Belvidere Town,Belvidere town,Town,Warren,34041,04990,885156,2538,28,ACS 2020-2024 5-year,2520
+3404106160,2104,Blairstown Township,Blairstown township,Township,Warren,34041,06160,882317,5741,18,ACS 2020-2024 5-year,5704
+3404124960,2105,Franklin Township,Franklin township,Township,Warren,34041,24960,882251,2992,22,ACS 2020-2024 5-year,2968
+3404125320,2106,Frelinghuysen Township,Frelinghuysen township,Township,Warren,34041,25320,882240,2137,260,ACS 2020-2024 5-year,2199
+3404128260,2107,Greenwich Township,Greenwich township,Township,Warren,34041,28260,882253,5512,42,ACS 2020-2024 5-year,5473
+3404128710,2108,Hackettstown Town,Hackettstown town,Town,Warren,34041,28710,885237,10140,30,ACS 2020-2024 5-year,10248
+3404129820,2109,Hardwick Township,Hardwick township,Township,Warren,34041,29820,882239,1423,221,ACS 2020-2024 5-year,1598
+3404130090,2110,Harmony Township,Harmony township,Township,Warren,34041,30090,882248,2517,19,ACS 2020-2024 5-year,2503
+3404133060,2111,Hope Township,Hope township,Township,Warren,34041,33060,882242,1818,245,ACS 2020-2024 5-year,1835
+3404133930,2112,Independence Township,Independence township,Township,Warren,34041,33930,882244,5536,25,ACS 2020-2024 5-year,5469
+3404137320,2113,Knowlton Township,Knowlton township,Township,Warren,34041,37320,882241,2919,18,ACS 2020-2024 5-year,2894
+3404140110,2114,Liberty Township,Liberty township,Township,Warren,34041,40110,882245,2680,29,ACS 2020-2024 5-year,2670
+3404141490,2115,Lopatcong Township,Lopatcong township,Township,Warren,34041,41490,882252,9321,21,ACS 2020-2024 5-year,8776
+3404143320,2116,Mansfield Township,Mansfield township,Township,Warren,34041,43320,882249,7778,21,ACS 2020-2024 5-year,7781
+3404155530,2117,Oxford Township,Oxford township,Township,Warren,34041,55530,882247,2665,210,ACS 2020-2024 5-year,2444
+3404158350,2119,Phillipsburg Town,Phillipsburg town,Town,Warren,34041,58350,885350,15299,26,ACS 2020-2024 5-year,15249
+3404159820,2120,Pohatcong Township,Pohatcong township,Township,Warren,34041,59820,882254,3266,20,ACS 2020-2024 5-year,3241
+3404177270,2121,Washington Borough,Washington borough,Borough,Warren,34041,77270,885432,7334,27,ACS 2020-2024 5-year,7299
+3404177300,2122,Washington Township,Washington township,Township,Warren,34041,77300,882250,6691,20,ACS 2020-2024 5-year,6492
+3404180570,2123,White Township,White township,Township,Warren,34041,80570,882246,4679,18,ACS 2020-2024 5-year,4606

@@ -1,0 +1,16 @@
+# Secrets: never commit
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Download cache (raw files are re-fetchable; see data/raw/README.md)
+.cache/
+
+.DS_Store
+data/raw/

@@ -1,0 +1,29 @@
+{
+  "built": "2026-11-19",
+  "rows": 564,
+  "key": "geoid (Census county subdivision, 10 digits)",
+  "sources": [
+    {
+      "name": "U.S. Census Bureau, ACS 5-year (Census Data API)",
+      "vintage": "ACS 2020-2024 5-year",
+      "fields": [
+        "geoid",
+        "census_name",
+        "county",
+        "pop_acs",
+        "pop_acs_moe"
+      ]
+    },
+    {
+      "name": "NJOGIS, NJ Municipal Boundaries (NJ_Municipal_Boundaries_3424)",
+      "url": "https://services2.arcgis.com/XVOqAjTOJ5P6ngMu/arcgis/rest/services/NJ_Municipal_Boundaries_3424/FeatureServer/0",
+      "fields": [
+        "mun_code",
+        "name",
+        "mun_type",
+        "gnis",
+        "pop_2020_census"
+      ]
+    }
+  ]
+}

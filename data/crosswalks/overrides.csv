@@ -1,0 +1,39 @@
+# Hand-maintained crosswalk overrides. Read by pipeline/crosswalk.py; these rows always win.
+# One row per (source region -> municipality) link. Key on the source's own region ID, never its name.
+# mun_code = NJ 4-digit municipal code (see data/geo/municipalities.csv), or NONE to exclude a region on purpose.
+# A region split across towns gets one row per town. Every row needs a note saying why.
+#
+# Rule used for Zillow regions that are unincorporated communities (no Census CDP of that name):
+# link to the municipality containing the USGS GNIS "Populated Place" point of the same name in
+# the county Zillow reports. Evidence comes from scripts/review_unmatched.py (GNIS feature IDs below).
+# Borough/township twins sharing one name (Chatham, Chester, Freehold, Hopewell, Mendham, Rockaway)
+# are left UNMATCHED on purpose until a methodology decision is made; see METHODOLOGY.md.
+source,region_id,region_name,mun_code,note
+zillow,3752,Boonton,1401,"Twin name (Boonton town / Boonton township). Zillow lists 'Boonton Township' separately (region 17117), so plain 'Boonton' is the town. Same as v1."
+zillow,831875,Andover,1902,"v1 decision (CLAUDE.md), not re-verified: twin name (Andover borough / Andover township, Sussex); assigned to the township"
+zillow,760887,Berlin,0405,"v1 decision (CLAUDE.md), not re-verified: twin name (Berlin borough / Berlin township, Camden); assigned to the borough"
+zillow,10869,Clinton,1005,"v1 decision (CLAUDE.md), not re-verified: twin name (Clinton town / Clinton township, Hunterdon); assigned to the town"
+zillow,397046,Shrewsbury,1344,"v1 decision (CLAUDE.md), not re-verified: twin name (Shrewsbury borough / Shrewsbury township, Monmouth); assigned to the borough"
+zillow,34059,South Orange,0719,"Census names this municipality 'South Orange Village township'; GNIS 1867376 lies inside it"
+zillow,8505,Gladstone,1815,"Part of Peapack and Gladstone borough; GNIS 876615 lies inside it"
+zillow,5840,Matawan,1331,"Zillow labels the region Middlesex County, but the only Matawan municipality is Matawan borough (Monmouth); GNIS 878181 lies inside it"
+zillow,189129,Highland Lake,1922,"No GNIS place of this name; Census CDP 'Highland Lakes' (one letter different) lies entirely in Vernon township"
+zillow,23548,Augusta,1905,"GNIS 874424 lies in Frankford township"
+zillow,16927,Bayville,1506,"GNIS 874560 lies in Berkeley township"
+zillow,44621,Clarksboro,0803,"GNIS 875467 lies in East Greenwich township"
+zillow,37920,Cliffwood,1301,"GNIS 875496 lies in Aberdeen township"
+zillow,17730,Deepwater,1709,"GNIS 875855 lies in Pennsville township (v1 also linked Carneys Point)"
+zillow,18307,Glenwood,1922,"GNIS 876639 lies in Vernon township"
+zillow,52320,Green Village,1405,"GNIS 876795 lies in Chatham township"
+zillow,5543,Landisville,0104,"GNIS 877664 lies in Buena borough"
+zillow,46154,Lanoka Harbor,1513,"GNIS 877670 lies in Lacey township"
+zillow,29223,Minotola,0104,"GNIS 878411 lies in Buena borough"
+zillow,53385,Monroeville,1714,"GNIS 878442 lies in Upper Pittsgrove township, Salem (v1 had Elk township, Gloucester, which is not in the county Zillow reports)"
+zillow,19855,Parlin,1219,"GNIS 879141 lies in Sayreville borough (v1 also linked Old Bridge)"
+zillow,40357,Pittstown,1010,"GNIS 879337 lies in Franklin township (Hunterdon)"
+zillow,27277,Stockholm,1911,"GNIS 880911 lies in Hardyston township (v1 had Hampton township)"
+zillow,14490,Waterford Works,0435,"GNIS 881615 lies in Waterford township"
+zillow,830774,West Creek,1509,"GNIS 881694 lies in Eagleswood township"
+zillow,27934,Whiting,1519,"GNIS 881807 lies in Manchester township"
+zillow,399495,Asbury,NONE,"Zillow says Hunterdon County, but no GNIS 'Asbury' is in Hunterdon (GNIS has Gloucester and Warren); can't place it with confidence"
+zillow,53566,Newfoundland,NONE,"Zillow says Morris County, but GNIS 878781 lies in West Milford (Passaic); the community straddles both counties; can't place it with confidence"

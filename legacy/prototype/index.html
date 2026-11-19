@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>TTTP Map</title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { margin: 0; display: flex; height: 100vh; }
+        #sidebar { width: 30%; background: #eee; padding: 10px; }
+        #map { width: 70%; height: 100vh; }
+    </style>
+</head>
+<body>
+
+<div id="sidebar">
+    <h3>Top 10 Vulnerable</h3>
+    <ul id="town-rankings"></ul>
+</div>
+<div id="map"></div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia2FydGhpa3B1bGxhIiwiYSI6ImNtcm54aTBpODA0MTIyenB6c3ZocmtvZDUifQ.lj2b4gjgCavNcMso7fcI6g';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v11',
+        center: [-74.4, 40.0],
+        zoom: 8
+    });
+
+    map.on('load', async () => {
+        try {
+            const geo = await d3.json('NJ_Municipalities_3857_-1662419949780650486.geojson');
+            const csv = await d3.csv('nj_housing_index_master.csv');
+
+            geo.features.forEach(f => {
+                const match = csv.find(d => d.place.trim().toLowerCase() === f.properties.MUN_LABEL.trim().toLowerCase());
+                f.properties.vScore = match ? (parseFloat(match.median_home_value) || 0) : 0;
+            });
+
+            map.addSource('nj', { type: 'geojson', data: geo });
+            map.addLayer({
+                id: 'towns', type: 'fill', source: 'nj',
+                paint: { 
+                    'fill-color': [
+                        'interpolate', ['linear'], ['get', 'vScore'],
+                        0, '#cccccc',    // Towns with no data are grey
+                        1000, '#ffff00', // Low/Medium are yellow
+                        50000, '#ff0000' // High are red
+                    ], 
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': '#ffffff'
+                }
+            });
+
+            const top10 = geo.features.sort((a,b) => b.properties.vScore - a.properties.vScore).slice(0,10);
+            d3.select('#town-rankings').html(top10.map(t => `<li>${t.properties.MUN_LABEL}</li>`).join(''));
+        } catch (e) {
+            console.error("Map Error:", e);
+        }
+    });
+</script>
+</body>
+</html>

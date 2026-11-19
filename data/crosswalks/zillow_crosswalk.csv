@@ -1,0 +1,546 @@
+source,region_id,region_name,region_county,geoid,mun_code,method,link_hu_2020,note
+zillow,10008,Bound Brook,Somerset County,3403506790,1804,muni_full,4389,
+zillow,10081,Allendale,Bergen County,3400300700,0201,muni_full,2450,
+zillow,10201,Atlantic City,Atlantic County,3400102080,0102,muni_full,20419,
+zillow,10375,Bernardsville,Somerset County,3403505590,1803,muni_full,2953,
+zillow,10482,Bogota,Bergen County,3400306490,0204,muni_full,3026,
+zillow,10549,Bridgeport,Gloucester County,3401541160,0809,census_place,187,Bridgeport CDP: 100% of 2020 housing units
+zillow,10552,Bridgewater Township,Somerset County,3403507720,1806,muni_full,16739,
+zillow,10676,Camden,Camden County,3400710000,0408,muni_full,27670,
+zillow,10704,Cape May,Cape May County,3400910270,0502,muni_full,4157,
+zillow,10802,Chesilhurst,Camden County,3400712550,0410,muni_full,625,
+zillow,10836,Clark,Union County,3403913150,2002,muni_full,6114,
+zillow,10869,Clinton,Hunterdon County,3401913720,1005,override,,"v1 decision (CLAUDE.md), not re-verified: twin name (Clinton town / Clinton township, Hunterdon); assigned to the town"
+zillow,10871,Closter,Bergen County,3400313810,0207,muni_full,2891,
+zillow,11083,Delran Township,Burlington County,3400517440,0310,muni_full,6763,
+zillow,11144,Dover,Morris County,3402718070,1409,muni_full,5972,
+zillow,11267,Edison,Middlesex County,3402320230,1205,muni_full,38493,
+zillow,11326,Englewood,Bergen County,3400321480,0215,muni_full,11563,
+zillow,11491,Fort Lee,Bergen County,3400324420,0219,muni_full,19861,
+zillow,11527,Franklin Lakes,Bergen County,3400324990,0220,muni_full,4051,
+zillow,11829,Harvey Cedars,Ocean County,3402930390,1510,muni_full,1178,
+zillow,11893,High Bridge,Hunterdon County,3401931320,1014,muni_full,1517,
+zillow,12067,Irvington,Essex County,3401334450,0709,muni_full,24984,
+zillow,12166,Keansburg,Monmouth County,3402536480,1323,muni_full,4361,
+zillow,12183,Kenvil,Morris County,3402764980,1436,census_place,648,Kenvil CDP: 100% of 2020 housing units
+zillow,12300,Landing,Morris County,3402764980,1436,census_place,1729,Landing CDP: 100% of 2020 housing units
+zillow,12339,Lawnside,Camden County,3400739420,0421,muni_full,1231,
+zillow,12351,Ledgewood,Morris County,3402764980,1436,census_place,1936,Ledgewood CDP: 100% of 2020 housing units
+zillow,12354,Leesburg,Cumberland County,3401144580,0609,census_place,294,Leesburg CDP: 100% of 2020 housing units
+zillow,12368,Leonia,Bergen County,3400340020,0229,muni_full,3476,
+zillow,12515,Mahwah Township,Bergen County,3400342750,0233,muni_full,10109,
+zillow,12561,Margate City,Atlantic County,3400143890,0116,muni_full,7124,
+zillow,12746,Millstone,Somerset County,3403546590,1812,muni_full,168,
+zillow,12970,Newark,Essex County,3401351000,0714,muni_full,118163,
+zillow,13042,Northfield,Atlantic County,3400152950,0118,muni_full,3309,
+zillow,13056,Nutley,Essex County,3401353680,0716,muni_full,12340,
+zillow,13534,Riverdale,Morris County,3402763300,1433,muni_full,2009,
+zillow,13593,Roselle,Union County,3403964620,2014,muni_full,8431,
+zillow,13829,Short Hills,Essex County,3401346380,0712,census_place,4543,Short Hills CDP: 100% of 2020 housing units
+zillow,13908,South Bound Brook,Somerset County,3403568730,1819,muni_full,1941,
+zillow,14055,Sussex,Sussex County,3403771670,1921,muni_full,1013,
+zillow,14490,Waterford Works,Camden County,3400777630,0435,override,,GNIS 881615 lies in Waterford township
+zillow,14839,Cedar Grove,Essex County,3401311200,0704,muni_full,5042,
+zillow,14903,Audubon,Camden County,3400702200,0401,muni_full,3795,
+zillow,15103,Allenwood,Monmouth County,3402576460,1352,census_place,352,Allenwood CDP: 100% of 2020 housing units
+zillow,15118,Franklinville,Gloucester County,3401524840,0805,census_place,777,Franklinville CDP: 100% of 2020 housing units
+zillow,15190,Highland Park,Middlesex County,3402331470,1207,muni_full,6669,
+zillow,15471,East Brunswick,Middlesex County,3402319000,1204,muni_full,18088,
+zillow,15490,Montague Township,Sussex County,3403747430,1914,muni_full,1832,
+zillow,15592,Manalapan Township,Monmouth County,3402542990,1328,muni_full,14850,
+zillow,15621,National Park,Gloucester County,3401549680,0812,muni_full,1192,
+zillow,15742,Riverside Township,Burlington County,3400563510,0330,muni_full,3156,
+zillow,15845,Ocean City,Cape May County,3400954360,0508,muni_full,20752,
+zillow,15846,Ocean View,Cape May County,3400917560,0504,census_place,267,Ocean View CDP: 100% of 2020 housing units
+zillow,15963,Stratford,Camden County,3400771220,0432,muni_full,2791,
+zillow,16021,Woodlynne,Camden County,3400782450,0437,muni_full,999,
+zillow,16117,Sicklerville,Camden County,3400726760,0415,census_place,8021,Sicklerville CDP: 49% of 2020 housing units
+zillow,16117,Sicklerville,Camden County,3400781740,0436,census_place,8431,Sicklerville CDP: 51% of 2020 housing units
+zillow,16216,West Orange,Essex County,3401379800,0722,muni_full,18746,
+zillow,16217,Woodland Park,Passaic County,3403182423,1616,muni_full,5495,
+zillow,16319,Oceanport,Monmouth County,3402554570,1338,muni_full,2469,
+zillow,16507,Dunellen,Middlesex County,3402318490,1203,muni_full,2727,
+zillow,16521,Belford,Monmouth County,3402545990,1332,census_place,617,Belford CDP: 100% of 2020 housing units
+zillow,16536,Oakhurst,Monmouth County,3402554270,1337,census_place,1491,Oakhurst CDP: 100% of 2020 housing units
+zillow,16654,Brooklawn,Camden County,3400708170,0407,muni_full,820,
+zillow,16927,Bayville,Ocean County,3402905305,1506,override,,GNIS 874560 lies in Berkeley township
+zillow,17072,Bloomsbury,Hunterdon County,3401906370,1003,muni_full,371,
+zillow,17117,Boonton Township,Morris County,3402706640,1402,muni_full,1583,
+zillow,17158,Brick,Ocean County,3402907420,1507,muni_full,33863,
+zillow,17422,Chesterfield Township,Burlington County,3400512670,0307,muni_full,2070,
+zillow,17465,Clayton,Gloucester County,3401513360,0801,muni_full,3433,
+zillow,17621,Cresskill,Bergen County,3400315820,0208,muni_full,3157,
+zillow,17730,Deepwater,Salem County,3403357870,1709,override,,GNIS 875855 lies in Pennsville township (v1 also linked Carneys Point)
+zillow,17827,Dumont,Bergen County,3400318400,0210,muni_full,6572,
+zillow,17907,Eatontown,Monmouth County,3402519840,1312,muni_full,6182,
+zillow,17965,Elmwood Park,Bergen County,3400321300,0211,muni_full,7949,
+zillow,17985,Englishtown,Monmouth County,3402521570,1313,muni_full,820,
+zillow,18065,Fairview,Bergen County,3400322560,0218,muni_full,5291,
+zillow,18080,Farmingdale,Monmouth County,3402522950,1315,muni_full,630,
+zillow,18115,Flanders,Morris County,3402749080,1427,census_place,3967,Flanders CDP: 100% of 2020 housing units
+zillow,18189,Franklin,Sussex County,3403724930,1906,muni_full,2177,
+zillow,18302,Glendora,Camden County,3400726760,0415,census_place,2056,Glendora CDP: 100% of 2020 housing units
+zillow,18307,Glenwood,Sussex County,3403775740,1922,override,,GNIS 876639 lies in Vernon township
+zillow,18396,Grenloch,Gloucester County,3400726760,0415,census_place,141,Grenloch CDP: 48% of 2020 housing units
+zillow,18396,Grenloch,Gloucester County,3401577180,0818,census_place,154,Grenloch CDP: 52% of 2020 housing units
+zillow,18420,Guttenberg,Hudson County,3401728650,0903,muni_full,5142,
+zillow,18426,Haddon Heights,Camden County,3400728800,0418,muni_full,3154,
+zillow,18427,Haddonfield,Camden County,3400728770,0417,muni_full,4682,
+zillow,18447,Hammonton,Atlantic County,3400129430,0113,muni_full,5804,
+zillow,18469,Hardwick Township,Warren County,3404129820,2109,muni_full,612,
+zillow,18815,Kenilworth,Union County,3403936690,2008,muni_full,3019,
+zillow,188868,Florence,Burlington County,3400523850,0315,muni_full,5361,
+zillow,189129,Highland Lake,Sussex County,3403775740,1922,override,,No GNIS place of this name; Census CDP 'Highland Lakes' (one letter different) lies entirely in Vernon township
+zillow,18913,Lake Hiawatha,Morris County,3402756460,1429,census_place,4001,Lake Hiawatha CDP: 100% of 2020 housing units
+zillow,189314,Lawrence Township,Mercer County,3402139510,1107,muni_full,13268,
+zillow,189331,Leisuretowne,Burlington County,3400568610,0333,census_place,2457,Leisuretowne CDP: 100% of 2020 housing units
+zillow,18995,Leonardo,Monmouth County,3402545990,1332,census_place,1076,Leonardo CDP: 100% of 2020 housing units
+zillow,190288,Springfield Township,Burlington County,3400569990,0334,muni_full,1238,
+zillow,19037,Linwood,Atlantic County,3400140530,0114,muni_full,2813,
+zillow,190473,Victory Gardens,Morris County,3402775890,1437,muni_full,584,
+zillow,19051,Little Silver,Monmouth County,3402540770,1325,muni_full,2323,
+zillow,19171,Manasquan,Monmouth County,3402543050,1329,muni_full,3412,
+zillow,19296,Medford Township,Burlington County,3400545120,0320,muni_full,9391,
+zillow,19518,Mullica Hill,Gloucester County,3401530180,0808,census_place,1862,Mullica Hill CDP: 100% of 2020 housing units
+zillow,19592,New Milford,Bergen County,3400351660,0238,muni_full,6432,
+zillow,19610,Newfield,Gloucester County,3401551390,0813,muni_full,700,
+zillow,19654,North Arlington,Bergen County,3400352320,0239,muni_full,6749,
+zillow,19724,Oakland,Bergen County,3400353850,0242,muni_full,4561,
+zillow,19819,Palisades Park,Bergen County,3400355770,0245,muni_full,7668,
+zillow,19855,Parlin,Middlesex County,3402365790,1219,override,,GNIS 879141 lies in Sayreville borough (v1 also linked Old Bridge)
+zillow,19864,Parsippany,Morris County,3402756460,1429,census_place,9278,Parsippany CDP: 100% of 2020 housing units
+zillow,19870,Passaic,Passaic County,3403156550,1607,muni_full,21513,
+zillow,19873,Paterson,Passaic County,3403157000,1608,muni_full,52885,
+zillow,19963,Pitman,Gloucester County,3401559070,0815,muni_full,3693,
+zillow,20068,Prospect Park,Passaic County,3403161170,1610,muni_full,2017,
+zillow,20176,Ridgewood,Bergen County,3400363000,0251,muni_full,8814,
+zillow,20181,Ringoes,Hunterdon County,3401918820,1008,census_place,354,Ringoes CDP: 96% of 2020 housing units
+zillow,20206,Rochelle Park,Bergen County,3400363990,0254,muni_full,2227,
+zillow,20271,Runnemede,Camden County,3400765160,0430,muni_full,3540,
+zillow,20377,Sayreville,Middlesex County,3402365790,1219,muni_full,17695,
+zillow,20391,Scotch Plains,Union County,3403966060,2016,muni_full,9103,
+zillow,20400,Sea Bright,Monmouth County,3402566240,1342,muni_full,1200,
+zillow,20428,Sewaren,Middlesex County,3402382000,1225,census_place,1103,Sewaren CDP: 100% of 2020 housing units
+zillow,20578,South Plainfield,Middlesex County,3402369390,1222,muni_full,8432,
+zillow,20626,Stanhope,Sussex County,3403770380,1919,muni_full,1507,
+zillow,20685,Strathmere,Cape May County,3400974810,0511,census_place,392,Strathmere CDP: 100% of 2020 housing units
+zillow,20723,Surf City,Ocean County,3402971640,1532,muni_full,2468,
+zillow,20883,Union,Union County,3403974480,2019,muni_full,21571,
+zillow,21122,Voorhees Township,Camden County,3400776220,0434,muni_full,12674,
+zillow,21156,Waretown,Ocean County,3402954300,1521,census_place,844,Waretown CDP: 100% of 2020 housing units
+zillow,21214,West Caldwell,Essex County,3401378510,0721,muni_full,4137,
+zillow,21292,Whitehouse Station,Hunterdon County,3401962250,1022,census_place,1481,White House Station CDP: 100% of 2020 housing units
+zillow,21366,Woodbury,Gloucester County,3401582120,0822,muni_full,4532,
+zillow,21367,Woodcliff Lake,Bergen County,3400382300,0268,muni_full,2235,
+zillow,21383,Woodstown,Salem County,3403382720,1715,muni_full,1603,
+zillow,21484,Dayton,Middlesex County,3402368790,1221,census_place,2778,Dayton CDP: 100% of 2020 housing units
+zillow,21500,Cedarville,Cumberland County,3401139450,0608,census_place,302,Cedarville CDP: 100% of 2020 housing units
+zillow,21586,Avon by the Sea,Monmouth County,3402502440,1306,muni_full,1334,
+zillow,21663,Buena,Atlantic County,3400108680,0104,muni_full,1923,
+zillow,21685,Bayonne,Hudson County,3401703580,0901,muni_full,29727,
+zillow,21762,West Berlin,Camden County,3400705470,0406,census_place,1023,West Berlin CDP: 100% of 2020 housing units
+zillow,21851,Kinnelon,Morris County,3402737110,1415,muni_full,3571,
+zillow,21901,Elmer,Salem County,3403321240,1703,muni_full,574,
+zillow,21959,Essex Fells,Essex County,3401321840,0706,muni_full,806,
+zillow,22330,Ridgefield,Bergen County,3400362910,0249,muni_full,4237,
+zillow,22369,Maywood,Bergen County,3400344880,0234,muni_full,3829,
+zillow,22377,Penns Grove,Salem County,3403357750,1708,muni_full,2010,
+zillow,22402,Newton,Sussex County,3403751930,1915,muni_full,3687,
+zillow,22671,Ventnor City,Atlantic County,3400175620,0122,muni_full,7897,
+zillow,22802,Roosevelt,Monmouth County,3402564410,1340,muni_full,331,
+zillow,22932,Westampton Township,Burlington County,3400578200,0337,muni_full,3419,
+zillow,23458,Alpine,Bergen County,3400301090,0202,muni_full,676,
+zillow,23548,Augusta,Sussex County,3403724810,1905,override,,GNIS 874424 lies in Frankford township
+zillow,23619,Bay Head,Ocean County,3402903520,1503,muni_full,1024,
+zillow,23821,Bridgeton,Cumberland County,3401107600,0601,muni_full,7274,
+zillow,23907,Caldwell,Essex County,3401309250,0703,muni_full,3669,
+zillow,23945,Cape May Court House,Cape May County,3400945810,0506,census_place,2758,Cape May Court House CDP: 100% of 2020 housing units
+zillow,24079,Cinnaminson Township,Burlington County,3400512940,0308,muni_full,6543,
+zillow,24120,Clifton,Passaic County,3403113690,1602,muni_full,33325,
+zillow,24869,Glassboro,Gloucester County,3401526340,0806,muni_full,7953,
+zillow,25004,Hainesport Township,Burlington County,3400529010,0316,muni_full,2406,
+zillow,25045,Harrington Park,Bergen County,3400330150,0224,muni_full,1643,
+zillow,25074,Hawthorne,Passaic County,3403130570,1604,muni_full,7946,
+zillow,25143,Ho Ho Kus,Bergen County,3400332310,0228,muni_full,1473,
+zillow,25146,Hoboken,Hudson County,3401732250,0905,muni_full,30202,
+zillow,25273,Island Heights,Ocean County,3402934530,1511,muni_full,841,
+zillow,25320,Jersey City,Hudson County,3401736000,0906,muni_full,130992,
+zillow,25599,Lincoln Park,Morris County,3402740290,1416,muni_full,4181,
+zillow,25637,Long Branch,Monmouth County,3402541310,1327,muni_full,14944,
+zillow,25687,Lyndhurst,Bergen County,3400342090,0232,muni_full,9516,
+zillow,25717,Manahawkin,Ocean County,3402970320,1531,census_place,1101,Manahawkin CDP: 100% of 2020 housing units
+zillow,25872,Metuchen,Middlesex County,3402345690,1209,muni_full,6053,
+zillow,25878,Mickleton,Gloucester County,3401519180,0803,census_place,818,Mickleton CDP: 100% of 2020 housing units
+zillow,25884,Midland Park,Bergen County,3400346110,0235,muni_full,2887,
+zillow,25968,Montvale,Bergen County,3400347610,0236,muni_full,3115,
+zillow,26082,Neptune Township,Monmouth County,3402549890,1335,muni_full,13278,
+zillow,26185,North Haledon,Passaic County,3403153040,1606,muni_full,3141,
+zillow,26186,North Hanover Township,Burlington County,3400553070,0326,muni_full,3118,
+zillow,26272,Ogdensburg,Sussex County,3403754660,1916,muni_full,927,
+zillow,26308,Oradell,Bergen County,3400354990,0244,muni_full,2850,
+zillow,26496,Pine Beach,Ocean County,3402958590,1523,muni_full,931,
+zillow,26551,Pleasantville,Atlantic County,3400159640,0119,muni_full,7856,
+zillow,26691,Raritan,Somerset County,3403561980,1816,muni_full,3167,
+zillow,26765,Rio Grande,Cape May County,3400945810,0506,census_place,1777,Rio Grande CDP: 98% of 2020 housing units
+zillow,26885,Rutherford,Bergen County,3400365280,0256,muni_full,7370,
+zillow,27004,Sea Girt,Monmouth County,3402566330,1343,muni_full,1305,
+zillow,27146,Somerdale,Camden County,3400768340,0431,muni_full,2437,
+zillow,27188,South River,Middlesex County,3402369420,1223,muni_full,5977,
+zillow,272632,Point Pleasant,Ocean County,3402959880,1525,muni_full,8485,
+zillow,272644,Sandyston Township,Sussex County,3403765700,1917,muni_full,979,
+zillow,27277,Stockholm,Sussex County,3403729850,1911,override,,GNIS 880911 lies in Hardyston township (v1 had Hampton township)
+zillow,27319,Summit,Union County,3403971430,2018,muni_full,8365,
+zillow,27411,Three Bridges,Hunterdon County,3401962250,1022,census_place,138,Three Bridges CDP: 100% of 2020 housing units
+zillow,27446,Totowa,Passaic County,3403173140,1612,muni_full,4026,
+zillow,27793,Watchung,Somerset County,3403577600,1821,muni_full,2285,
+zillow,27808,Wayne,Passaic County,3403177840,1614,muni_full,19808,
+zillow,27896,Westfield,Union County,3403979040,2020,muni_full,11095,
+zillow,27910,Westville,Gloucester County,3401580120,0821,muni_full,1945,
+zillow,27912,Westwood,Bergen County,3400380270,0267,muni_full,4716,
+zillow,27934,Whiting,Ocean County,3402943140,1519,override,,GNIS 881807 lies in Manchester township
+zillow,27950,Wildwood,Cape May County,3400981170,0514,muni_full,6780,
+zillow,28233,Bradley Beach,Monmouth County,3402506970,1308,muni_full,3221,
+zillow,28336,Beachwood,Ocean County,3402904180,1505,muni_full,3860,
+zillow,28407,Berkeley Heights,Union County,3403905320,2001,muni_full,4660,
+zillow,28446,East Rutherford,Bergen County,3400319510,0212,muni_full,4585,
+zillow,28510,Hillsborough Township,Somerset County,3403531890,1810,muni_full,15955,
+zillow,29062,Rocky Hill,Somerset County,3403564320,1817,muni_full,298,
+zillow,29187,Pompton Plains,Morris County,3402758110,1431,census_place,5005,Pompton Plains CDP: 100% of 2020 housing units
+zillow,29207,Oaklyn,Camden County,3400753880,0426,muni_full,1852,
+zillow,29223,Minotola,Atlantic County,3400108680,0104,override,,GNIS 878411 lies in Buena borough
+zillow,29390,Wyckoff,Bergen County,3400383050,0270,muni_full,5769,
+zillow,29395,Seaside Heights,Ocean County,3402966450,1527,muni_full,2870,
+zillow,29512,Roselle Park,Union County,3403964650,2015,muni_full,5346,
+zillow,29517,Skillman,Somerset County,3403547580,1813,census_place,95,Skillman CDP: 100% of 2020 housing units
+zillow,29733,South Toms River,Ocean County,3402969510,1530,muni_full,1141,
+zillow,29739,Ocean Gate,Ocean County,3402954450,1522,muni_full,1153,
+zillow,29748,Iselin,Middlesex County,3402382000,1225,census_place,6994,Iselin CDP: 100% of 2020 housing units
+zillow,30048,Wanaque,Passaic County,3403176730,1613,muni_full,4597,
+zillow,30170,Allentown,Monmouth County,3402500760,1303,muni_full,724,
+zillow,30225,Annandale,Hunterdon County,3401913750,1006,census_place,725,Annandale CDP: 100% of 2020 housing units
+zillow,30592,Brielle,Monmouth County,3402507750,1309,muni_full,2176,
+zillow,30621,Browns Mills,Burlington County,3400557510,0329,census_place,4244,Browns Mills CDP: 100% of 2020 housing units
+zillow,30745,Cape May Point,Cape May County,3400910330,0503,muni_full,625,
+zillow,31092,Cranford,Union County,3403915640,2003,muni_full,9264,
+zillow,31388,Elizabeth,Union County,3403921000,2004,muni_full,48439,
+zillow,31443,Englewood Cliffs,Bergen County,3400321510,0216,muni_full,1961,
+zillow,31869,Greenwich,Cumberland County,3401128170,0606,muni_full,364,
+zillow,32061,Holmdel Township,Monmouth County,3402532640,1320,muni_full,6038,
+zillow,32180,Jackson,Ocean County,3402934680,1512,muni_full,21626,
+zillow,32508,Lincroft,Monmouth County,3402545990,1332,census_place,2509,Lincroft CDP: 100% of 2020 housing units
+zillow,32513,Lindenwold,Camden County,3400740440,0422,muni_full,9731,
+zillow,32677,Mantoloking,Ocean County,3402943380,1520,muni_full,498,
+zillow,32685,Maple Shade Township,Burlington County,3400543740,0319,muni_full,9369,
+zillow,32711,Marmora,Cape May County,3400974810,0511,census_place,1375,Marmora CDP: 100% of 2020 housing units
+zillow,32800,Medford Lakes,Burlington County,3400545210,0321,muni_full,1574,
+zillow,32815,Merchantville,Camden County,3400745510,0424,muni_full,1699,
+zillow,32940,Moonachie,Bergen County,3400347700,0237,muni_full,1149,
+zillow,32998,Mountain Lakes,Morris County,3402748480,1425,muni_full,1429,
+zillow,3304,Absecon,Atlantic County,3400100100,0101,muni_full,3888,
+zillow,33173,North Wildwood,Cape May County,3400953490,0507,muni_full,8984,
+zillow,33185,Northvale,Bergen County,3400353430,0240,muni_full,1700,
+zillow,33424,Pine Hill,Camden County,3400758770,0428,muni_full,4637,
+zillow,33445,Plainfield,Union County,3403959190,2012,muni_full,17125,
+zillow,33500,Port Reading,Middlesex County,3402382000,1225,census_place,1361,Port Reading CDP: 100% of 2020 housing units
+zillow,3358,Allenhurst,Monmouth County,3402500730,1302,muni_full,369,
+zillow,33824,Salem,Salem County,3403365490,1713,muni_full,2467,
+zillow,33909,Seaside Park,Ocean County,3402966480,1528,muni_full,2586,
+zillow,33911,Secaucus,Hudson County,3401766570,0909,muni_full,9316,
+zillow,33949,Sewell,Gloucester County,3401543440,0810,census_place,1228,Sewell CDP: 100% of 2020 housing units
+zillow,34059,South Orange,Essex County,3401369274,0719,override,,Census names this municipality 'South Orange Village township'; GNIS 1867376 lies inside it
+zillow,34311,Toms River,Ocean County,3402973125,1508,muni_full,44526,
+zillow,3455,Asbury Park,Monmouth County,3402501960,1304,muni_full,8274,
+zillow,34597,Vineland,Cumberland County,3401176070,0614,muni_full,23477,
+zillow,34750,West Long Branch,Monmouth County,3402579310,1353,muni_full,2755,
+zillow,35008,Blairstown Township,Warren County,3404106160,2104,muni_full,2245,
+zillow,35053,Cedar Knolls,Morris County,3402729550,1412,census_place,1737,Cedar Knolls CDP: 100% of 2020 housing units
+zillow,35236,Budd Lake,Morris County,3402749080,1427,census_place,3571,Budd Lake CDP: 100% of 2020 housing units
+zillow,35421,Egg Harbor City,Atlantic County,3400120350,0107,muni_full,1896,
+zillow,3553,Basking Ridge,Somerset County,3403505560,1802,census_place,2706,Basking Ridge CDP: 100% of 2020 housing units
+zillow,35546,Lafayette Township,Sussex County,3403737440,1913,muni_full,921,
+zillow,35781,Morganville,Monmouth County,3402544070,1330,census_place,2270,Morganville CDP: 100% of 2020 housing units
+zillow,36150,Millburn,Essex County,3401346380,0712,muni_full,7241,
+zillow,36165,Port Norris,Cumberland County,3401114710,0602,census_place,538,Port Norris CDP: 100% of 2020 housing units
+zillow,36354,Woodbury Heights,Gloucester County,3401582180,0823,muni_full,1149,
+zillow,36497,Somerville,Somerset County,3403568460,1818,muni_full,5387,
+zillow,36529,West New York,Hudson County,3401779610,0912,muni_full,21798,
+zillow,36718,Linden,Union County,3403940350,2009,muni_full,16452,
+zillow,36743,Lumberton Township,Burlington County,3400542060,0317,muni_full,4979,
+zillow,3699,Bloomfield,Essex County,3401306260,0702,muni_full,21714,
+zillow,37362,Belleville,Essex County,3401304695,0701,muni_full,14970,
+zillow,37363,Bellmawr,Camden County,3400704750,0404,muni_full,4962,
+zillow,37367,Belmar,Monmouth County,3402504930,1307,muni_full,4066,
+zillow,37409,Beverly,Burlington County,3400505740,0302,muni_full,1084,
+zillow,3752,Boonton,Morris County,3402706610,1401,override,,"Twin name (Boonton town / Boonton township). Zillow lists 'Boonton Township' separately (region 17117), so plain 'Boonton' is the town. Same as v1."
+zillow,37547,Branchburg Township,Somerset County,3403507180,1805,muni_full,5843,
+zillow,37663,Burlington Township,Burlington County,3400508950,0306,muni_full,8757,
+zillow,37754,Carlstadt,Bergen County,3400310480,0205,muni_full,2563,
+zillow,37920,Cliffwood,Monmouth County,3402500070,1301,override,,GNIS 875496 lies in Aberdeen township
+zillow,38157,Deal,Monmouth County,3402516660,1311,muni_full,925,
+zillow,38388,Emerson,Bergen County,3400321450,0214,muni_full,2600,
+zillow,38545,Florham Park,Morris County,3402723910,1411,muni_full,4768,
+zillow,38565,Forked River,Ocean County,3402937380,1513,census_place,2640,Forked River CDP: 100% of 2020 housing units
+zillow,38685,Gibbsboro,Camden County,3400726070,0413,muni_full,825,
+zillow,38710,Glen Rock,Bergen County,3400326640,0222,muni_full,4041,
+zillow,38835,Hackensack,Bergen County,3400328680,0223,muni_full,20290,
+zillow,38870,Hampton,Hunterdon County,3401929460,1013,muni_full,650,
+zillow,38911,Hasbrouck Heights,Bergen County,3400330420,0225,muni_full,4715,
+zillow,395471,Lakewood,Ocean County,3402938550,1515,muni_full,34726,
+zillow,395489,Princeton,Mercer County,3402160900,1114,muni_full,10380,
+zillow,395548,Byram Township,Sussex County,3403709160,1904,muni_full,3292,
+zillow,395570,Florence Township,Burlington County,3400523850,0315,muni_full,5361,
+zillow,395667,Millstone Township,Monmouth County,3402546560,1333,muni_full,3428,
+zillow,395758,Moorestown Township,Burlington County,3400547880,0322,muni_full,8031,
+zillow,39609,Manville,Somerset County,3403543620,1811,muni_full,4290,
+zillow,39616,Maplewood,Essex County,3401343800,0711,muni_full,9269,
+zillow,396479,Pennsville,Salem County,3403357870,1709,muni_full,5762,
+zillow,396672,Roebling,Burlington County,3400523850,0315,census_place,1503,Roebling CDP: 100% of 2020 housing units
+zillow,397040,New Hanover Township,Burlington County,3400551510,0325,muni_full,981,
+zillow,397046,Shrewsbury,Monmouth County,3402567350,1344,override,,"v1 decision (CLAUDE.md), not re-verified: twin name (Shrewsbury borough / Shrewsbury township, Monmouth); assigned to the borough"
+zillow,397230,Hazlet Township,Monmouth County,3402530690,1318,muni_full,7492,
+zillow,397335,Alloway,Salem County,3403300880,1701,muni_full,1345,
+zillow,397423,Cranbury Township,Middlesex County,3402315550,1202,muni_full,1388,
+zillow,397619,Bordentown Township,Burlington County,3400506700,0304,muni_full,4682,
+zillow,397666,Green Brook Township,Somerset County,3403527510,1809,muni_full,2510,
+zillow,397684,Haddon Township,Camden County,3400728740,0416,muni_full,6988,
+zillow,397820,Long Beach Township,Ocean County,3402941250,1518,muni_full,8832,
+zillow,397859,Mt Laurel Township,Burlington County,3400549020,0324,muni_full,19780,
+zillow,397869,West Deptford Township,Gloucester County,3401578800,0820,muni_full,9623,
+zillow,397969,Carneys Point,Salem County,3403310610,1702,muni_full,3708,
+zillow,398105,Mt Holly Township,Burlington County,3400548900,0323,muni_full,4120,
+zillow,398243,South Hackensack,Bergen County,3400368970,0259,muni_full,950,
+zillow,398283,Sparta Township,Sussex County,3403769690,1918,muni_full,7614,
+zillow,39831,Monmouth Beach,Monmouth County,3402547130,1334,muni_full,2006,
+zillow,39839,Montclair,Essex County,3401347500,0713,muni_full,16304,
+zillow,398406,Monroe Township,Middlesex County,3402347280,1212,muni_full,21504,
+zillow,398778,Woodland Township,Burlington County,3400582420,0339,muni_full,521,
+zillow,398873,Pemberton Township,Burlington County,3400557510,0329,muni_full,10802,
+zillow,398893,Piscataway,Middlesex County,3402359010,1217,muni_full,18904,
+zillow,39910,Mountainside,Union County,3403948510,2010,muni_full,2564,
+zillow,39967,New Brunswick,Middlesex County,3402351210,1213,muni_full,17509,
+zillow,39972,New Egypt,Ocean County,3402959790,1524,census_place,991,New Egypt CDP: 100% of 2020 housing units
+zillow,40015,Newtonville,Atlantic County,3400108710,0105,census_place,291,Newtonville CDP: 100% of 2020 housing units
+zillow,40038,North Bergen Township,Hudson County,3401752470,0908,muni_full,25079,
+zillow,40043,North Caldwell,Essex County,3401352620,0715,muni_full,2364,
+zillow,40146,Old Tappan,Bergen County,3400354870,0243,muni_full,2083,
+zillow,40357,Pittstown,Hunterdon County,3401924870,1010,override,,GNIS 879337 lies in Franklin township (Hunterdon)
+zillow,40514,Red Bank,Monmouth County,3402562430,1339,muni_full,5863,
+zillow,40608,Rockleigh,Bergen County,3400364170,0255,muni_full,81,
+zillow,41023,Spring Lake,Monmouth County,3402570110,1347,muni_full,2107,
+zillow,41030,Springfield,Union County,3403970020,2017,muni_full,7105,
+zillow,41064,Stewartsville,Warren County,3404128260,2107,census_place,262,Stewartsville CDP: 100% of 2020 housing units
+zillow,41074,Stirling,Morris County,3402741362,1430,census_place,954,Stirling CDP: 100% of 2020 housing units
+zillow,41279,Trenton,Mercer County,3402174000,1111,muni_full,34322,
+zillow,41299,Tuckerton,Ocean County,3402974210,1533,muni_full,2110,
+zillow,4131,Cliffside Park,Bergen County,3400313570,0206,muni_full,11435,
+zillow,41501,Villas,Cape May County,3400941610,0505,census_place,5910,Villas CDP: 100% of 2020 housing units
+zillow,41687,Whippany,Morris County,3402729550,1412,census_place,3605,Whippany CDP: 100% of 2020 housing units
+zillow,4171,Colonia,Middlesex County,3402382000,1225,census_place,6599,Colonia CDP: 100% of 2020 housing units
+zillow,41716,Williamstown,Gloucester County,3401547250,0811,census_place,5941,Williamstown CDP: 100% of 2020 housing units
+zillow,42001,Barnegat Light,Ocean County,3402903130,1502,muni_full,1257,
+zillow,42156,Kendall Park,Middlesex County,3402368790,1221,census_place,3315,Kendall Park CDP: 100% of 2020 housing units
+zillow,42213,Garfield,Bergen County,3400325770,0221,muni_full,12407,
+zillow,42217,Highlands,Monmouth County,3402531500,1319,muni_full,2931,
+zillow,42270,Glen Ridge,Essex County,3401326610,0708,muni_full,2592,
+zillow,42402,Fanwood,Union County,3403922860,2005,muni_full,2829,
+zillow,42713,Ridgefield Park,Bergen County,3400362940,0250,muni_full,5269,
+zillow,42730,Pedricktown,Salem County,3403354810,1707,census_place,232,Pedricktown CDP: 100% of 2020 housing units
+zillow,42807,Pine Brook,Morris County,3402747670,1421,census_place,2084,Pine Brook CDP: 100% of 2020 housing units
+zillow,42863,Point Pleasant Beach,Ocean County,3402959910,1526,muni_full,3397,
+zillow,42989,Stockton,Hunterdon County,3401970980,1023,muni_full,255,
+zillow,43078,Verona,Essex County,3401375815,0720,muni_full,6150,
+zillow,43149,Woodbine,Cape May County,3400981890,0516,muni_full,999,
+zillow,43328,Upper Saddle River,Bergen County,3400375140,0263,muni_full,2785,
+zillow,4334,Delanco Township,Burlington County,3400517080,0309,muni_full,2147,
+zillow,43381,River Edge,Bergen County,3400363360,0252,muni_full,4337,
+zillow,43491,Little Falls,Passaic County,3403140620,1605,muni_full,4947,
+zillow,43697,Fair Lawn,Bergen County,3400322470,0217,muni_full,12649,
+zillow,43775,Willingboro Township,Burlington County,3400581440,0338,muni_full,11956,
+zillow,43966,Atco,Camden County,3400777630,0435,census_place,3397,Atco CDP: 100% of 2020 housing units
+zillow,43976,Atlantic Highlands,Monmouth County,3402502110,1305,muni_full,2092,
+zillow,43996,Avalon,Cape May County,3400902320,0501,muni_full,5626,
+zillow,43998,Avenel,Middlesex County,3402382000,1225,census_place,6078,Avenel CDP: 100% of 2020 housing units
+zillow,44137,Bergenfield,Bergen County,3400305170,0203,muni_full,9387,
+zillow,44192,Blackwood,Camden County,3400726760,0415,census_place,1825,Blackwood CDP: 100% of 2020 housing units
+zillow,44291,Branchville,Sussex County,3403707300,1903,muni_full,372,
+zillow,44310,Brigantine,Atlantic County,3400107810,0103,muni_full,9294,
+zillow,44621,Clarksboro,Gloucester County,3401519180,0803,override,,GNIS 875467 lies in East Greenwich township
+zillow,44701,Colts Neck Township,Monmouth County,3402514560,1310,muni_full,3451,
+zillow,4483,East Newark,Hudson County,3401719360,0902,muni_full,920,
+zillow,44903,Demarest,Bergen County,3400317530,0209,muni_full,1680,
+zillow,4498,East Windsor Township,Mercer County,3402119780,1101,muni_full,11690,
+zillow,45082,Edgewater Park Township,Burlington County,3400520050,0312,muni_full,3849,
+zillow,4529,Egg Harbor Township,Atlantic County,3400120290,0108,muni_full,18160,
+zillow,45325,Fortescue,Cumberland County,3401118220,0604,census_place,240,Fortescue CDP: 100% of 2020 housing units
+zillow,45627,Hamburg,Sussex County,3403729220,1909,muni_full,1539,
+zillow,45639,Hancocks Bridge,Salem County,3403341640,1705,census_place,87,Hancocks Bridge CDP: 100% of 2020 housing units
+zillow,46128,Lakehurst,Ocean County,3402937770,1514,muni_full,979,
+zillow,46154,Lanoka Harbor,Ocean County,3402937380,1513,override,,GNIS 877670 lies in Lacey township
+zillow,46267,Little Ferry,Bergen County,3400340680,0230,muni_full,4527,
+zillow,46452,Mays Landing,Atlantic County,3400129280,0112,census_place,2332,Mays Landing CDP: 100% of 2020 housing units
+zillow,4648,Fair Haven,Monmouth County,3402522440,1314,muni_full,2074,
+zillow,46549,Millington,Morris County,3402741362,1430,census_place,1107,Millington CDP: 100% of 2020 housing units
+zillow,46645,Mount Royal,Gloucester County,3401519180,0803,census_place,310,Mount Royal CDP: 100% of 2020 housing units
+zillow,46727,New Providence,Union County,3403951810,2011,muni_full,5497,
+zillow,46744,Newport,Cumberland County,3401118220,0604,census_place,234,Newport CDP: 100% of 2020 housing units
+zillow,46780,North Brunswick,Middlesex County,3402352560,1214,muni_full,15585,
+zillow,46805,North Plainfield,Somerset County,3403553280,1814,muni_full,8055,
+zillow,4685,Far Hills,Somerset County,3403522890,1807,muni_full,418,
+zillow,46984,Paramus,Bergen County,3400355950,0246,muni_full,8786,
+zillow,47071,Perth Amboy,Middlesex County,3402358200,1216,muni_full,17855,
+zillow,4730,Flemington,Hunterdon County,3401923700,1009,muni_full,1974,
+zillow,47392,Ringwood,Passaic County,3403163150,1611,muni_full,4364,
+zillow,4748,Fords,Middlesex County,3402382000,1225,census_place,4784,Fords CDP: 100% of 2020 housing units
+zillow,47885,Succasunna,Morris County,3402764980,1436,census_place,3744,Succasunna CDP: 100% of 2020 housing units
+zillow,47935,Tabernacle Township,Burlington County,3400572060,0335,muni_full,2511,
+zillow,47956,Teaneck,Bergen County,3400372360,0260,muni_full,14430,
+zillow,47961,Tenafly,Bergen County,3400372420,0261,muni_full,5184,
+zillow,48025,Towaco,Morris County,3402747670,1421,census_place,1932,Towaco CDP: 100% of 2020 housing units
+zillow,4805,Franklin Park,Somerset County,3403524900,1808,census_place,5566,Franklin Park CDP: 100% of 2020 housing units
+zillow,48302,Waldwick,Bergen County,3400376400,0264,muni_full,3691,
+zillow,48385,Weehawken,Hudson County,3401777930,0911,muni_full,9089,
+zillow,48563,Wood Ridge,Bergen County,3400382570,0269,muni_full,4057,
+zillow,48631,Corbin City,Atlantic County,3400115160,0106,muni_full,211,
+zillow,48902,Butler,Morris County,3402709040,1403,muni_full,3403,
+zillow,4891,Gillette,Morris County,3402741362,1430,census_place,1157,Gillette CDP: 100% of 2020 housing units
+zillow,48934,Belle Mead,Somerset County,3403531890,1810,census_place,284,Belle Mead CDP: 15% of 2020 housing units
+zillow,48934,Belle Mead,Somerset County,3403547580,1813,census_place,1642,Belle Mead CDP: 85% of 2020 housing units
+zillow,49005,Frenchtown,Hunterdon County,3401925350,1011,muni_full,677,
+zillow,49222,Great Meadows,Warren County,3404133930,2112,census_place,115,Great Meadows CDP: 100% of 2020 housing units
+zillow,49292,Dorothy,Atlantic County,3400180330,0123,census_place,422,Dorothy CDP: 100% of 2020 housing units
+zillow,49513,Palmyra,Burlington County,3400555800,0327,muni_full,3458,
+zillow,49526,Mansfield Township,Burlington County,3400543290,0318,muni_full,3683,
+zillow,49764,Port Monmouth,Monmouth County,3402545990,1332,census_place,1486,Port Monmouth CDP: 100% of 2020 housing units
+zillow,49765,Port Republic,Atlantic County,3400160600,0120,muni_full,457,
+zillow,50015,Wallington,Bergen County,3400376490,0265,muni_full,5108,
+zillow,50052,Township of Washington,Bergen County,3400377135,0266,muni_base,3375,
+zillow,50108,Wenonah,Gloucester County,3401578110,0819,muni_full,882,
+zillow,50223,Roseland,Essex County,3401364590,0718,muni_full,2607,
+zillow,50250,Mine Hill Township,Morris County,3402746860,1420,muni_full,1523,
+zillow,5027,Hackettstown,Warren County,3404128710,2108,muni_full,3945,
+zillow,50339,Sea Isle City,Cape May County,3400966390,0509,muni_full,6992,
+zillow,50861,Barnegat,Ocean County,3402903050,1501,muni_full,10724,
+zillow,50870,Barrington,Camden County,3400703250,0403,muni_full,3415,
+zillow,5098,Haworth,Bergen County,3400330540,0226,muni_full,1148,
+zillow,51034,Bloomingdale,Passaic County,3403106340,1601,muni_full,3267,
+zillow,51291,Carteret,Middlesex County,3402310750,1201,muni_full,8809,
+zillow,51448,Clementon,Camden County,3400713420,0411,muni_full,2394,
+zillow,51499,Columbia,Warren County,3404137320,2113,census_place,82,Columbia CDP: 100% of 2020 housing units
+zillow,5169,Hillsdale,Bergen County,3400331920,0227,muni_full,3635,
+zillow,51806,East Orange,Essex County,3401319390,0705,muni_full,30357,
+zillow,51822,Eastampton Township,Burlington County,3400518790,0311,muni_full,2568,
+zillow,51938,Estell Manor,Atlantic County,3400121870,0109,muni_full,706,
+zillow,51952,Evesham Township,Burlington County,3400522110,0313,muni_full,19413,
+zillow,51976,Fairfield,Essex County,3401322385,0707,muni_full,2826,
+zillow,52015,Fieldsboro,Burlington County,3400523250,0314,muni_full,227,
+zillow,52178,Garwood,Union County,3403925800,2006,muni_full,2016,
+zillow,52224,Glen Gardner,Hunterdon County,3401926550,1012,muni_full,835,
+zillow,52245,Gloucester City,Camden County,3400726820,0414,muni_full,4547,
+zillow,52320,Green Village,Morris County,3402712130,1405,override,,GNIS 876795 lies in Chatham township
+zillow,52380,Haledon,Passaic County,3403129070,1603,muni_full,3117,
+zillow,52521,Hightstown,Mercer County,3402131620,1104,muni_full,2216,
+zillow,52570,Hopatcong,Sussex County,3403732910,1912,muni_full,6393,
+zillow,52855,Lake Hopatcong,Morris County,3402734980,1414,census_place,4466,Lake Hopatcong CDP: 100% of 2020 housing units
+zillow,53018,Lodi,Bergen County,3400341100,0231,muni_full,10414,
+zillow,53105,Madison,Morris County,3402742510,1417,muni_full,5989,
+zillow,5313,Jamesburg,Middlesex County,3402334890,1208,muni_full,2228,
+zillow,53300,Middlesex,Middlesex County,3402345900,1210,muni_full,5472,
+zillow,53321,Milford,Hunterdon County,3401946260,1020,muni_full,556,
+zillow,53338,Millville,Cumberland County,3401146680,0610,muni_full,11616,
+zillow,53385,Monroeville,Salem County,3403375110,1714,override,,"GNIS 878442 lies in Upper Pittsgrove township, Salem (v1 had Elk township, Gloucester, which is not in the county Zillow reports)"
+zillow,53418,Morris Plains,Morris County,3402748210,1423,muni_full,2527,
+zillow,53420,Morristown,Morris County,3402748300,1424,muni_full,9213,
+zillow,53658,Oak Ridge,Morris County,3402734980,1414,census_place,3813,Oak Ridge CDP: 89% of 2020 housing units
+zillow,53658,Oak Ridge,Morris County,3403179460,1615,census_place,483,Oak Ridge CDP: 11% of 2020 housing units
+zillow,53733,Orange,Essex County,3401313045,0717,muni_full,13590,
+zillow,53809,Park Ridge,Bergen County,3400356130,0247,muni_full,3435,
+zillow,5382,Kearny,Hudson County,3401736510,0907,muni_full,15392,
+zillow,53876,Phillipsburg,Warren County,3404158350,2119,muni_full,6659,
+zillow,53952,Pompton Lakes,Passaic County,3403160090,1609,muni_full,4349,
+zillow,5416,Keyport,Monmouth County,3402536810,1324,muni_full,3427,
+zillow,54456,Somers Point,Atlantic County,3400168430,0121,muni_full,5589,
+zillow,54461,South Amboy,Middlesex County,3402368550,1220,muni_full,3906,
+zillow,54491,Southampton Township,Burlington County,3400568610,0333,muni_full,4996,
+zillow,54570,Stone Harbor,Cape May County,3400971010,0510,muni_full,3207,
+zillow,54702,Tinton Falls,Monmouth County,3402573020,1349,muni_full,8972,
+zillow,54788,Union Beach,Monmouth County,3402574540,1350,muni_full,2183,
+zillow,54791,Union City,Hudson County,3401774630,0910,muni_full,26455,
+zillow,5489,Lake Como,Monmouth County,3402537560,1346,muni_full,1081,
+zillow,55038,Warren Township,Somerset County,3403576940,1820,muni_full,5614,
+zillow,55267,Wrightstown,Burlington County,3400582960,0340,muni_full,362,
+zillow,5529,Lambertville,Hunterdon County,3401938610,1017,muni_full,2265,
+zillow,5543,Landisville,Atlantic County,3400108680,0104,override,,GNIS 877664 lies in Buena borough
+zillow,55585,Beach Haven,Ocean County,3402903940,1504,muni_full,2600,
+zillow,5563,Laurel Springs,Camden County,3400739210,0420,muni_full,796,
+zillow,55689,Helmetta,Middlesex County,3402330840,1206,muni_full,1091,
+zillow,55745,Hillside,Union County,3403931980,2007,muni_full,7844,
+zillow,55767,Gibbstown,Gloucester County,3401528185,0807,census_place,1605,Gibbstown CDP: 100% of 2020 housing units
+zillow,55913,Lavallette,Ocean County,3402939390,1516,muni_full,3078,
+zillow,55928,Interlaken,Monmouth County,3402534200,1322,muni_full,400,
+zillow,56241,Paulsboro,Gloucester County,3401557150,0814,muni_full,2639,
+zillow,56245,Richland,Atlantic County,3400108710,0105,census_place,272,Richland CDP: 100% of 2020 housing units
+zillow,56261,New Vernon,Morris County,3402729700,1413,census_place,343,New Vernon CDP: 100% of 2020 housing units
+zillow,56414,Norwood,Bergen County,3400353610,0241,muni_full,2032,
+zillow,56428,Livingston,Essex County,3401340890,0710,muni_full,10719,
+zillow,5668,Loch Arbour,Monmouth County,3402541010,1326,muni_full,154,
+zillow,56726,Ship Bottom,Ocean County,3402967110,1529,muni_full,1938,
+zillow,56814,Somerset,Somerset County,3403524900,1808,census_place,9228,Somerset CDP: 100% of 2020 housing units
+zillow,56870,Spotswood,Middlesex County,3402369810,1224,muni_full,3297,
+zillow,57011,Shamong Township,Burlington County,3400566810,0332,muni_full,2285,
+zillow,5840,Matawan,Middlesex County,3402544520,1331,override,,"Zillow labels the region Middlesex County, but the only Matawan municipality is Matawan borough (Monmouth); GNIS 878181 lies inside it"
+zillow,5967,Milltown,Middlesex County,3402346620,1211,muni_full,2707,
+zillow,6068,Mount Ephraim,Camden County,3400748750,0425,muni_full,2015,
+zillow,6462,Pennington,Mercer County,3402157600,1108,muni_full,1088,
+zillow,6463,Pennsauken,Camden County,3400757660,0427,muni_full,13977,
+zillow,6503,Pilesgrove,Salem County,3403358530,1710,muni_full,1661,
+zillow,6575,Port Murray,Warren County,3404143320,2116,census_place,112,Port Murray CDP: 100% of 2020 housing units
+zillow,6679,Ramsey,Bergen County,3400361680,0248,muni_full,5670,
+zillow,6780,River Vale,Bergen County,3400363690,0253,muni_full,3644,
+zillow,6789,Riverton,Burlington County,3400563660,0331,muni_full,1109,
+zillow,6877,Saddle Brook,Bergen County,3400365340,0257,muni_full,5618,
+zillow,7341,Swedesboro,Gloucester County,3401571850,0817,muni_full,1022,
+zillow,737788,Lebanon Borough,Hunterdon County,3401939630,1018,muni_full,828,
+zillow,7434,Titusville,Mercer County,3402133180,1106,census_place,279,Titusville CDP: 100% of 2020 housing units
+zillow,760887,Berlin,Camden County,3400705440,0405,override,,"v1 decision (CLAUDE.md), not re-verified: twin name (Berlin borough / Berlin township, Camden); assigned to the borough"
+zillow,7852,West Milford,Passaic County,3403179460,1615,muni_full,10570,
+zillow,8146,Cream Ridge,Monmouth County,3402574900,1351,census_place,233,Cream Ridge CDP: 100% of 2020 housing units
+zillow,826200,Woodbridge,Middlesex County,3402382000,1225,muni_full,38137,
+zillow,826245,Quinton,Salem County,3403361470,1712,muni_full,1148,
+zillow,830774,West Creek,Ocean County,3402918670,1509,override,,GNIS 881694 lies in Eagleswood township
+zillow,830775,Manchester,Ocean County,3402943140,1519,muni_full,26764,
+zillow,831334,Mantua,Gloucester County,3401543440,0810,muni_full,6181,
+zillow,831874,Vernon,Sussex County,3403775740,1922,muni_full,10538,
+zillow,831875,Andover,Sussex County,3403701360,1902,override,,"v1 decision (CLAUDE.md), not re-verified: twin name (Andover borough / Andover township, Sussex); assigned to the township"
+zillow,832568,Montville,Morris County,3402747670,1421,muni_full,8206,
+zillow,833169,Mount Tabor,Morris County,3402756460,1429,census_place,480,Mount Tabor CDP: 95% of 2020 housing units
+zillow,833170,Denville,Morris County,3402717650,1408,muni_full,6834,
+zillow,833171,Pequannock,Morris County,3402758110,1431,muni_full,6688,
+zillow,833173,Mount Arlington,Morris County,3402748690,1426,muni_full,2915,
+zillow,833174,Randolph,Morris County,3402761890,1432,muni_full,9676,
+zillow,8350,Collingswood,Camden County,3400714260,0412,muni_full,6950,
+zillow,835398,Howell,Monmouth County,3402533300,1321,muni_full,19694,
+zillow,835399,Marlboro,Monmouth County,3402544070,1330,muni_full,14215,
+zillow,835400,Wall,Monmouth County,3402576460,1352,muni_full,10838,
+zillow,835402,Middletown,Monmouth County,3402545990,1332,muni_full,25859,
+zillow,835403,Ocean,Monmouth County,3402554270,1337,muni_full,12257,
+zillow,835630,Ewing,Mercer County,3402122185,1102,muni_full,15637,
+zillow,836350,Bedminster,Somerset County,3403504450,1801,muni_full,4483,
+zillow,836353,Galloway,Atlantic County,3400125560,0111,muni_full,14584,
+zillow,837003,Plainsboro,Middlesex County,3402359280,1218,muni_full,10281,
+zillow,8505,Gladstone,Somerset County,3403557300,1815,override,,Part of Peapack and Gladstone borough; GNIS 876615 lies inside it
+zillow,8759,East Hanover Township,Morris County,3402719210,1410,muni_full,4040,
+zillow,8762,Harrison,Hudson County,3401730210,0904,muni_full,8594,
+zillow,8854,Rahway,Union County,3403961530,2013,muni_full,12363,
+zillow,8863,Magnolia,Camden County,3400742630,0423,muni_full,1877,
+zillow,8865,Malaga,Gloucester County,3401524840,0805,census_place,588,Malaga CDP: 100% of 2020 housing units
+zillow,9137,Milmay,Cumberland County,3400108710,0105,census_place,260,Milmay CDP: 72% of 2020 housing units
+zillow,9137,Milmay,Cumberland County,3401144580,0609,census_place,100,Milmay CDP: 28% of 2020 housing units
+zillow,9155,Longport,Atlantic County,3400141370,0115,muni_full,1641,
+zillow,9181,Monmouth Junction,Middlesex County,3402368790,1221,census_place,3170,Monmouth Junction CDP: 100% of 2020 housing units
+zillow,9195,Wharton,Morris County,3402780390,1439,muni_full,2736,
+zillow,9399,Shiloh,Cumberland County,3401167020,0611,muni_full,210,
+zillow,9455,Rumson,Monmouth County,3402565130,1341,muni_full,2624,
+zillow,9501,Saddle River,Bergen County,3400365400,0258,muni_full,1458,
+zillow,9669,Belvidere,Warren County,3404104990,2103,muni_full,1143,
+zillow,9726,Califon,Hunterdon County,3401909280,1004,muni_full,429,
+zillow,9859,Edgewater,Bergen County,3400320020,0213,muni_full,7315,

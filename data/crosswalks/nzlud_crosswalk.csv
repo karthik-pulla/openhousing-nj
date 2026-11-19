@@ -1,0 +1,106 @@
+nzlud_geoid,nzlud_place,nzlud_type,geoid,mun_code,census_name,name_check
+3400070,Aberdeen,Township,3402500070,1301,Aberdeen township,True
+3400100,Absecon,City,3400100100,0101,Absecon city,True
+3400700,Allendale,Borough,3400300700,0201,Allendale borough,True
+3401360,Andover,Township,3403701360,1902,Andover township,True
+3401960,AsburyPark,City,3402501960,1304,Asbury Park city,True
+3402080,Atlantic,City,3400102080,0102,Atlantic City city,True
+3402200,Audubon,Borough,3400702200,0401,Audubon borough,True
+3405740,Beverly,City,3400505740,0302,Beverly city,True
+3407600,Bridgeton,City,3401107600,0601,Bridgeton city,True
+3407750,Brielle,Borough,3402507750,1309,Brielle borough,True
+3407810,Brigantine,City,3400107810,0103,Brigantine city,True
+3411200,CedarGrove,Township,3401311200,0704,Cedar Grove township,True
+3412100,Chatham,Borough,3402712100,1404,Chatham borough,True
+3413045,Orange,Township,3401313045,0717,City of Orange township,True
+3413810,Closter,Borough,3400313810,0207,Closter borough,True
+3414260,Collingswood,Borough,3400714260,0412,Collingswood borough,True
+3417560,Dennis,Township,3400917560,0504,Dennis township,True
+3417710,Deptford,Township,3401517710,0802,Deptford township,True
+3419000,EastBrunswick,Township,3402319000,1204,East Brunswick township,True
+3419180,EastGreenwich,Township,3401519180,0803,East Greenwich township,True
+3419390,EastOrange,City,3401319390,0705,East Orange city,True
+3420020,Edgewater,Borough,3400320020,0213,Edgewater borough,True
+3420230,Edison,Town,3402320230,1205,Edison township,True
+3421000,Elizabeth,City,3403921000,2004,Elizabeth city,True
+3421510,EnglewoodCliffs,Borough,3400321510,0216,Englewood Cliffs borough,True
+3423700,Flemington,Borough,3401923700,1009,Flemington borough,True
+3423850,Florence,Township,3400523850,0315,Florence township,True
+3423910,FlorhamPark,Borough,3402723910,1411,Florham Park borough,True
+3424930,FranklinBorough,Borough,3403724930,1906,Franklin borough,True
+3425230,Freehold,Township,3402525230,1317,Freehold township,True
+3426610,GlenRidge,City,3401326610,0708,Glen Ridge borough,True
+3428650,Guttenberg,Town,3401728650,0903,Guttenberg town,True
+3429310,HamiltonTownship,Township,3402129310,1103,Hamilton township,True
+3429430,Hammonton,Town,3400129430,0113,Hammonton town,True
+3429700,Harding,Township,3402729700,1413,Harding township,True
+3430150,HarringtonPark,Borough,3400330150,0224,Harrington Park borough,True
+3431920,Hillsdale,Borough,3400331920,0227,Hillsdale borough,True
+3432310,HoHoKus,Borough,3400332310,0228,Ho-Ho-Kus borough,True
+3432640,Holmdel,Township,3402532640,1320,Holmdel township,True
+3433180,HopewellTownship,Township,3402133180,1106,Hopewell township,True
+3434450,Irvington,Town,3401334450,0709,Irvington township,True
+3434680,Jackson,Township,3402934680,1512,Jackson township,True
+3436000,Jersey,City,3401736000,0906,Jersey City city,True
+3436510,Kearny,Town,3401736510,0907,Kearny town,True
+3436690,Kenilworth,Borough,3403936690,2008,Kenilworth borough,True
+3438550,Lakewood,Township,3402938550,1515,Lakewood township,True
+3438610,Lambertville,City,3401938610,1017,Lambertville city,True
+3439510,LawrenceTownship,Township,3402139510,1107,Lawrence township,True
+3440440,Lindenwold,Borough,3400740440,0422,Lindenwold borough,True
+3440560,LittleEggHarbor,Township,3402940560,1517,Little Egg Harbor township,True
+3441310,LongBranch,City,3402541310,1327,Long Branch city,True
+3442090,Lyndhurst,Township,3400342090,0232,Lyndhurst township,True
+3442510,Madison,Borough,3402742510,1417,Madison borough,True
+3443050,Manasquan,Borough,3402543050,1329,Manasquan borough,True
+3445510,Merchantville,Borough,3400745510,0424,Merchantville borough,True
+3446380,Millburn,Township,3401346380,0712,Millburn township,True
+3446680,Millville,City,3401146680,0610,Millville city,True
+3447700,Moonachie,Borough,3400347700,0237,Moonachie borough,True
+3449680,NationalPark,Borough,3401549680,0812,National Park borough,True
+3449890,Neptune,Township,3402549890,1335,Neptune township,True
+3451000,Newark,City,3401351000,0714,Newark city,True
+3452560,NorthBrunswick,Township,3402352560,1214,North Brunswick township,True
+3453610,Norwood,Borough,3400353610,0241,Norwood borough,True
+3454570,Oceanport,Borough,3402554570,1338,Oceanport borough,True
+3454705,OldBridge,Township,3402354705,1215,Old Bridge township,True
+3454870,OldTappan,Borough,3400354870,0243,Old Tappan borough,True
+3454990,Oradell,Borough,3400354990,0244,Oradell borough,True
+3456130,ParkRidge,Borough,3400356130,0247,Park Ridge borough,True
+3456550,Passaic,City,3403156550,1607,Passaic city,True
+3457000,Paterson,City,3403157000,1608,Paterson city,True
+3457750,PennsGrove,Borough,3403357750,1708,Penns Grove borough,True
+3458110,Pequannock,Township,3402758110,1431,Pequannock township,True
+3458770,PineHill,Borough,3400758770,0428,Pine Hill borough,True
+3459190,Plainfield,City,3403959190,2012,Plainfield city,True
+3459280,Plainsboro,Township,3402359280,1218,Plainsboro township,True
+3459640,Pleasantville,City,3400159640,0119,Pleasantville city,True
+3460900,Princeton,Municipality,3402160900,1114,Princeton,True
+3461530,Rahway,City,3403961530,2013,Rahway city,True
+3461920,Raritan,Township,3401961920,1021,Raritan township,True
+3463000,Ridgewood,Village,3400363000,0251,Ridgewood village,True
+3463690,RiverVale,Township,3400363690,0253,River Vale township,True
+3463990,RochellePark,Township,3400363990,0254,Rochelle Park township,True
+3465280,Rutherford,Borough,3400365280,0256,Rutherford borough,True
+3467350,Shrewsbury,Borough,3402567350,1344,Shrewsbury borough,True
+3468730,SouthBoundBrook,Borough,3403568730,1819,South Bound Brook borough,True
+3468790,SouthBrunswick,Township,3402368790,1221,South Brunswick township,True
+3469420,SouthRiver,Borough,3402369420,1223,South River borough,True
+3469690,Sparta,Township,3403769690,1918,Sparta township,True
+3470020,SpringfieldTownship,Township,3403970020,2017,Springfield township,True
+3470110,SpringLake,Borough,3402570110,1347,Spring Lake borough,True
+3471220,Stratford,Borough,3400771220,0432,Stratford borough,True
+3474000,Trenton,City,3402174000,1111,Trenton city,True
+3474480,UnionTownship,Township,3403974480,2019,Union township,True
+3474630,UnionCity,City,3401774630,0910,Union City city,True
+3475740,Vernon,Township,3403775740,1922,Vernon township,True
+3475815,Verona,Township,3401375815,0720,Verona township,True
+3476070,Vineland,City,3401176070,0614,Vineland city,True
+3476400,Waldwick,Borough,3400376400,0264,Waldwick borough,True
+3476460,Wall,Township,3402576460,1352,Wall township,True
+3477240,WashingtonTownship,Township,3402777240,1438,Washington township,True
+3477630,Waterford,Township,3400777630,0435,Waterford township,True
+3478200,Westampton,Township,3400578200,0337,Westampton township,True
+3479460,WestMilford,Township,3403179460,1615,West Milford township,True
+3480240,WestWindsor,Township,3402180240,1113,West Windsor township,True
+3482840,Woolwich,Township,3401582840,0824,Woolwich township,True

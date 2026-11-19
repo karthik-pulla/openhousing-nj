@@ -1,0 +1,17 @@
+{
+  "built": "2026-11-19",
+  "source": "zillow",
+  "regions_in_file": 548,
+  "regions_linked": 540,
+  "regions_unmatched_or_excluded": 8,
+  "links": 545,
+  "municipalities_covered": 485,
+  "by_method": {
+    "census_place": 92,
+    "muni_base": 1,
+    "muni_full": 421,
+    "override": 26
+  },
+  "min_part_share": 0.1,
+  "input_file": "raw/zillow/2026-11-19/City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv"
+}

@@ -1,0 +1,9 @@
+region_id,region_name,region_county,reason,gnis_evidence,v1_assignment
+399495,Asbury,Hunterdon County,"excluded by override: Zillow says Hunterdon County, but no GNIS 'Asbury' is in Hunterdon (GNIS has Gloucester and Warren); can't place it with confidence","GNIS 874390 'Asbury' [Gloucester] -> Woolwich Township (0824, Gloucester) | GNIS 874391 'Asbury' [Warren] -> Franklin Township (2105, Warren)",Franklin Township (2105)
+41940,Chatham,Morris County,ambiguous: Chatham borough (1404) | Chatham township (1405),"GNIS 875378 'Chatham' [Morris] -> Chatham Borough (1404, Morris)",Chatham Township (1405)
+833172,Chester,Morris County,ambiguous: Chester borough (1406) | Chester township (1407),"GNIS 875401 'Chester' [Morris] -> Chester Borough (1406, Morris)",
+395552,Freehold,Monmouth County,ambiguous: Freehold borough (1316) | Freehold township (1317),"GNIS 876504 'Freehold' [Monmouth] -> Freehold Borough (1316, Monmouth)",Freehold Township (1317)
+836126,Hopewell,Mercer County,ambiguous: Hopewell borough (1105) | Hopewell township (1106),"GNIS 877244 'Hopewell' [Mercer] -> Hopewell Borough (1105, Mercer)",
+833168,Mendham,Morris County,ambiguous: Mendham borough (1418) | Mendham township (1419),"GNIS 878258 'Mendham' [Morris] -> Mendham Borough (1418, Morris)",
+53566,Newfoundland,Morris County,"excluded by override: Zillow says Morris County, but GNIS 878781 lies in West Milford (Passaic); the community straddles both counties; can't place it with confidence","GNIS 878781 'Newfoundland' [Passaic] -> West Milford Township (1615, Passaic)",
+833175,Rockaway,Morris County,ambiguous: Rockaway borough (1434) | Rockaway township (1435),"GNIS 879752 'Rockaway' [Morris] -> Rockaway Borough (1434, Morris)",

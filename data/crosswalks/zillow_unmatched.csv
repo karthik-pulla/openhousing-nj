@@ -1,0 +1,9 @@
+source,region_id,region_name,region_county,reason
+zillow,399495,Asbury,Hunterdon County,"excluded by override: Zillow says Hunterdon County, but no GNIS 'Asbury' is in Hunterdon (GNIS has Gloucester and Warren); can't place it with confidence"
+zillow,41940,Chatham,Morris County,ambiguous: Chatham borough (1404) | Chatham township (1405)
+zillow,833172,Chester,Morris County,ambiguous: Chester borough (1406) | Chester township (1407)
+zillow,395552,Freehold,Monmouth County,ambiguous: Freehold borough (1316) | Freehold township (1317)
+zillow,836126,Hopewell,Mercer County,ambiguous: Hopewell borough (1105) | Hopewell township (1106)
+zillow,833168,Mendham,Morris County,ambiguous: Mendham borough (1418) | Mendham township (1419)
+zillow,53566,Newfoundland,Morris County,"excluded by override: Zillow says Morris County, but GNIS 878781 lies in West Milford (Passaic); the community straddles both counties; can't place it with confidence"
+zillow,833175,Rockaway,Morris County,ambiguous: Rockaway borough (1434) | Rockaway township (1435)
