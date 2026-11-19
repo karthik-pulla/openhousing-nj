@@ -1,6 +1,6 @@
 # OpenHousing v2 configuration. Every assumption the pipeline makes lives here,
-# so it can be shown in the UI and the methodology. Phase 3 adds index weights,
-# mortgage assumptions and confidence thresholds to this file.
+# so it can be shown in the UI and in METHODOLOGY.md. Change a value here, rerun
+# scripts/refresh_data.py, and the index, docs table and site all follow.
 
 sources:
   acs:
@@ -13,6 +13,10 @@ sources:
     #   town_region_first: use the region named after the town itself if there is one; otherwise
     #   the housing-unit-weighted mean of the community (CDP) regions inside it.
     aggregation: town_region_first
+    # Zillow's terms for republishing research data are not yet confirmed
+    # (docs/SOURCES_VERIFICATION.md). While false, the published index uses ACS
+    # home values only; `--preview-zillow` builds a local, gitignored comparison.
+    cleared_for_publication: false
   redfin:
     # Disabled: Redfin now offers only form-generated CSV downloads, and its Terms of Use
     # (sec. 2.3.3-2.3.5) bar redistribution and automated querying without written permission.
@@ -37,3 +41,49 @@ sources:
   fourth_round:
     pdf: data/static/fourth_round/FourthRoundCalculation_Methodology.pdf
     csv: data/static/fourth_round/obligations_dca_2024.csv
+
+# --------------------------------------------------------------------------- index
+index:
+  # A. Affordability score (the outcome). Each component is converted to a
+  # percentile rank across municipalities (higher = more affordable) and
+  # combined as a weighted mean. Weights are relative; they are rescaled over the
+  # components a town has. Barriers (zoning, obligations) are never in the score.
+  weights:
+    ownership_burden: 1          # annual ownership cost / county median household income
+    rent_burden: 1               # 12 x median gross rent / county median household income
+    renters_cost_burdened: 1     # share of renter households paying 30%+ of income on rent
+  # Income used as the denominator for the score. "county" avoids comparing a
+  # wealthy town to its own wealthy residents and matches Mount Laurel's
+  # regional framing. Town-income burdens are also published, for display.
+  denominator: county
+  # A town needs at least this many components to get a score.
+  min_components: 1
+
+ownership:
+  # Annual ownership cost = mortgage principal & interest + average residential property tax bill.
+  down_payment_pct: 20           # 20% down, so no private mortgage insurance applies
+  loan_term_years: 30
+  # Mortgage rate: FRED MORTGAGE30US, mean of sources.fred.trailing_weeks weeks.
+  excluded_costs: [homeowners insurance, private mortgage insurance, HOA or condo fees,
+                   maintenance, utilities, closing costs]
+  # Home value source priority (first available wins; Redfin is not used, see sources.redfin).
+  home_value_priority: [zillow, acs]
+
+ami_view:
+  # Third view (shown, not scored): can a household at HUD's 80% of area median income afford it?
+  income_limit: il80             # HUD "low income" limit
+  household_size: 4              # HUD's base household size
+  affordable_share: 0.30         # housing costs at or below 30% of income = affordable
+
+confidence:
+  # Coefficient of variation of an ACS estimate: CV = (MOE / 1.645) / estimate.
+  # Common practice (e.g. Esri's ACS reliability tiers): CV <= 12% high, 12-40% medium, > 40% low.
+  cv_high_max: 0.12
+  cv_medium_max: 0.40
+  # Overall flag = the weakest confidence among the components the score uses;
+  # a missing component caps the overall flag at "medium", two or more at "low".
+  overall_rule: weakest_component
+  # Zillow vs ACS home value: a town is flagged when its Zillow/ACS ratio differs
+  # from the statewide median ratio by more than this factor (ACS is owner-reported
+  # and averages 5 years, so it runs below Zillow everywhere).
+  value_disagreement_factor: 1.30

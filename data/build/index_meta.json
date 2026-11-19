@@ -1,0 +1,65 @@
+{
+  "built": "2026-11-19",
+  "rows": 564,
+  "scored": 562,
+  "unscored": [
+    "Tavistock Borough",
+    "Walpack Township"
+  ],
+  "confidence_counts": {
+    "medium": 311,
+    "low": 128,
+    "high": 123,
+    "insufficient data": 2
+  },
+  "home_value_source_counts": {
+    "ACS median value": 561,
+    "null": 3
+  },
+  "home_value_priority_used": [
+    "acs"
+  ],
+  "zillow_included": false,
+  "zillow_cleared_for_publication": false,
+  "statewide_zillow_to_acs_ratio": null,
+  "weights": {
+    "ownership_burden": 1,
+    "rent_burden": 1,
+    "renters_cost_burdened": 1
+  },
+  "denominator": "county",
+  "assumptions": {
+    "down_payment_pct": 20,
+    "loan_term_years": 30,
+    "mortgage_rate_pct": 7.203,
+    "mortgage_rate_vintage": "Freddie Mac PMMS, mean of 4 weeks 2026-10-29 to 2026-11-19",
+    "excluded_costs": [
+      "homeowners insurance",
+      "private mortgage insurance",
+      "HOA or condo fees",
+      "maintenance",
+      "utilities",
+      "closing costs"
+    ],
+    "ami_view": {
+      "income_limit": "il80",
+      "household_size": 4,
+      "affordable_share": 0.3
+    }
+  },
+  "confidence_rules": {
+    "cv_high_max": 0.12,
+    "cv_medium_max": 0.4,
+    "overall_rule": "weakest_component",
+    "value_disagreement_factor": 1.3
+  },
+  "vintages": {
+    "acs_county": "ACS 2020-2024 5-year",
+    "acs_municipal": "ACS 2020-2024 5-year",
+    "fourth_round_municipal": "DCA Fourth Round calculation, October 2024 (obligations for 2025-2035)",
+    "fred_mortgage30": "Freddie Mac PMMS, mean of 4 weeks 2026-10-29 to 2026-11-19",
+    "hud_county": "HUD FY2026 Income Limits; FY2027 Fair Market Rents",
+    "nzlud_municipal": "NZLUD (municipal surveys 2019-2022; file 2023)",
+    "property_tax_municipal": "NJ DCA 2025 Property Tax Tables (tax year 2025)"
+  }
+}

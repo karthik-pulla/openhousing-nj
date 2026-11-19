@@ -3,7 +3,7 @@
   "steps": {
     "geography": {
       "ok": true,
-      "seconds": 0.4
+      "seconds": 0.7
     },
     "acs": {
       "ok": true,
@@ -53,7 +53,7 @@
     },
     "property_tax": {
       "ok": true,
-      "seconds": 0.4,
+      "seconds": 0.5,
       "outputs": {
         "property_tax_municipal": {
           "vintage": "NJ DCA 2025 Property Tax Tables (tax year 2025)",
@@ -86,7 +86,7 @@
     },
     "nzlud": {
       "ok": true,
-      "seconds": 0.2,
+      "seconds": 0.4,
       "outputs": {
         "nzlud_municipal": {
           "vintage": "NZLUD (municipal surveys 2019-2022; file 2023)",
@@ -124,6 +124,21 @@
           "municipalities_missing": 0,
           "missing_sample": []
         }
+      }
+    },
+    "index": {
+      "ok": true,
+      "seconds": 0.1,
+      "scored": 562,
+      "unscored": [
+        "Tavistock Borough",
+        "Walpack Township"
+      ],
+      "confidence": {
+        "medium": 311,
+        "low": 128,
+        "high": 123,
+        "insufficient data": 2
       }
     }
   }

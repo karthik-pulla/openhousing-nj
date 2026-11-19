@@ -8,7 +8,9 @@ Steps
   2. One fetcher per source (pipeline/fetchers/), each writing a tidy table
      keyed on GEOID or county FIPS to data/interim/<name>.csv, plus
      <name>.meta.json with its vintage, source, attribution and coverage.
-  3. data/interim/run_summary.json: what ran, what failed, coverage.
+  3. Index v2 (pipeline/index.py) -> data/build/openhousing_nj.csv, only if
+     every fetcher succeeded.
+  4. data/interim/run_summary.json: what ran, what failed, coverage.
 
 Raw downloads are cached in data/raw/<source>/<date>/ (gitignored), so
 rerunning on the same day doesn't hit the sources again.
@@ -27,7 +29,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from pipeline import geography  # noqa: E402
+from pipeline import geography, index  # noqa: E402
 from pipeline.common import log, setup_logging, today, write_json  # noqa: E402
 from pipeline.fetchers import FETCHERS  # noqa: E402
 from pipeline.fetchers.base import INTERIM  # noqa: E402
@@ -69,6 +71,28 @@ def main(argv=None) -> int:
             summary["steps"][name] = {"ok": False, "error": f"{type(e).__name__}: {e}",
                                       "traceback": traceback.format_exc(limit=5)}
             failed.append(name)
+
+    # Index (Phase 3): only from a complete set of fresh inputs.
+    if failed or args.only:
+        reason = "a fetcher failed" if failed else "--only run"
+        log.warning("index not rebuilt (%s)", reason)
+        summary["steps"]["index"] = {"ok": False, "skipped": reason}
+    else:
+        t0 = time.time()
+        try:
+            df, meta = index.build()
+            index.BUILD.mkdir(parents=True, exist_ok=True)
+            df.to_csv(index.BUILD / "openhousing_nj.csv", index=False)
+            write_json(index.BUILD / "index_meta.json", meta)
+            summary["steps"]["index"] = {"ok": True, "seconds": round(time.time() - t0, 1),
+                                         "scored": meta["scored"], "unscored": meta["unscored"],
+                                         "confidence": meta["confidence_counts"]}
+            log.info("index: %d of %d scored; confidence %s", meta["scored"], meta["rows"],
+                     meta["confidence_counts"])
+        except Exception as e:
+            log.error("index failed: %s", e)
+            summary["steps"]["index"] = {"ok": False, "error": f"{type(e).__name__}: {e}"}
+            failed.append("index")
 
     write_json(INTERIM / "run_summary.json", summary)
     log.info("done. %d step(s) failed: %s", len(failed), failed or "none")
