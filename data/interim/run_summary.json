@@ -3,11 +3,11 @@
   "steps": {
     "geography": {
       "ok": true,
-      "seconds": 0.6
+      "seconds": 0.7
     },
     "acs": {
       "ok": true,
-      "seconds": 6.5,
+      "seconds": 4.5,
       "outputs": {
         "acs_municipal": {
           "vintage": "ACS 2020-2024 5-year",
@@ -53,7 +53,7 @@
     },
     "property_tax": {
       "ok": true,
-      "seconds": 0.4,
+      "seconds": 0.5,
       "outputs": {
         "property_tax_municipal": {
           "vintage": "NJ DCA 2025 Property Tax Tables (tax year 2025)",
@@ -86,7 +86,7 @@
     },
     "nzlud": {
       "ok": true,
-      "seconds": 0.3,
+      "seconds": 0.5,
       "outputs": {
         "nzlud_municipal": {
           "vintage": "NZLUD (municipal surveys 2019-2022; file 2023)",

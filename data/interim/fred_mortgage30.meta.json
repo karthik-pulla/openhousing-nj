@@ -1,7 +1,7 @@
 {
   "name": "fred_mortgage30",
   "fetched": "2026-11-19",
-  "fetched_at": "2026-11-19T20:02:01+00:00",
+  "fetched_at": "2026-11-19T20:21:23+00:00",
   "key": "date",
   "vintage": "Freddie Mac PMMS, mean of 4 weeks 2026-10-29 to 2026-11-19",
   "source": "Freddie Mac Primary Mortgage Market Survey via FRED (series MORTGAGE30US)",

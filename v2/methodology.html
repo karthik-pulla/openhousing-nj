@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology · OpenHousing NJ (v2 preview)</title>
+<meta name="description" content="How OpenHousing NJ measures housing affordability in New Jersey's 564 municipalities, in plain English.">
+<script>
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("oh-theme"); } catch (e) {}
+    if (!t) t = (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+<link href="app.css" rel="stylesheet">
+<style>
+  body.page{overflow:auto;height:auto;display:block}
+  .prose{max-width:760px;margin:0 auto;padding:28px 20px 64px;font-size:15.5px;line-height:1.65}
+  .prose h1{font-size:28px;line-height:1.2;margin-bottom:6px}
+  .prose .lede{color:var(--muted);font-size:16px;margin-bottom:18px}
+  .prose h2{font-size:20px;margin:34px 0 8px;padding-top:6px;border-top:1px solid var(--border)}
+  .prose h3{font-size:16px;margin:20px 0 6px}
+  .prose p,.prose ul,.prose ol{margin:8px 0}
+  .prose ul,.prose ol{padding-left:22px}
+  .prose li{margin:4px 0}
+  .formula{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14.5px;margin:10px 0;overflow-x:auto}
+  .formula code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px}
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:14px 0}
+  .facts div{border:1px solid var(--border);border-radius:12px;padding:10px 12px}
+  .facts b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+  .facts span{font-size:12.5px;color:var(--muted)}
+  table.st{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
+  table.st th,table.st td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--border);vertical-align:top}
+  table.st th{font-weight:600;background:var(--bg2)}
+  .callout{border-left:3px solid var(--accent);background:var(--accent-soft);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+  .toc{columns:2;font-size:14px;padding-left:18px}
+  @media (max-width:600px){.toc{columns:1}}
+</style>
+</head>
+<body class="page">
+<header class="bar">
+  <a class="logo" href="./" aria-label="OpenHousing NJ v2 map">
+    <img class="lt" src="../OpenHousing_Normal.png" alt="OpenHousing">
+    <img class="dk" src="../OpenHousing_White.png" alt="OpenHousing">
+  </a>
+  <span class="tag">v2 preview</span>
+  <span class="sp"></span>
+  <a class="btn ghost" href="./">Back to the map</a>
+  <button type="button" class="iconbtn" id="theme-btn" aria-label="Switch between light and dark theme">
+    <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+  </button>
+</header>
+
+<main class="prose">
+  <h1>How OpenHousing measures affordability</h1>
+  <p class="lede">A plain-English guide to every number on the map: where it comes from, how it's calculated, and what it can and can't tell you.</p>
+  <p class="updated" id="updated">Loading the current figures…</p>
+
+  <div class="facts" id="facts"></div>
+
+  <ul class="toc">
+    <li><a href="#question">The question</a></li>
+    <li><a href="#two-scores">Two scores, two markets</a></li>
+    <li><a href="#owning">Cost of owning</a></li>
+    <li><a href="#renting">Cost of renting</a></li>
+    <li><a href="#ranks">From numbers to scores</a></li>
+    <li><a href="#context">Context we show but don't score</a></li>
+    <li><a href="#confidence">Confidence flags</a></li>
+    <li><a href="#barriers">Barriers: zoning and obligations</a></li>
+    <li><a href="#limits">What this can't tell you</a></li>
+    <li><a href="#sources">Sources and data periods</a></li>
+    <li><a href="#data">Downloading the data</a></li>
+  </ul>
+
+  <h2 id="question">The question</h2>
+  <p>For each of New Jersey's 564 municipalities: <strong>how much of a typical household's income would it take to own, or to rent, a typical home there?</strong></p>
+  <p>We compare each town's housing costs with the median household income of its <strong>county</strong>, not of the town itself. If you divide a wealthy town's costs by its own residents' high incomes, it can look affordable precisely because only high earners can live there. Using county income asks the regional question, the same one New Jersey's Mount Laurel doctrine asks: could people from the surrounding region afford to live here? Town-income figures are shown on each profile too, labelled "display only".</p>
+
+  <h2 id="two-scores">Two scores, two markets</h2>
+  <p>Owning and renting are largely separate markets, so there are two scores and no combined number:</p>
+  <ul>
+    <li><strong>Ownership affordability score</strong>: how the cost of owning the typical home compares with county income.</li>
+    <li><strong>Rental affordability score</strong>: how the typical rent compares with county income.</li>
+  </ul>
+  <p>Both measure <strong>prices relative to regional income</strong>. A town can rank well on one and poorly on the other; across New Jersey the two rankings are only loosely related.</p>
+
+  <h2 id="owning">Cost of owning</h2>
+  <p>We estimate what it would cost each year to buy the typical home today with a standard mortgage, plus the town's property taxes:</p>
+  <div class="formula">
+    <p><strong>Yearly ownership cost</strong> = 12 × monthly mortgage payment + average residential property tax bill</p>
+    <p><strong>Ownership burden</strong> = yearly ownership cost ÷ county median household income</p>
+  </div>
+  <p>The monthly payment uses the standard fixed-rate formula: <code>loan × r ÷ (1 − (1 + r)<sup>−n</sup>)</code>, where <code>r</code> is the annual rate ÷ 12 and <code>n</code> is the number of monthly payments.</p>
+  <table class="st" aria-label="Ownership cost assumptions"><tbody id="assumptions"></tbody></table>
+  <p><strong>Typical home value.</strong> <span id="home-value-text"></span></p>
+  <p><strong>Property taxes</strong> come from the NJ Department of Community Affairs' Property Tax Tables: the average total tax (county, municipal and school) on a residential property, before credits such as ANCHOR or Senior Freeze. New Jersey's property taxes are among the highest in the country and are a large part of the cost of owning, which is why they're included.</p>
+
+  <h2 id="renting">Cost of renting</h2>
+  <div class="formula">
+    <p><strong>Rent burden</strong> = 12 × median gross rent ÷ county median household income</p>
+  </div>
+  <p>Median gross rent (rent plus utilities) comes from the Census Bureau's American Community Survey. Towns with very few rental homes may have no published median rent; they have no rental score rather than an invented one.</p>
+
+  <h2 id="ranks">From numbers to scores</h2>
+  <p>Each burden is turned into a <strong>percentile</strong> across all towns that have it: 100 means the smallest burden in the state (most affordable) and 0 the largest. The percentile is calculated as (rank − 0.5) ÷ number of towns × 100, with tied towns sharing their average rank. The <strong>rank</strong> (1st = most affordable) orders towns by that score.</p>
+  <p>Each score currently uses a single measure, so the score is simply that measure's percentile. The settings live in one configuration file, and this page reads them from the published data:</p>
+  <table class="st" aria-label="Score weights"><thead><tr><th>Score</th><th>Measures and weights</th><th>Towns scored</th></tr></thead><tbody id="weights"></tbody></table>
+
+  <h2 id="context">Context we show but don't score</h2>
+  <ul>
+    <li><strong>Renters paying 30% or more of their income on rent.</strong> This describes how residents are doing, not what housing costs: it is high in places where renters have low incomes, even if rents are low. It is also very imprecise in small towns. It appears on each profile and as a map layer, clearly labelled as context.</li>
+    <li><strong>A moderate-income household.</strong> For each county we use HUD's low-income limit (80% of area median income) for a four-person household and ask whether the typical home's ownership cost, and the median rent, would be 30% or less of that income. This ties the numbers to the households affordable-housing programs serve. <span id="ami-text"></span></li>
+    <li><strong>Burdens using the town's own income</strong>, for comparison with the county-based score.</li>
+  </ul>
+
+  <h2 id="confidence">Confidence flags</h2>
+  <p>Every score carries a flag: <strong>high</strong>, <strong>medium</strong>, <strong>low</strong>, or <strong>insufficient data</strong>. Small towns are flagged, never dropped.</p>
+  <ul>
+    <li><strong>Survey precision.</strong> Census estimates come from a sample, with a published margin of error. We convert it to a coefficient of variation (margin ÷ 1.645 ÷ estimate). <span id="cv-text"></span></li>
+    <li><strong>Source.</strong> A home value from the Census is a five-year average of what owners think their home is worth, not a current market price, so it is at most "medium" confidence however precise it is.</li>
+    <li><strong>Top-coding.</strong> The Census reports only that a value is "at least" a ceiling ($2,000,000 for home values, $3,500 for rent). Those towns are flagged low.</li>
+    <li>If a score has no usable measure at all, the town shows "insufficient data" and no score. <span id="unscored-text"></span></li>
+  </ul>
+  <p>Each town's profile lists the specific reasons for its flags.</p>
+
+  <h2 id="barriers">Barriers: zoning and obligations</h2>
+  <p>These describe possible causes of unaffordability. They are shown as separate map layers and profile rows and are <strong>never part of either score</strong>.</p>
+  <h3>Zoning restrictiveness</h3>
+  <p>From the National Zoning and Land Use Database (NZLUD), compiled by Matthew Mleczko and Matthew Desmond (Eviction Lab, Princeton University) from municipal surveys in 2019-2022. Higher values mean more restrictive zoning. It covers only <strong>105 of the 564</strong> New Jersey municipalities; the rest are shown as "no data".</p>
+  <h3>Fourth Round affordable housing obligations</h3>
+  <p>Under the state's Affordable Housing Law (P.L.2024, c.2), the Department of Community Affairs calculated each municipality's obligation for 2025-2035 in October 2024:</p>
+  <ul>
+    <li><strong>Present need</strong>: existing deficient housing occupied by low- and moderate-income households.</li>
+    <li><strong>Prospective need</strong>: the town's share of projected regional need, after the cap the state applied (shown in its table as the "1,000/20% Cap"). We also show it <strong>per 1,000 households</strong>, so towns of different sizes can be compared.</li>
+  </ul>
+  <div class="callout">
+    <p><strong>Qualified Urban Aid municipalities</strong> (47 towns) received, in the state's words, "an average allocation factor of 0 since they have no prospective need obligation under the Affordable Housing Law" (DCA report, p. 18). Their prospective need of 0 is a legal result, not missing data. They can still have a present need.</p>
+  </div>
+  <p>These are the state's <strong>calculated</strong> numbers. Municipalities could adopt different numbers through the law's dispute-resolution process, so a town's final obligation may differ. They are obligations, not records of homes built: OpenHousing has no construction data and <strong>never describes a town as having met or not met its obligation</strong>.</p>
+
+  <h2 id="limits">What this can't tell you</h2>
+  <ul>
+    <li><strong>Small towns have large survey errors.</strong> Census estimates for towns with a few hundred residents can be far off; check the confidence flag.</li>
+    <li><strong>Home values lag the market.</strong> <span id="lag-text"></span></li>
+    <li><strong>"Typical" isn't "every".</strong> Medians hide variation inside a town, and the typical home in one town may be a different kind of home from another's.</li>
+    <li><strong>Average tax bills</strong> are for the average residential property, not exactly the typical home, and are before credits and deductions.</li>
+    <li><strong>Costs left out:</strong> <span id="excluded-text"></span>. Real ownership costs are higher than shown.</li>
+    <li><strong>Second-home markets.</strong> Several shore towns rank as the least affordable to own. Their prices likely reflect second-home buyers from outside the county, so the comparison with county income may not describe what year-round residents face.</li>
+    <li><strong>Zoning data covers only 105 towns</strong>, and obligations are calculated estimates, not built units.</li>
+    <li><strong>Mutual-housing townships</strong> (for example Winfield and Audubon Park) have unusual home values and assessments; read them with care.</li>
+  </ul>
+
+  <h2 id="sources">Sources and data periods</h2>
+  <p>Every figure comes from one of these sources. Missing data is shown as "Unavailable"; nothing is estimated, filled in or generated.</p>
+  <table class="st" aria-label="Sources and data periods"><thead><tr><th>Source</th><th>Data period</th></tr></thead><tbody id="sources-table"></tbody></table>
+  <p class="note" id="attributions"></p>
+  <p>Boundaries: NJOGIS New Jersey Municipal Boundaries. Map: © Mapbox © OpenStreetMap.</p>
+  <p>The written summaries on each town profile are generated from fixed sentence templates filled with the numbers above. No AI writes them, and every sentence traces back to a number and a source.</p>
+
+  <h2 id="data">Downloading the data</h2>
+  <ul>
+    <li><a href="../data/published/openhousing_nj.csv" download>Full dataset (CSV)</a>: one row per municipality, every measure, score, flag and source column.</li>
+    <li><a href="../data/manifest.json">Data manifest (JSON)</a>: every source, its data period, when it was fetched, coverage, and the checks the data passed before publishing.</li>
+    <li>From the map, you can also download a single town or a comparison of up to three towns.</li>
+  </ul>
+  <p>The data refreshes automatically each month and is published only after passing validation checks: exactly 564 towns, no unexpected gaps, values in plausible ranges, and an unchanged format.</p>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]; }); }
+  $("theme-btn").addEventListener("click", function () {
+    var t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = t;
+    try { localStorage.setItem("oh-theme", t); } catch (e) {}
+  });
+  var LABELS = { acs_municipal: "U.S. Census Bureau, American Community Survey (municipalities)", acs_county: "U.S. Census Bureau, American Community Survey (counties)",
+    property_tax_municipal: "NJ Department of Community Affairs, Property Tax Tables", hud_county: "HUD Income Limits and Fair Market Rents (HUD USER API)",
+    fred_mortgage30: "Freddie Mac Primary Mortgage Market Survey, 30-year fixed (via FRED)", nzlud_municipal: "National Zoning and Land Use Database (Eviction Lab)",
+    fourth_round_municipal: "NJ Department of Community Affairs, Fourth Round obligations (Oct 2024)", zillow_municipal: "Zillow Home Value Index" };
+  Promise.all([fetch("../data/manifest.json").then(function (r) { return r.json(); }),
+               fetch("../data/published/index_meta.json").then(function (r) { return r.json(); })])
+  .then(function (res) {
+    var m = res[0], meta = res[1], a = meta.assumptions, sc = meta.scores, cr = meta.confidence_rules;
+    var d = new Date(m.published_at);
+    $("updated").textContent = "Figures on this page are from the dataset published " +
+      (isNaN(d) ? m.published_at : d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })) + ".";
+    var n = function (x, dp) { return Number(x).toLocaleString("en-US", { minimumFractionDigits: dp || 0, maximumFractionDigits: dp || 0 }); };
+    $("facts").innerHTML =
+      "<div><b>" + m.rows + "</b><span>municipalities, none dropped</span></div>" +
+      "<div><b>" + sc.ownership.scored + "</b><span>with an ownership score</span></div>" +
+      "<div><b>" + sc.rental.scored + "</b><span>with a rental score</span></div>" +
+      "<div><b>" + n(a.mortgage_rate_pct, 2) + "%</b><span>30-year mortgage rate used</span></div>";
+    $("assumptions").innerHTML = [
+      ["Down payment", a.down_payment_pct + "% (so no private mortgage insurance)"],
+      ["Loan", a.loan_term_years + "-year fixed rate"],
+      ["Interest rate", n(a.mortgage_rate_pct, 2) + "%: " + a.mortgage_rate_vintage],
+      ["Not included", a.excluded_costs.join(", ")]
+    ].map(function (r) { return "<tr><th scope='row'>" + esc(r[0]) + "</th><td>" + esc(r[1]) + "</td></tr>"; }).join("");
+    $("excluded-text").textContent = a.excluded_costs.join(", ");
+    $("home-value-text").textContent = m.zillow_included
+      ? "We use the Zillow Home Value Index (the typical value of homes in the middle third of the market) where Zillow covers a town, and the Census Bureau's median home value otherwise. Each town's profile says which was used."
+      : "Currently every home value comes from the Census Bureau's American Community Survey: the median of what owner-occupants estimate their home is worth, averaged over five years (" +
+        (meta.vintages.acs_municipal || "") + "). We plan to add the Zillow Home Value Index, a current market estimate, once its terms of use are confirmed; each town's profile says which source was used.";
+    $("lag-text").textContent = m.zillow_included
+      ? "Zillow values are monthly; Census values average five years and run well below current prices."
+      : "Census home values cover " + (meta.vintages.acs_municipal || "a five-year period").replace(" 5-year", "") + " (a five-year average) and are owners' own estimates, so they run below today's market prices. Burdens are therefore likely understated, though rankings between towns are much less affected.";
+    $("ami-text").textContent = "The map layer \"Cost of owning ÷ HUD 80% income limit\" shows this for every town.";
+    $("weights").innerHTML = Object.keys(sc).map(function (k) {
+      var w = Object.keys(sc[k].measures).map(function (x) { return x.replace(/_/g, " ") + " (weight " + sc[k].measures[x] + ")"; }).join(", ");
+      return "<tr><td>" + esc(k.charAt(0).toUpperCase() + k.slice(1)) + "</td><td>" + esc(w) + "</td><td>" + sc[k].scored + " of " + m.rows + "</td></tr>";
+    }).join("");
+    $("cv-text").textContent = "Up to " + Math.round(cr.cv_high_max * 100) + "% is high, up to " + Math.round(cr.cv_medium_max * 100) +
+      "% medium, above that low. A score's flag is the weakest flag among its measures.";
+    $("unscored-text").textContent = "Currently: no ownership score for " + sc.ownership.unscored.join(", ") + "; no rental score for " + sc.rental.unscored.length + " towns, mostly with very few rental homes.";
+    $("sources-table").innerHTML = m.sources.map(function (s) {
+      return "<tr><td>" + esc(LABELS[s.name] || s.source) + "</td><td>" + esc(s.vintage) + "</td></tr>";
+    }).join("");
+    var notes = m.sources.map(function (s) { return s.attribution; }).filter(Boolean);
+    $("attributions").textContent = notes.filter(function (x, i) { return notes.indexOf(x) === i; }).join(" ");
+  }).catch(function (e) {
+    $("updated").textContent = "The current figures couldn't be loaded (" + e.message + "). The explanations below still apply.";
+  });
+})();
+</script>
+</body>
+</html>

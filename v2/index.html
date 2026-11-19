@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenHousing NJ (v2 preview)</title>
+<meta name="description" content="How affordable is it to own or rent a home in each of New Jersey's 564 municipalities? Interactive map, town profiles, comparisons and downloadable data.">
+<script>
+  // Apply the saved theme before first paint (same key as v1).
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("oh-theme"); } catch (e) {}
+    if (!t) t = (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
+<link href="app.css" rel="stylesheet">
+</head>
+<body>
+<a class="skip" href="#table-view" data-view-link="table">Skip to the table of all municipalities</a>
+
+<header class="bar">
+  <a class="logo" href="./" aria-label="OpenHousing NJ v2 home">
+    <img class="lt" src="../OpenHousing_Normal.png" alt="OpenHousing">
+    <img class="dk" src="../OpenHousing_White.png" alt="OpenHousing">
+  </a>
+  <span class="tag">v2 preview</span>
+  <nav class="views" aria-label="Views">
+    <button type="button" class="tab" data-view="map" aria-pressed="true">Map</button>
+    <button type="button" class="tab" data-view="table" aria-pressed="false">Table</button>
+    <button type="button" class="tab" data-view="compare" aria-pressed="false">Compare <span class="count" id="compare-count">0</span></button>
+  </nav>
+  <span class="sp"></span>
+  <a class="btn ghost hide-sm" href="methodology.html">Methodology</a>
+  <div class="pop-wrap">
+    <button type="button" class="btn ghost" id="sources-btn" aria-expanded="false" aria-controls="sources-pop">Sources</button>
+    <div class="popover" id="sources-pop" role="dialog" aria-label="Data sources and vintages">
+      <h2 class="pop-h">Data sources</h2>
+      <p class="updated" id="updated-pop"></p>
+      <ul class="srclist" id="source-list"></ul>
+      <p class="notices" id="notices"></p>
+      <p><a href="methodology.html#sources">Full source list and methodology</a></p>
+    </div>
+  </div>
+  <button type="button" class="iconbtn" id="theme-btn" aria-label="Switch between light and dark theme">
+    <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+  </button>
+</header>
+
+<div class="status" id="status" role="status" aria-live="polite">Loading data…</div>
+
+<main class="app" id="app">
+  <!-- MAP VIEW -->
+  <section class="view" id="map-view" aria-label="Map view">
+    <aside class="side" aria-label="Layer and town list">
+      <div class="side-top">
+        <label class="lbl" for="search">Find a municipality</label>
+        <input id="search" class="input" type="search" placeholder="Town or county" autocomplete="off">
+
+        <label class="lbl" for="layer">Map layer</label>
+        <select id="layer" class="input"></select>
+        <p class="layer-desc" id="layer-desc"></p>
+
+        <div class="row">
+          <div class="seg" role="group" aria-label="Sort order">
+            <button type="button" class="segb" id="sort-best" aria-pressed="true"></button>
+            <button type="button" class="segb" id="sort-worst" aria-pressed="false"></button>
+          </div>
+          <label class="chk"><input type="checkbox" id="fav-only"> Favorites</label>
+        </div>
+        <p class="listcount" id="listcount"></p>
+      </div>
+      <ol class="list" id="list" aria-label="Municipalities, ranked by the selected layer"></ol>
+      <footer class="side-foot">
+        <a class="btn sm" id="dl-all" href="../data/published/openhousing_nj.csv" download>Download all data (CSV)</a>
+        <p class="updated" id="updated"></p>
+      </footer>
+    </aside>
+
+    <div class="mapwrap">
+      <div id="map" role="region" aria-label="Map of New Jersey municipalities colored by the selected layer. Use the list or the table view for keyboard access."></div>
+      <div class="legend" id="legend" aria-label="Map legend"></div>
+      <div class="tip" id="tip" aria-hidden="true"></div>
+      <p class="map-error" id="map-error" hidden></p>
+    </div>
+  </section>
+
+  <!-- TABLE VIEW -->
+  <section class="view" id="table-view" aria-label="Table of all municipalities" hidden>
+    <div class="tv-head">
+      <h1 class="h1">All 564 municipalities</h1>
+      <label class="lbl sr" for="tsearch">Filter the table</label>
+      <input id="tsearch" class="input" type="search" placeholder="Filter by town or county" autocomplete="off">
+      <span class="sp"></span>
+      <a class="btn sm" href="../data/published/openhousing_nj.csv" download>Download all data (CSV)</a>
+    </div>
+    <p class="hint">Select a column heading to sort. Select a town's name to open its profile. Missing values are shown as "Unavailable".</p>
+    <div class="tablewrap" tabindex="0" aria-label="Scrollable table">
+      <table class="dt" id="table">
+        <caption class="sr">Affordability scores, measures and barriers for every New Jersey municipality</caption>
+        <thead></thead><tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- COMPARE VIEW -->
+  <section class="view" id="compare-view" aria-label="Compare municipalities" hidden>
+    <div class="tv-head">
+      <h1 class="h1">Compare municipalities</h1>
+      <span class="sp"></span>
+      <button type="button" class="btn sm" id="dl-compare">Download comparison (CSV)</button>
+    </div>
+    <p class="hint" id="compare-hint">Add up to three municipalities from a town profile (select "Compare").</p>
+    <div class="tablewrap" id="compare-wrap"></div>
+  </section>
+
+  <!-- TOWN PROFILE -->
+  <aside class="drawer" id="drawer" aria-labelledby="p-name" hidden>
+    <div class="d-head">
+      <div>
+        <h2 class="p-name" id="p-name" tabindex="-1"></h2>
+        <p class="p-sub" id="p-sub"></p>
+      </div>
+      <button type="button" class="iconbtn" id="close-drawer" aria-label="Close town profile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="d-actions">
+      <button type="button" class="btn sm" id="fav-btn" aria-pressed="false"></button>
+      <button type="button" class="btn sm" id="cmp-btn"></button>
+      <button type="button" class="btn sm" id="dl-town">Download (CSV)</button>
+    </div>
+    <div class="d-body" id="d-body"></div>
+  </aside>
+</main>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

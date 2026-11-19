@@ -270,7 +270,9 @@ def build_manifest(df: pd.DataFrame, report: dict, published_at: str) -> dict:
         "rows": len(df),
         "files": {"csv": str(PUBLISHED_CSV.relative_to(DATA.parent)),
                   "index_meta": "data/published/index_meta.json",
-                  "summaries": "data/published/summaries.json"},
+                  "summaries": "data/published/summaries.json",
+                  "web_data": "data/published/openhousing_nj.web.json",
+                  "web_summaries": "data/published/summaries.web.json"},
         "scores": meta["scores"],
         "context_measures": meta["context_measures"],
         "assumptions": meta["assumptions"],
@@ -292,6 +294,16 @@ def publish(df: pd.DataFrame, report: dict) -> None:
     tmp.replace(PUBLISHED_CSV)                       # atomic swap of the live file
     shutil.copy2(BUILD / "index_meta.json", PUBLISHED / "index_meta.json")
     shutil.copy2(BUILD / "summaries.json", PUBLISHED / "summaries.json")
+    # Compact copies for the website: same rows/columns as the CSV, split
+    # orientation (no repeated keys); summaries without per-sentence field lists.
+    (PUBLISHED / "openhousing_nj.web.json").write_text(
+        df.to_json(orient="split", index=False, double_precision=6) + "\n")
+    full = json.loads((BUILD / "summaries.json").read_text())
+    web = {"generated": full["generated"], "sources": full["sources"],
+           "towns": {g: {"summary": t["summary"],
+                         "sentences": [[s["text"], s["sources"]] for s in t["sentences"]]}
+                     for g, t in full["towns"].items()}}
+    (PUBLISHED / "summaries.web.json").write_text(json.dumps(web, separators=(",", ":")) + "\n")
     write_json(PUBLISHED / "validation.json", report)
     write_json(MANIFEST, build_manifest(df, report, published_at))
     log.info("published %s (%d rows) and %s", PUBLISHED_CSV.name, len(df), MANIFEST.name)

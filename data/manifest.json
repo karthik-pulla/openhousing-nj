@@ -1,11 +1,13 @@
 {
   "dataset": "OpenHousing NJ v2",
-  "published_at": "2026-11-19T20:02:01+00:00",
+  "published_at": "2026-11-19T20:21:24+00:00",
   "rows": 564,
   "files": {
     "csv": "data/published/openhousing_nj.csv",
     "index_meta": "data/published/index_meta.json",
-    "summaries": "data/published/summaries.json"
+    "summaries": "data/published/summaries.json",
+    "web_data": "data/published/openhousing_nj.web.json",
+    "web_summaries": "data/published/summaries.web.json"
   },
   "scores": {
     "ownership": {
@@ -91,7 +93,7 @@
       "url": "https://api.census.gov/data/2024/acs/acs5",
       "attribution": "",
       "fetched": "2026-11-19",
-      "fetched_at": "2026-11-19T20:01:58+00:00",
+      "fetched_at": "2026-11-19T20:21:21+00:00",
       "coverage": {
         "rows": 21
       }
@@ -103,7 +105,7 @@
       "url": "https://api.census.gov/data/2024/acs/acs5",
       "attribution": "Source: U.S. Census Bureau, ACS 2020-2024 5-year.",
       "fetched": "2026-11-19",
-      "fetched_at": "2026-11-19T20:01:58+00:00",
+      "fetched_at": "2026-11-19T20:21:21+00:00",
       "coverage": {
         "rows": 564,
         "municipalities_covered": 564,
@@ -118,7 +120,7 @@
       "url": "data/static/fourth_round/FourthRoundCalculation_Methodology.pdf",
       "attribution": "Source: New Jersey Department of Community Affairs, Affordable Housing Obligations for 2025-2035 (Fourth Round) Methodology and Background, October 2024, Appendix A.",
       "fetched": "2026-11-19",
-      "fetched_at": "2026-11-19T20:02:01+00:00",
+      "fetched_at": "2026-11-19T20:21:24+00:00",
       "coverage": {
         "rows": 564,
         "municipalities_covered": 564,
@@ -133,7 +135,7 @@
       "url": "https://fred.stlouisfed.org/series/MORTGAGE30US",
       "attribution": "Freddie Mac, 30-Year Fixed Rate Mortgage Average in the United States [MORTGAGE30US], retrieved from FRED, Federal Reserve Bank of St. Louis. This product uses the FRED\u00ae API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
       "fetched": "2026-11-19",
-      "fetched_at": "2026-11-19T20:02:01+00:00",
+      "fetched_at": "2026-11-19T20:21:23+00:00",
       "coverage": {
         "rows": 260
       }
@@ -145,7 +147,7 @@
       "url": "https://www.huduser.gov/portal/dataset/fmr-api.html",
       "attribution": "This product uses the HUD User Data API but is not endorsed or certified by HUD User.",
       "fetched": "2026-11-19",
-      "fetched_at": "2026-11-19T20:02:01+00:00",
+      "fetched_at": "2026-11-19T20:21:23+00:00",
       "coverage": {
         "rows": 21
       }
@@ -157,7 +159,7 @@
       "url": "https://github.com/mtmleczko/nzlud",
       "attribution": "Mleczko, Matthew, and Matthew Desmond. 2023. National Zoning and Land Use Database (NZLUD). https://github.com/mtmleczko/nzlud",
       "fetched": "2026-11-19",
-      "fetched_at": "2026-11-19T20:02:01+00:00",
+      "fetched_at": "2026-11-19T20:21:24+00:00",
       "coverage": {
         "rows": 105,
         "municipalities_covered": 105,
@@ -188,7 +190,7 @@
       "url": "https://www.nj.gov/dca/dlgs/resources/Property_Tax_info.shtml",
       "attribution": "Source: NJ Department of Community Affairs, 2025 Property Tax Tables.",
       "fetched": "2026-11-19",
-      "fetched_at": "2026-11-19T20:02:01+00:00",
+      "fetched_at": "2026-11-19T20:21:23+00:00",
       "coverage": {
         "rows": 564,
         "municipalities_covered": 564,
@@ -198,7 +200,7 @@
     }
   ],
   "validation": {
-    "validated_at": "2026-11-19T20:02:01+00:00",
+    "validated_at": "2026-11-19T20:21:24+00:00",
     "passed": true,
     "errors": 0,
     "warnings": 0,
