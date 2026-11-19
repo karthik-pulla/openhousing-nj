@@ -1,0 +1,23 @@
+{
+  "name": "fred_mortgage30",
+  "fetched": "2026-11-19",
+  "key": "date",
+  "vintage": "Freddie Mac PMMS, mean of 4 weeks 2026-10-29 to 2026-11-19",
+  "source": "Freddie Mac Primary Mortgage Market Survey via FRED (series MORTGAGE30US)",
+  "url": "https://fred.stlouisfed.org/series/MORTGAGE30US",
+  "attribution": "Freddie Mac, 30-Year Fixed Rate Mortgage Average in the United States [MORTGAGE30US], retrieved from FRED, Federal Reserve Bank of St. Louis. This product uses the FRED\u00ae API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
+  "columns": [
+    "date",
+    "rate_pct"
+  ],
+  "coverage": {
+    "rows": 260
+  },
+  "notes": [
+    "Rate used for ownership cost = mean of the last 4 weekly observations."
+  ],
+  "rate_used_pct": 7.203,
+  "latest_week": "2026-11-19",
+  "latest_rate_pct": 7.28,
+  "weeks_averaged": 4
+}

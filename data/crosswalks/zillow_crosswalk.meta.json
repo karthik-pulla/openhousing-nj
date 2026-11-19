@@ -13,5 +13,5 @@
     "override": 26
   },
   "min_part_share": 0.1,
-  "input_file": "raw/zillow/2026-11-19/City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv"
+  "input_file": "City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv"
 }

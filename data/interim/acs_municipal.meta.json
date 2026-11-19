@@ -1,0 +1,63 @@
+{
+  "name": "acs_municipal",
+  "fetched": "2026-11-19",
+  "key": "geoid",
+  "vintage": "ACS 2020-2024 5-year",
+  "source": "U.S. Census Bureau, American Community Survey 5-year estimates (Census Data API)",
+  "url": "https://api.census.gov/data/2024/acs/acs5",
+  "attribution": "Source: U.S. Census Bureau, ACS 2020-2024 5-year.",
+  "columns": [
+    "geoid",
+    "name_acs",
+    "median_hh_income",
+    "median_hh_income_moe",
+    "median_home_value",
+    "median_home_value_moe",
+    "median_gross_rent",
+    "median_gross_rent_moe",
+    "median_owner_cost_mortgage",
+    "median_owner_cost_mortgage_moe",
+    "median_owner_cost_no_mortgage",
+    "median_owner_cost_no_mortgage_moe",
+    "households",
+    "households_moe",
+    "renter_households",
+    "renter_households_moe",
+    "housing_units",
+    "housing_units_moe",
+    "median_hh_income_topcoded",
+    "median_home_value_topcoded",
+    "median_gross_rent_topcoded",
+    "renters_cost_burdened_share",
+    "renters_cost_burdened_share_moe",
+    "renters_cost_burdened_n"
+  ],
+  "coverage": {
+    "rows": 564,
+    "municipalities_covered": 564,
+    "municipalities_missing": 0,
+    "missing_sample": []
+  },
+  "notes": [
+    "Jam values (no estimate) are missing, not zero.",
+    "Top-coded medians are flagged *_topcoded (income 250,000+, value 2,000,000+, rent 3,500+).",
+    "renters_cost_burdened_share = renters paying 30%+ of income on gross rent / renters with a computable ratio (B25070); MOE by the ACS Handbook proportion formula."
+  ],
+  "acs_year": 2024,
+  "variables": {
+    "B19013_001": "median_hh_income",
+    "B25077_001": "median_home_value",
+    "B25064_001": "median_gross_rent",
+    "B25088_002": "median_owner_cost_mortgage",
+    "B25088_003": "median_owner_cost_no_mortgage",
+    "B25003_001": "households",
+    "B25003_003": "renter_households",
+    "B25001_001": "housing_units",
+    "B25070_001": "rent_burden_universe",
+    "B25070_007": "rent_30_34",
+    "B25070_008": "rent_35_39",
+    "B25070_009": "rent_40_49",
+    "B25070_010": "rent_50_plus",
+    "B25070_011": "rent_not_computed"
+  }
+}

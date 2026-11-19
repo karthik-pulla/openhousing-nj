@@ -14,3 +14,7 @@ __pycache__/
 
 .DS_Store
 data/raw/
+
+# Zillow-derived values stay out of git until Zillow's terms are checked
+# (docs/SOURCES_VERIFICATION.md). Region names/IDs in data/crosswalks are fine.
+data/interim/zillow_municipal.*

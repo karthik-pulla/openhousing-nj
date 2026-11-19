@@ -1,0 +1,29 @@
+{
+  "name": "property_tax_municipal",
+  "fetched": "2026-11-19",
+  "key": "geoid",
+  "vintage": "NJ DCA 2025 Property Tax Tables (tax year 2025)",
+  "source": "New Jersey Department of Community Affairs, Division of Local Government Services",
+  "url": "https://www.nj.gov/dca/dlgs/resources/Property_Tax_info.shtml",
+  "attribution": "Source: NJ Department of Community Affairs, 2025 Property Tax Tables.",
+  "columns": [
+    "geoid",
+    "avg_res_assessed_value",
+    "avg_res_tax_bill",
+    "equalization_ratio",
+    "effective_tax_rate",
+    "tax_year"
+  ],
+  "coverage": {
+    "rows": 564,
+    "municipalities_covered": 564,
+    "municipalities_missing": 0,
+    "missing_sample": []
+  },
+  "notes": [
+    "Average bill is before credits/deductions (e.g. ANCHOR, Senior Freeze).",
+    "effective_tax_rate is derived: bill / (assessed value / equalization ratio)."
+  ],
+  "tax_year": 2025,
+  "file": "https://www.nj.gov/dca/dlgs/resources/Property_Tax/25_data/25taxes.xls"
+}

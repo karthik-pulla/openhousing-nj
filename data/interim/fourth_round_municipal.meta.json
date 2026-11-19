@@ -1,0 +1,35 @@
+{
+  "name": "fourth_round_municipal",
+  "fetched": "2026-11-19",
+  "key": "geoid",
+  "vintage": "DCA Fourth Round calculation, October 2024 (obligations for 2025-2035)",
+  "source": "New Jersey Department of Community Affairs, Affordable Housing Obligations for 2025-2035 (Fourth Round) Methodology and Background, October 2024, Appendix A",
+  "url": "data/static/fourth_round/FourthRoundCalculation_Methodology.pdf",
+  "attribution": "Source: New Jersey Department of Community Affairs, Affordable Housing Obligations for 2025-2035 (Fourth Round) Methodology and Background, October 2024, Appendix A.",
+  "columns": [
+    "geoid",
+    "dca_name",
+    "housing_region",
+    "present_need",
+    "qualified_urban_aid",
+    "factor_nonresidential_valuation",
+    "factor_land_capacity",
+    "factor_income_capacity",
+    "factor_average_allocation",
+    "prospective_need",
+    "cap_1000_or_20pct",
+    "prospective_need_capped"
+  ],
+  "coverage": {
+    "rows": 564,
+    "municipalities_covered": 564,
+    "municipalities_missing": 0,
+    "missing_sample": []
+  },
+  "notes": [
+    "prospective_need_capped is the obligation after the 1,000-unit / 20% cap.",
+    "Qualified Urban Aid municipalities have no prospective need obligation under the Affordable Housing Law (report p. 18); their prospective-need zeros are not missing data. They may still have a present need.",
+    "Obligations are calculated need, not units built. Never describe a town as having met or failed its obligation."
+  ],
+  "status": "DCA calculation (advisory under P.L.2024, c.2); municipalities may have adopted different numbers. Not a record of units built."
+}

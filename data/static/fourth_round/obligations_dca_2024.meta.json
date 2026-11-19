@@ -1,0 +1,14 @@
+{
+  "source": "New Jersey Department of Community Affairs, Affordable Housing Obligations for 2025-2035 (Fourth Round) Methodology and Background, October 2024, Appendix A",
+  "publisher": "NJ Department of Community Affairs",
+  "published": "2024-10 (PDF creation date 2024-10-21)",
+  "extracted_from": "data/static/fourth_round/FourthRoundCalculation_Methodology.pdf",
+  "rows": 564,
+  "totals_match_report": {
+    "present_need": 65410,
+    "prospective_need": 84698,
+    "prospective_need_capped": 80798
+  },
+  "status": "DCA calculation (advisory under P.L.2024, c.2); municipalities may have adopted different numbers. Not a record of units built.",
+  "last_hand_update": null
+}

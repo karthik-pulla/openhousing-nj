@@ -90,15 +90,48 @@ def raw_dir(source: str, date: str | None = None) -> Path:
     return d
 
 
+def _previous_copy(source: str, filename: str) -> Path | None:
+    """Newest earlier-dated copy of this file in data/raw/<source>/."""
+    base = RAW / source
+    if not base.exists():
+        return None
+    for d in sorted((p for p in base.iterdir() if p.is_dir() and p.name < today()), reverse=True):
+        f = d / filename
+        if f.exists() and f.stat().st_size > 0:
+            return f
+    return None
+
+
 def download(source: str, filename: str, url: str, *, params: dict | None = None,
              headers: dict | None = None, retries: int = 3, timeout: int = 120,
-             force: bool = False) -> Path:
-    """Download `url` to data/raw/<source>/<today>/<filename>, reusing today's copy if present."""
+             force: bool = False, reuse_if_unchanged: bool = False) -> Path:
+    """Download `url` to data/raw/<source>/<today>/<filename>, reusing today's copy if present.
+
+    reuse_if_unchanged: for large files, send a HEAD request first; if the
+    server's ETag/Last-Modified match the newest earlier copy, copy that file
+    instead of downloading it again.
+    """
     out = raw_dir(source) / filename
     out.parent.mkdir(parents=True, exist_ok=True)
     if out.exists() and out.stat().st_size > 0 and not force:
         log.info("cache hit %s/%s", source, out.relative_to(RAW / source))
         return out
+    if reuse_if_unchanged and not force:
+        prev = _previous_copy(source, filename)
+        sidecar = prev.with_name(prev.name + ".headers.json") if prev else None
+        if prev and sidecar.exists():
+            try:
+                h = requests.head(url, params=params, headers=headers, timeout=30, allow_redirects=True)
+                old = json.loads(sidecar.read_text())
+                now = {k: h.headers.get(k) for k in ("ETag", "Last-Modified")}
+                if h.ok and any(now.values()) and now == old:
+                    import shutil
+                    shutil.copy2(prev, out)
+                    shutil.copy2(sidecar, out.with_name(out.name + ".headers.json"))
+                    log.info("unchanged since %s; reused %s", prev.parent.name, filename)
+                    return out
+            except requests.RequestException as e:
+                log.warning("HEAD check failed for %s: %s", redact(url), e)
     last_err: Exception | None = None
     for attempt in range(1, retries + 1):
         try:
@@ -112,6 +145,8 @@ def download(source: str, filename: str, url: str, *, params: dict | None = None
                     for chunk in r.iter_content(chunk_size=1 << 20):
                         f.write(chunk)
                 tmp.replace(out)
+                out.with_name(out.name + ".headers.json").write_text(json.dumps(
+                    {k: r.headers.get(k) for k in ("ETag", "Last-Modified")}))
                 log.info("downloaded %s (%s bytes) from %s", out.name, out.stat().st_size, redact(r.url))
                 return out
         except (requests.RequestException, OSError) as e:
@@ -133,6 +168,13 @@ def census_get(dataset: str, variables: list[str], for_: str, in_: str | None,
     return [dict(zip(header, r)) for r in body]
 
 
+def load_config() -> dict:
+    import yaml
+    return yaml.safe_load((ROOT / "config.yaml").read_text())
+
+
 def write_json(path: Path, obj) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(obj, indent=2, sort_keys=False) + "\n")
+    # numpy/pandas scalars -> plain Python; anything else -> str
+    path.write_text(json.dumps(obj, indent=2, sort_keys=False,
+                               default=lambda o: o.item() if hasattr(o, "item") else str(o)) + "\n")

@@ -1,0 +1,130 @@
+{
+  "run_date": "2026-11-19",
+  "steps": {
+    "geography": {
+      "ok": true,
+      "seconds": 0.4
+    },
+    "acs": {
+      "ok": true,
+      "seconds": 4.9,
+      "outputs": {
+        "acs_municipal": {
+          "vintage": "ACS 2020-2024 5-year",
+          "rows": 564,
+          "municipalities_covered": 564,
+          "municipalities_missing": 0,
+          "missing_sample": []
+        },
+        "acs_county": {
+          "vintage": "ACS 2020-2024 5-year",
+          "rows": 21
+        }
+      }
+    },
+    "zillow": {
+      "ok": true,
+      "seconds": 1.9,
+      "outputs": {
+        "zillow_municipal": {
+          "vintage": "Zillow ZHVI Oct 2026",
+          "rows": 485,
+          "municipalities_covered": 485,
+          "municipalities_missing": 79,
+          "missing_sample": [
+            "Folsom Borough",
+            "Mullica Township",
+            "Teterboro Borough",
+            "Bass River Township",
+            "Bordentown City",
+            "Burlington City",
+            "Pemberton Borough",
+            "Washington Township",
+            "Audubon Park Borough",
+            "Cherry Hill Township",
+            "Hi-Nella Borough",
+            "Tavistock Borough",
+            "West Cape May Borough",
+            "West Wildwood Borough",
+            "Wildwood Crest Borough"
+          ]
+        }
+      }
+    },
+    "property_tax": {
+      "ok": true,
+      "seconds": 0.4,
+      "outputs": {
+        "property_tax_municipal": {
+          "vintage": "NJ DCA 2025 Property Tax Tables (tax year 2025)",
+          "rows": 564,
+          "municipalities_covered": 564,
+          "municipalities_missing": 0,
+          "missing_sample": []
+        }
+      }
+    },
+    "hud": {
+      "ok": true,
+      "seconds": 0.0,
+      "outputs": {
+        "hud_county": {
+          "vintage": "HUD FY2026 Income Limits; FY2027 Fair Market Rents",
+          "rows": 21
+        }
+      }
+    },
+    "fred": {
+      "ok": true,
+      "seconds": 0.0,
+      "outputs": {
+        "fred_mortgage30": {
+          "vintage": "Freddie Mac PMMS, mean of 4 weeks 2026-10-29 to 2026-11-19",
+          "rows": 260
+        }
+      }
+    },
+    "nzlud": {
+      "ok": true,
+      "seconds": 0.2,
+      "outputs": {
+        "nzlud_municipal": {
+          "vintage": "NZLUD (municipal surveys 2019-2022; file 2023)",
+          "rows": 105,
+          "municipalities_covered": 105,
+          "municipalities_missing": 459,
+          "missing_sample": [
+            "Buena Borough",
+            "Buena Vista Township",
+            "Corbin City",
+            "Egg Harbor Township",
+            "Egg Harbor City",
+            "Estell Manor City",
+            "Folsom Borough",
+            "Galloway Township",
+            "Hamilton Township",
+            "Linwood City",
+            "Longport Borough",
+            "Margate City",
+            "Mullica Township",
+            "Northfield City",
+            "Port Republic City"
+          ]
+        }
+      }
+    },
+    "fourth_round": {
+      "ok": true,
+      "seconds": 0.0,
+      "outputs": {
+        "fourth_round_municipal": {
+          "vintage": "DCA Fourth Round calculation, October 2024 (obligations for 2025-2035)",
+          "rows": 564,
+          "municipalities_covered": 564,
+          "municipalities_missing": 0,
+          "missing_sample": []
+        }
+      }
+    }
+  }
+}

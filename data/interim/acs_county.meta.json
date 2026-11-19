@@ -1,0 +1,44 @@
+{
+  "name": "acs_county",
+  "fetched": "2026-11-19",
+  "key": "county_fips",
+  "vintage": "ACS 2020-2024 5-year",
+  "source": "U.S. Census Bureau, American Community Survey 5-year estimates (Census Data API)",
+  "url": "https://api.census.gov/data/2024/acs/acs5",
+  "attribution": "",
+  "columns": [
+    "county_fips",
+    "name_acs",
+    "median_hh_income",
+    "median_hh_income_moe",
+    "median_home_value",
+    "median_home_value_moe",
+    "median_gross_rent",
+    "median_gross_rent_moe",
+    "median_owner_cost_mortgage",
+    "median_owner_cost_mortgage_moe",
+    "median_owner_cost_no_mortgage",
+    "median_owner_cost_no_mortgage_moe",
+    "households",
+    "households_moe",
+    "renter_households",
+    "renter_households_moe",
+    "housing_units",
+    "housing_units_moe",
+    "median_hh_income_topcoded",
+    "median_home_value_topcoded",
+    "median_gross_rent_topcoded",
+    "renters_cost_burdened_share",
+    "renters_cost_burdened_share_moe",
+    "renters_cost_burdened_n"
+  ],
+  "coverage": {
+    "rows": 21
+  },
+  "notes": [
+    "Jam values (no estimate) are missing, not zero.",
+    "Top-coded medians are flagged *_topcoded (income 250,000+, value 2,000,000+, rent 3,500+).",
+    "renters_cost_burdened_share = renters paying 30%+ of income on gross rent / renters with a computable ratio (B25070); MOE by the ACS Handbook proportion formula."
+  ],
+  "acs_year": 2024
+}

@@ -1,0 +1,61 @@
+{
+  "name": "hud_county",
+  "fetched": "2026-11-19",
+  "key": "county_fips",
+  "vintage": "HUD FY2026 Income Limits; FY2027 Fair Market Rents",
+  "source": "U.S. Department of Housing and Urban Development, HUD USER API",
+  "url": "https://www.huduser.gov/portal/dataset/fmr-api.html",
+  "attribution": "This product uses the HUD User Data API but is not endorsed or certified by HUD User.",
+  "columns": [
+    "county_fips",
+    "hud_county_name",
+    "hud_area_name",
+    "il_year",
+    "hud_median_family_income",
+    "il30_p1",
+    "il30_p2",
+    "il30_p3",
+    "il30_p4",
+    "il30_p5",
+    "il30_p6",
+    "il30_p7",
+    "il30_p8",
+    "il50_p1",
+    "il50_p2",
+    "il50_p3",
+    "il50_p4",
+    "il50_p5",
+    "il50_p6",
+    "il50_p7",
+    "il50_p8",
+    "il80_p1",
+    "il80_p2",
+    "il80_p3",
+    "il80_p4",
+    "il80_p5",
+    "il80_p6",
+    "il80_p7",
+    "il80_p8",
+    "fmr_year",
+    "fmr_small_area",
+    "fmr_0br",
+    "fmr_1br",
+    "fmr_2br",
+    "fmr_3br",
+    "fmr_4br"
+  ],
+  "coverage": {
+    "rows": 21
+  },
+  "notes": [
+    "Limits apply to HUD areas; a county inherits its area's limits (see hud_area_name).",
+    "hud_median_family_income is HUD's area median family income (AMI), not ACS median household income.",
+    "fmr_small_area = True: HUD sets ZIP-level Small Area FMRs there; the area-wide ('MSA level') FMR is used."
+  ],
+  "il_years": [
+    2026
+  ],
+  "fmr_years": [
+    2027
+  ]
+}

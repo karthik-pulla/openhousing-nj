@@ -1,0 +1,39 @@
+# OpenHousing v2 configuration. Every assumption the pipeline makes lives here,
+# so it can be shown in the UI and the methodology. Phase 3 adds index weights,
+# mortgage assumptions and confidence thresholds to this file.
+
+sources:
+  acs:
+    # null = use the newest ACS 5-year release the Census API serves (checked each run).
+    year: null
+  zillow:
+    url: https://files.zillowstatic.com/research/public_csvs/zhvi/City_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv
+    series: "ZHVI All Homes (SFR, Condo/Co-op), middle tier (35th-65th percentile), smoothed, seasonally adjusted"
+    # How a town's value is formed from its Zillow regions:
+    #   town_region_first: use the region named after the town itself if there is one; otherwise
+    #   the housing-unit-weighted mean of the community (CDP) regions inside it.
+    aggregation: town_region_first
+  redfin:
+    # Disabled: Redfin now offers only form-generated CSV downloads, and its Terms of Use
+    # (sec. 2.3.3-2.3.5) bar redistribution and automated querying without written permission.
+    # See docs/SOURCES_VERIFICATION.md.
+    enabled: false
+  property_tax:
+    # NJ DCA Division of Local Government Services "Property Tax Tables" (one .xls per tax year).
+    page: https://www.nj.gov/dca/dlgs/resources/Property_Tax_info.shtml
+    url_pattern: https://www.nj.gov/dca/dlgs/resources/Property_Tax/{yy}_data/{yy}taxes.xls
+  hud:
+    base: https://www.huduser.gov/hudapi/public
+    year: null              # null = HUD's latest
+    seconds_between_calls: 1.1   # HUD limit is 60 calls/minute
+  fred:
+    series: MORTGAGE30US
+    # Rate used for ownership cost: mean of the last N weekly observations
+    # (smooths week-to-week noise). 4 weeks ~= one month.
+    trailing_weeks: 4
+  nzlud:
+    upstream: https://raw.githubusercontent.com/mtmleczko/nzlud/main/nzlud_muni.csv
+    local: data/static/nzlud/nzlud_muni.csv
+  fourth_round:
+    pdf: data/static/fourth_round/FourthRoundCalculation_Methodology.pdf
+    csv: data/static/fourth_round/obligations_dca_2024.csv

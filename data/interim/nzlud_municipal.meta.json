@@ -1,0 +1,46 @@
+{
+  "name": "nzlud_municipal",
+  "fetched": "2026-11-19",
+  "key": "geoid",
+  "vintage": "NZLUD (municipal surveys 2019-2022; file 2023)",
+  "source": "National Zoning and Land Use Database, Eviction Lab (Princeton University)",
+  "url": "https://github.com/mtmleczko/nzlud",
+  "attribution": "Mleczko, Matthew, and Matthew Desmond. 2023. National Zoning and Land Use Database (NZLUD). https://github.com/mtmleczko/nzlud",
+  "columns": [
+    "geoid",
+    "zri",
+    "nzlud_min_lot_size",
+    "nzlud_one_acre_more",
+    "nzlud_inclusionary",
+    "nzlud_open_space"
+  ],
+  "coverage": {
+    "rows": 105,
+    "municipalities_covered": 105,
+    "municipalities_missing": 459,
+    "missing_sample": [
+      "Buena Borough",
+      "Buena Vista Township",
+      "Corbin City",
+      "Egg Harbor Township",
+      "Egg Harbor City",
+      "Estell Manor City",
+      "Folsom Borough",
+      "Galloway Township",
+      "Hamilton Township",
+      "Linwood City",
+      "Longport Borough",
+      "Margate City",
+      "Mullica Township",
+      "Northfield City",
+      "Port Republic City"
+    ]
+  },
+  "notes": [
+    "Higher zri = more restrictive zoning.",
+    "Covers 105 of 564 NJ municipalities."
+  ],
+  "sha256_local": "994b7b672a4da2fa5d5cfd85ef78f0f4fa2a144f18448aaaffdd64641292310f",
+  "sha256_upstream": "994b7b672a4da2fa5d5cfd85ef78f0f4fa2a144f18448aaaffdd64641292310f",
+  "upstream_matches": true
+}
