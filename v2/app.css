@@ -489,3 +489,12 @@ td.rk .dot,.cmp .dot{margin-right:6px;vertical-align:-1px}
 .sum-sec{padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--text) 3.5%,transparent);border:1px solid var(--glass-border)}
 .sum-sec h4{font-size:12px;font-weight:650;color:var(--text);margin-bottom:3px;letter-spacing:-.005em}
 .sum-sec p{margin:0;color:var(--text)}
+.hv-sel{opacity:.26}
+[data-theme="dark"] .hv-sel{opacity:.34}
+
+/* phones: the profile sheet is nearly opaque and hides what's behind it */
+@media (max-width: 860px){
+  .drawer{background:rgba(255,255,255,.97)}
+  [data-theme="dark"] .drawer{background:rgba(10,13,19,.97)}
+  body.profile-open .side,body.profile-open .legend,body.profile-open .map-status,body.profile-open .map-hint{visibility:hidden}
+}

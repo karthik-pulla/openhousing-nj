@@ -27,7 +27,9 @@ body.landing{display:block;height:auto;overflow-x:hidden;overflow-y:auto;font-si
 .board-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .stage{position:relative;height:220px;transition:height .6s var(--ease)}
 .tile{position:absolute;left:0;top:0;display:block;cursor:pointer;transform-origin:0 0;opacity:0;
-  transition:transform .6s var(--ease),background-color .4s,opacity .4s,box-shadow .15s}
+  transition:background-color .4s,opacity .4s,box-shadow .15s}
+/* squares only slide after the first layout, so nothing flies in from a corner on load */
+.stage.anim .tile{transition:transform .6s var(--ease),background-color .4s,opacity .4s,box-shadow .15s}
 .stage.ready .tile{opacity:1}
 .stage.dim .tile{opacity:.4}
 .stage.dim .tile.on{opacity:1;box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--text);z-index:2}
@@ -84,8 +86,9 @@ body.landing{display:block;height:auto;overflow-x:hidden;overflow-y:auto;font-si
   .nav a:not(:first-child){display:none}
   .lists{grid-template-columns:1fr}
   .board{padding:12px;border-radius:16px}
-  .board-head .seg{flex:1}
-  .board-head .segb{flex:1}
+  .board-head{flex-direction:column;gap:8px}
+  .board-head .seg{width:100%}
+  .board-head .segb{flex:1;white-space:nowrap}
   .sec{padding-top:60px}
   .srcs-list li{flex-direction:column;gap:2px}
   .srcs-list li span{text-align:left}

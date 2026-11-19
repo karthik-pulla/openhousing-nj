@@ -539,6 +539,7 @@
     var r = D.byId[geoid]; if (!r) return;
     S.selected = geoid;
     $("drawer").hidden = false;
+    document.body.classList.add("profile-open");
     if (mobile.matches) setSheet("peek");
     $("p-name").innerHTML = esc(r.name) + ' <span class="type">' + esc(r.mun_type) + "</span>";
     $("p-sub").textContent = r.county + " County · Code " + r.mun_code + " · Pop. " + num(r.population);
@@ -551,7 +552,7 @@
       scoreBlock("Renting", "rental_score", "rental_rank", "rental_confidence", "rental_confidence_reasons", r, nRent) + "</div>" +
       '<p class="higher">Higher is more affordable ' + info("Scores are percentiles across New Jersey towns (100 = smallest share of county income). Assumes " +
         a.down_payment_pct + "% down, " + a.loan_term_years + "-year fixed at " + num(a.mortgage_rate_pct, 2) + "%. Excludes " + (a.excluded_costs || []).join(", ") + ".", "How scores work") + "</p>";
-    html += '<section class="chart-sec"><h3>Home value <span id="hv-range"></span> ' + info("Census ACS 5-year median value of owner-occupied homes (owners' own estimates). Each point pools five years and overlaps the next, in dollars of that period's final year, not adjusted to today. The shaded band is the survey's margin of error (90% confidence): the range the true value very likely falls in.", "About this graph") +
+    html += '<section class="chart-sec"><h3>Home value <span id="hv-range"></span> ' + info("Census ACS 5-year median value of owner-occupied homes (owners' own estimates). Each point is a five-year period ending in that year (2009 = 2005–2009) and overlaps the next, in dollars of that period's final year, not adjusted to today. The shaded band is the survey's margin of error (90% confidence): the range the true value very likely falls in.", "About this graph") +
       '</h3><div id="hv-chart" class="hv"></div></section>';
     html += '<h3>In plain English</h3><div class="summary" id="p-summary">' + (D.summaries ? "" : "Loading summary…") + "</div>";
     SECTIONS.forEach(function (sec) {
@@ -636,7 +637,7 @@
       var el = $("hv-chart"); if (!el || S.selected !== r.geoid) return;
       var H = D.history, pts = (H.towns[r.geoid] || []).map(function (p, i) { return p && has(p[0]) ? { y: H.years[i], v: p[0], m: p[1], top: p[2] } : null; }).filter(Boolean);
       if (pts.length < 2) { el.innerHTML = '<p class="na">Unavailable</p>'; $("hv-range").textContent = ""; return; }
-      $("hv-range").textContent = (pts[0].y - 4) + "–" + pts[pts.length - 1].y;
+      $("hv-range").textContent = pts[0].y + "–" + pts[pts.length - 1].y;   // matches the axis (each point = 5-year period ending that year)
       // Draw at the container's real pixel width so text stays a fixed size.
       var W = Math.max(240, Math.round(el.clientWidth || 380)), Ht = 124, pl = 4, pr = 6, pt = 22, pb = 20;
       var lo = Math.min.apply(null, pts.map(function (p) { return p.v - (p.m || 0); }));
@@ -655,7 +656,7 @@
       el.innerHTML = '<svg viewBox="0 0 ' + W + " " + Ht + '" role="img" aria-label="Median home value from ' + (first.y - 4) + "–" + first.y + " (" + money(first.v) + ") to " +
         (last.y - 4) + "–" + last.y + " (" + money(last.v) + ')">' +
         '<path class="hv-tint" d="' + area + '"/><path class="hv-edge" d="' + upper + '"/><path class="hv-edge" d="' + lower + '"/>' +
-        '<rect class="hv-sel" rx="5" width="10" x="0" y="0" height="0" visibility="hidden"/>' +
+        '<rect class="hv-sel" rx="6" width="12" x="0" y="0" height="0" visibility="hidden"/>' +
         '<path class="hv-line" d="' + line + '"/>' +
         '<circle class="hv-end" cx="' + X(last.y) + '" cy="' + Y(last.v) + '" r="3.5"/>' +
         '<text class="hv-lbl" x="' + X(first.y) + '" y="12">' + money(first.v) + '</text>' +
@@ -673,7 +674,8 @@
         xl.setAttribute("visibility", "visible"); dot.setAttribute("visibility", "visible");
         // highlight that year's likely range as a rounded bar
         var top = Y(p.v + (p.m || 0)), bot = Y(Math.max(0, p.v - (p.m || 0)));
-        sel.setAttribute("x", X(p.y) - 5); sel.setAttribute("y", top); sel.setAttribute("height", Math.max(4, bot - top)); sel.setAttribute("visibility", "visible");
+        var hgt = Math.max(12, bot - top), mid = (top + bot) / 2;
+        sel.setAttribute("x", X(p.y) - 6); sel.setAttribute("y", mid - hgt / 2); sel.setAttribute("height", hgt); sel.setAttribute("visibility", "visible");
         read.textContent = (p.y - 4) + "–" + p.y + ": " + (p.top ? "at least " : "") + money(p.v) +
           (p.m ? " · likely " + money(Math.max(0, p.v - p.m)) + "–" + money(p.v + p.m) : "");
       };
@@ -701,6 +703,7 @@
   function closeProfile() {
     var prev = S.selected;
     $("drawer").hidden = true;
+    document.body.classList.remove("profile-open");
     S.selected = null;
     hideTip();
     repaint(); markListSelection(); writeHash();

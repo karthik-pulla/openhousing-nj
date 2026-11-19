@@ -99,7 +99,10 @@
     });
     stage.appendChild(frag);
     paint(); layout();
-    requestAnimationFrame(function () { stage.classList.add("ready"); });
+    requestAnimationFrame(function () {
+      stage.classList.add("ready");
+      requestAnimationFrame(function () { stage.classList.add("anim"); });   // enable sliding only now
+    });
     wire();
   }
 

@@ -117,6 +117,10 @@ See [data/crosswalks/README.md](data/crosswalks/README.md). In short: run `pytho
 
 Set `sources.zillow.cleared_for_publication: true` in `config.yaml`, add Zillow's required attribution wording where the other notices appear (site footer/Sources panel, methodology), and run the pipeline. Home values then come from Zillow where available and ACS elsewhere, with source and confidence recorded per town.
 
+### Changing the website's code
+
+The pages load `app.js`, `app.css`, `landing.js` and `landing.css` with a version tag (`?v=20261119c`). After editing any of them, change the tag in `v2/index.html`, `v2/map.html` and `v2/methodology.html` (e.g. to today's date) so visitors' browsers load the new files instead of a cached copy. Data files don't need this; they are fetched fresh.
+
 ### Changing an assumption or weight
 
 Edit `config.yaml` (down payment, loan term, rate averaging, score weights, confidence thresholds, summary rules, validation limits) and rerun. The methodology page and `data/published/index_meta.json` pick up the new values automatically. Update [METHODOLOGY.md](METHODOLOGY.md) by hand.
