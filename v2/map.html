@@ -33,7 +33,7 @@
   </nav>
   <span class="sp"></span>
   <div class="pop-wrap">
-    <button type="button" class="btn ghost" id="snap-btn" aria-expanded="false" aria-controls="snap-pop">NJ snapshot</button>
+    <button type="button" class="btn ghost hide-sm" id="snap-btn" aria-expanded="false" aria-controls="snap-pop">NJ snapshot</button>
     <div class="popover" id="snap-pop" role="dialog" aria-label="New Jersey snapshot">
       <h2 class="pop-h">New Jersey at a glance</h2>
       <div class="snapgrid" id="snapgrid"></div>
@@ -42,7 +42,7 @@
   </div>
   <a class="btn ghost hide-sm" href="methodology.html">Methodology</a>
   <div class="pop-wrap">
-    <button type="button" class="btn ghost" id="sources-btn" aria-expanded="false" aria-controls="sources-pop">Sources</button>
+    <button type="button" class="btn ghost hide-sm" id="sources-btn" aria-expanded="false" aria-controls="sources-pop">Sources</button>
     <div class="popover" id="sources-pop" role="dialog" aria-label="Data sources and vintages">
       <h2 class="pop-h">Data sources</h2>
       <p class="updated" id="updated-pop"></p>
@@ -62,7 +62,8 @@
 <main class="app" id="app">
   <!-- MAP VIEW -->
   <section class="view" id="map-view" aria-label="Map view">
-    <aside class="side" aria-label="Layer and town list">
+    <aside class="side" id="side" aria-label="Layer and town list">
+      <button type="button" class="sheet-handle" id="sheet-handle" aria-label="Show more of the list"><i aria-hidden="true"></i></button>
       <div class="side-top">
         <label class="lbl sr" for="search">Find a municipality</label>
         <div class="searchbox">
@@ -70,9 +71,15 @@
           <input id="search" class="input" type="search" placeholder="Search a town or county" autocomplete="off">
         </div>
 
-        <div class="lbl-row"><label class="lbl" for="layer">Map layer</label>
-          <button type="button" class="info" id="layer-info" data-tip="" aria-label="About this layer">i</button></div>
-        <select id="layer" class="input"></select>
+        <div class="lbl-row"><span class="lbl" id="layer-lbl">Color the map by</span>
+          <button type="button" class="info" id="layer-info" data-tip="" aria-label="About this layer"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25"/><path d="M8 7.2v3.9"/><circle cx="8" cy="5" r=".55" class="i-dot"/></svg></button></div>
+        <div class="picker">
+          <button type="button" class="picker-btn" id="layer-btn" aria-haspopup="true" aria-expanded="false" aria-controls="layer-pop" aria-labelledby="layer-lbl layer-btn-t">
+            <span class="pb-text"><span class="pb-t" id="layer-btn-t"></span><span class="pb-s" id="layer-btn-s"></span></span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="picker-pop" id="layer-pop" role="group" aria-label="Choose what colors the map" hidden></div>
+        </div>
 
         <div class="row">
           <div class="seg" role="group" aria-label="Sort order">
@@ -86,7 +93,8 @@
       <ol class="list" id="list" aria-label="Municipalities, ranked by the selected layer"></ol>
       <footer class="side-foot">
         <p class="updated" id="updated"></p>
-        <a class="dl-link" id="dl-all" href="../data/published/openhousing_nj.csv" download>Download CSV</a>
+        <span class="foot-links"><a class="dl-link show-sm" href="methodology.html">Methodology</a>
+        <a class="dl-link" id="dl-all" href="../data/published/openhousing_nj.csv" download>Download CSV</a></span>
       </footer>
     </aside>
 
@@ -107,7 +115,7 @@
   <section class="view" id="table-view" aria-label="Table of all municipalities" hidden>
     <div class="tv-head">
       <h1 class="h1">All 564 municipalities</h1>
-      <button type="button" class="info" data-tip="Select a column heading to sort. Select a town's name to open its profile. Missing values show as Unavailable." aria-label="How to use the table">i</button>
+      <button type="button" class="info" data-tip="Select a column heading to sort. Select a town's name to open its profile. Missing values show as Unavailable." aria-label="How to use the table"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25"/><path d="M8 7.2v3.9"/><circle cx="8" cy="5" r=".55" class="i-dot"/></svg></button>
       <label class="lbl sr" for="tsearch">Filter the table</label>
       <input id="tsearch" class="input" type="search" placeholder="Filter by town or county" autocomplete="off">
       <span class="sp"></span>

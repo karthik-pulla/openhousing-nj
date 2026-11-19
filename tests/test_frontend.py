@@ -23,7 +23,7 @@ def columns_used_by_site() -> set[str]:
 
 def test_every_column_the_site_reads_exists():
     ignore = {"name", "county", "length", "map", "table", "compare", "__own_rank", "__rent_rank",
-              "top", "left", "bottom", "width"}   # always present, view names, pseudo-rows, DOMRect fields
+              "top", "left", "bottom", "width", "peek", "half", "full"}   # always present, view names, pseudo-rows, DOMRect fields
     missing = sorted(c for c in columns_used_by_site() - ignore if c not in SCHEMA_COLS)
     assert not missing, f"v2/app.js reads columns not in the published schema: {missing}"
 

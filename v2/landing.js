@@ -3,9 +3,9 @@
   "use strict";
   var P = { data: "../data/published/openhousing_nj.web.json", manifest: "../data/manifest.json",
             meta: "../data/published/index_meta.json", bounds: "data/boundaries.geojson" };
-  // Same diverging affordability colors as the map: red = less, gray = middle, blue = more affordable.
-  var DIV = { light: ["#892b2a", "#d75853", "#ea9a93", "#dcdad5", "#86b6ef", "#3987e5", "#184f95"],
-              dark:  ["#f1aea8", "#d75853", "#9e3432", "#3a3a37", "#1c5cab", "#3987e5", "#9ec5f4"] };
+  // Same diverging affordability colors as the map: reds below the NJ median, blues above it.
+  var DIV = { light: ["#892b2a", "#d75853", "#ea9a93", "#86b6ef", "#3987e5", "#184f95"],
+              dark:  ["#f1aea8", "#d75853", "#9e3432", "#1c5cab", "#3987e5", "#9ec5f4"] };
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   var $ = function (id) { return document.getElementById(id); };
   var has = function (v) { return v !== null && v !== undefined && !(typeof v === "number" && isNaN(v)); };
@@ -22,7 +22,7 @@
     var t = isDark() ? "light" : "dark";
     document.documentElement.dataset.theme = t;
     try { localStorage.setItem("oh-theme", t); } catch (e) {}
-    paint(false); fillMarkets();
+    paint(); fillMarkets();
   });
   var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); countUp(e.target); io.unobserve(e.target); } });
@@ -52,6 +52,43 @@
     else el.textContent = (opts.pre || "") + Number(value).toLocaleString("en-US", { minimumFractionDigits: opts.dec || 0, maximumFractionDigits: opts.dec || 0 }) + (opts.post || "");
   }
 
+  // ------------------------------------------------------------ motion: headline, progress, tilt, spotlight
+  (function words() {
+    var h = document.querySelector(".words > span"); if (!h) return;
+    var i = 0;
+    var wrap = function (node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+        if (n.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(function (w) {
+            if (!w) return;
+            if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(w)); return; }
+            var s = document.createElement("span"); s.className = "w"; s.style.setProperty("--wi", i++); s.textContent = w; frag.appendChild(s);
+          });
+          n.parentNode.replaceChild(frag, n);
+        } else if (n.nodeType === 1) { n.classList.add("w"); n.style.setProperty("--wi", i++); }
+      });
+    };
+    wrap(h);
+  })();
+  var prog = $("progress");
+  var onProg = function () { var d = document.documentElement, max = d.scrollHeight - d.clientHeight; prog.style.transform = "scaleX(" + (max > 0 ? window.scrollY / max : 0) + ")"; };
+  window.addEventListener("scroll", onProg, { passive: true }); onProg();
+  var fine = window.matchMedia && matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (fine && !reduce) {
+    var card = $("mapcard") || document.createElement("div");
+    card.addEventListener("mousemove", function (e) {
+      var b = card.getBoundingClientRect(), x = (e.clientX - b.left) / b.width - 0.5, y = (e.clientY - b.top) / b.height - 0.5;
+      card.style.transform = "perspective(1100px) rotateY(" + (x * 5).toFixed(2) + "deg) rotateX(" + (-y * 5).toFixed(2) + "deg)";
+      card.style.setProperty("--gx", (x + 0.5) * 100 + "%"); card.style.setProperty("--gy", (y + 0.5) * 100 + "%");
+    });
+    card.addEventListener("mouseleave", function () { card.style.transform = ""; });
+    document.addEventListener("mousemove", function (e) {
+      var t = e.target.closest && e.target.closest(".spot"); if (!t) return;
+      var b = t.getBoundingClientRect(); t.style.setProperty("--mx", e.clientX - b.left + "px"); t.style.setProperty("--my", e.clientY - b.top + "px");
+    });
+  }
+
   // ------------------------------------------------------------ data
   function get(u) { return fetch(u, { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error(u + " " + r.status); return r.json(); }); }
 
@@ -61,6 +98,9 @@
     rows.forEach(function (r) { byId[r.geoid] = r; });
     fillCopy(m, meta);
     fillMarkets();
+    var best = rows.filter(function (r) { return r.ownership_rank === 1; })[0];
+    if (best) $("chip-a").innerHTML = "<small>#1 to own</small><b>" + esc(best.name) + "</b>";
+    $("chip-b").innerHTML = "<small>Rate used</small><b>" + Number(meta.assumptions.mortgage_rate_pct).toFixed(2) + "%</b>";
     get(P.bounds).then(drawMap).catch(function () { $("mc-loading").textContent = "The map preview couldn't load. Open the full map instead."; });
   }).catch(function () {
     $("eyebrow").textContent = "564 municipalities";
@@ -75,7 +115,7 @@
     $("f-note").textContent = a.down_payment_pct + "% down · " + a.loan_term_years + "-year fixed at " + Number(a.mortgage_rate_pct).toFixed(2) + "%";
     var groups = {}; m.sources.forEach(function (s) { groups[s.name.split("_")[0]] = 1; });
     var nSources = Object.keys(groups).length + 1;   // + NJOGIS boundaries
-    var statSrc = document.querySelector('.stat b[data-count="7"]');
+    var statSrc = document.querySelector('.kpi b[data-count="7"]');
     if (statSrc) setCount(statSrc, nSources);
     setCount($("b-prosp"), rows.reduce(function (s, r) { return s + (has(r.prospective_need_capped) ? r.prospective_need_capped : 0); }, 0));
     setCount($("b-qua"), rows.filter(function (r) { return r.qualified_urban_aid === true || r.qualified_urban_aid === "True"; }).length);
@@ -108,10 +148,14 @@
     mk("rental_score", "rental_rank", "rent-worst", false);
   }
 
-  // ------------------------------------------------------------ hero map
+  // ------------------------------------------------------------ hero: 564-square tile wall
+  // Each square is one municipality. "Ranked" sorts them most -> least affordable
+  // (no-data squares last); "On the map" flies each square to its town's location.
+  var stage = $("tile-stage"), tiles = [], mode = "grid", geoPts = {}, autoTimer = null, touched = false;
+
   function classes(key) {
     var v = rows.map(function (r) { return r[key]; }).filter(has).sort(function (a, b) { return a - b; });
-    var br = []; for (var i = 1; i < 7; i++) br.push(v[Math.floor(i * v.length / 7)]);
+    var br = []; for (var i = 1; i < 6; i++) br.push(v[Math.floor(i * v.length / 6)]);   // 6 groups, split at the median
     return br;
   }
   function colorFor(val, br) {
@@ -121,76 +165,95 @@
   }
 
   function drawMap(gj) {
-    var svg = $("njmap"), lat0 = 40.1 * Math.PI / 180, kx = Math.cos(lat0);
-    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-    var polys = gj.features.map(function (f) { return f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates; });
-    polys.forEach(function (mp) { mp.forEach(function (p) { p[0].forEach(function (c) {
-      var x = c[0] * kx, y = -c[1]; if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; }); }); });
-    var S = 600 / (maxY - minY), W = (maxX - minX) * S, H = 600;
-    svg.setAttribute("viewBox", "0 0 " + W.toFixed(1) + " " + H);
-    var frag = document.createDocumentFragment(), ns = "http://www.w3.org/2000/svg";
-    gj.features.forEach(function (f, i) {
-      var cy = 0, cx = 0, n = 0, d = "";
-      polys[i].forEach(function (poly) { poly.forEach(function (ring) {
-        ring.forEach(function (c, j) {
-          var x = (c[0] * kx - minX) * S, y = (-c[1] - minY) * S;
-          d += (j ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1);
-          cx += x; cy += y; n++;
-        });
-        d += "Z";
-      }); });
-      var p = document.createElementNS(ns, "path");
-      p.setAttribute("d", d);
-      p.dataset.geoid = f.properties.geoid;
-      cx /= n; cy /= n;
-      // North-to-south reveal with a little jitter; left-to-right sweep when switching layers.
-      p.style.setProperty("--d", reduce ? "0s" : ((cy / H) * 1.3 + Math.random() * 0.25).toFixed(2) + "s");
-      p.style.setProperty("--sw", reduce ? "0s" : ((cx / W) * 0.6).toFixed(2) + "s");
-      paths.push(p);
-      frag.appendChild(p);
+    // town centroids (mean of boundary points), projected with a cos(latitude) stretch
+    var kx = Math.cos(40.1 * Math.PI / 180), minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, raw = {};
+    gj.features.forEach(function (f) {
+      var polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates, sx = 0, sy = 0, n = 0;
+      polys.forEach(function (p) { p[0].forEach(function (c) { sx += c[0] * kx; sy += -c[1]; n++; }); });
+      var x = sx / n, y = sy / n; raw[f.properties.geoid] = [x, y];
+      if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y;
     });
-    svg.appendChild(frag);
+    Object.keys(raw).forEach(function (g) { geoPts[g] = [(raw[g][0] - minX) / (maxY - minY), (raw[g][1] - minY) / (maxY - minY)]; });
+    geoPts._w = (maxX - minX) / (maxY - minY);
+    var frag = document.createDocumentFragment();
+    rows.forEach(function (r) {
+      var t = document.createElement("span"); t.className = "tile"; t.dataset.geoid = r.geoid; t.setAttribute("aria-hidden", "true");
+      tiles.push(t); frag.appendChild(t);
+    });
+    stage.appendChild(frag);
     $("mc-loading").hidden = true;
-    paint(true);
-    wireMap(svg);
-    // After the reveal, drop the animation so hover dimming (opacity) can apply.
-    setTimeout(function () { svg.classList.add("ready"); }, reduce ? 0 : 2300);
+    paint(); layout(true);
+    stage.classList.add("live");
+    wireTiles();
+    // After the squares ripple in, fly them onto the map once to show the trick.
+    if (!reduce) autoTimer = setTimeout(function () { if (!touched) setMode("geo"); }, 2600);
   }
 
   function paint() {
-    if (!paths.length) return;
     var key = score + "_score", br = classes(key);
-    paths.forEach(function (p) { var r = byId[p.dataset.geoid]; p.style.fill = colorFor(r ? r[key] : null, br); });
-    $("njmap").setAttribute("aria-label", "Map of New Jersey's 564 municipalities, colored by " + (score === "ownership" ? "ownership" : "rental") + " affordability score");
+    tiles.forEach(function (t) { var r = byId[t.dataset.geoid]; t.style.backgroundColor = colorFor(r ? r[key] : null, br); });
+    stage.setAttribute("aria-label", "564 squares, one per New Jersey municipality, colored by " + score + " affordability" + (mode === "grid" ? " and sorted from most to least affordable" : " and placed at each town's location"));
+  }
+
+  function layout(first) {
+    if (!tiles.length) return;
+    var W = stage.clientWidth, key = score + "_score";
+    var s = W > 900 ? 15 : W > 640 ? 12 : W > 420 ? 9 : 7, g = Math.max(2, Math.round(s * 0.3));
+    var cols = Math.max(10, Math.floor((W + g) / (s + g))), nrows = Math.ceil(tiles.length / cols);
+    var gridW = cols * (s + g) - g, gridH = nrows * (s + g) - g, ox = (W - gridW) / 2;
+    var order = tiles.slice().sort(function (a, b) {
+      var va = byId[a.dataset.geoid][key], vb = byId[b.dataset.geoid][key];
+      if (!has(va) && !has(vb)) return 0; if (!has(va)) return 1; if (!has(vb)) return -1; return vb - va;
+    });
+    var geoH = Math.min(560, Math.max(320, W * 0.9)), geoW = geoH * geoPts._w, gx0 = (W - geoW) / 2, sg = Math.max(5, Math.round(s * 0.8)), k = sg / s;
+    stage.style.height = (mode === "grid" ? gridH : geoH + sg) + "px";
+    order.forEach(function (t, i) {
+      var p = geoPts[t.dataset.geoid] || [0.5, 0.5];
+      var x, y, sc = 1, d;
+      if (mode === "grid") { x = ox + (i % cols) * (s + g); y = Math.floor(i / cols) * (s + g); d = (i % cols) * 6 + Math.floor(i / cols) * 22; }
+      else { x = gx0 + p[0] * geoH; y = p[1] * geoH; sc = k; d = p[1] * 700 + p[0] * 200; }
+      t.style.width = t.style.height = s + "px";
+      t.style.borderRadius = Math.round(s * 0.28) + "px";
+      t.style.setProperty("--d", reduce ? "0ms" : (first ? i * 2.2 : d) + "ms");
+      t.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px) scale(" + sc + ")";
+    });
+  }
+
+  function setMode(m) {
+    mode = m;
+    document.querySelectorAll('.tiles-card [data-mode]').forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.mode === m)); });
+    stage.classList.toggle("geo", m === "geo");
+    layout(false); paint();
   }
 
   function readout(r) {
     var el = $("mc-read");
-    if (!r) { el.innerHTML = '<span class="mc-k">Hover a town</span><span class="mc-v">Each shape is a municipality. Blue is more affordable, red less, gray the middle.</span>'; return; }
+    if (!r) { el.textContent = "Each square is one New Jersey municipality. Hover one."; return; }
     var key = score + "_score", rank = score + "_rank", n = rows.filter(function (x) { return has(x[key]); }).length;
-    var label = score === "ownership" ? "Ownership" : "Rental";
-    var v = has(r[key]) ? label + " score " + Number(r[key]).toFixed(1) + " · ranks " + ordinal(r[rank]) + " of " + n + " · click to open"
-                        : label + " score unavailable (not enough data) · click to open";
-    el.innerHTML = '<span class="mc-k">' + esc(r.name) + ', <span style="font-weight:500">' + esc(r.county) + ' County</span></span><span class="mc-v">' + esc(v) + "</span>";
+    var label = score === "ownership" ? "Owning" : "Renting";
+    el.innerHTML = "<b>" + esc(r.name) + "</b> · " + esc(r.county) + " County · " +
+      (has(r[key]) ? label + " score " + Number(r[key]).toFixed(1) + ", rank " + r[rank] + " of " + n : label + " score unavailable");
   }
 
-  function wireMap(svg) {
+  function wireTiles() {
     var last = null;
-    svg.addEventListener("mouseover", function (e) {
-      var p = e.target.closest("path"); if (!p || p === last) return;
+    stage.addEventListener("mouseover", function (e) {
+      var t = e.target.closest(".tile"); if (!t || t === last) return;
       if (last) last.classList.remove("on");
-      last = p; p.classList.add("on"); p.parentNode.appendChild(p);   // bring outline to front
-      svg.classList.add("dim");
-      readout(byId[p.dataset.geoid]);
+      last = t; t.classList.add("on"); stage.classList.add("dim"); readout(byId[t.dataset.geoid]);
     });
-    svg.addEventListener("mouseleave", function () { if (last) last.classList.remove("on"); last = null; svg.classList.remove("dim"); readout(null); });
-    svg.addEventListener("click", function (e) { var p = e.target.closest("path"); if (p) location.href = "map.html#town=" + p.dataset.geoid; });
-    document.querySelectorAll(".mapcard .segb").forEach(function (b) {
+    stage.addEventListener("mouseleave", function () { if (last) last.classList.remove("on"); last = null; stage.classList.remove("dim"); readout(null); });
+    stage.addEventListener("click", function (e) { var t = e.target.closest(".tile"); if (t) location.href = "map.html#town=" + t.dataset.geoid; });
+    document.querySelectorAll(".tiles-card [data-mode]").forEach(function (b) {
+      b.addEventListener("click", function () { touched = true; clearTimeout(autoTimer); setMode(b.dataset.mode); });
+    });
+    document.querySelectorAll(".tiles-card [data-score]").forEach(function (b) {
       b.addEventListener("click", function () {
-        score = b.dataset.score;
-        document.querySelectorAll(".mapcard .segb").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
-        paint(); if (last) readout(byId[last.dataset.geoid]);
+        touched = true; clearTimeout(autoTimer); score = b.dataset.score;
+        document.querySelectorAll(".tiles-card [data-score]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+        paint(); layout(false); if (last) readout(byId[last.dataset.geoid]);
       });
     });
+    var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { layout(false); }, 120); });
   }
 })();

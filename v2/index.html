@@ -20,6 +20,8 @@
 </head>
 <body class="landing">
 <a class="skip" href="#main">Skip to content</a>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="field" aria-hidden="true"><i class="f1"></i><i class="f2"></i><i class="f3"></i></div>
 
 <header class="lbar" id="lbar">
   <div class="wrap lbar-in">
@@ -44,47 +46,50 @@
 
 <main id="main">
   <!-- HERO -->
-  <section class="hero">
+  <section class="hero hero-c">
     <div class="bg" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><i class="grid"></i></div>
-    <div class="wrap hero-in">
-      <div class="hero-copy">
-        <p class="eyebrow rise" style="--i:0"><span class="dot" aria-hidden="true"></span><span id="eyebrow">564 municipalities · updated monthly</span></p>
-        <h1 class="rise" style="--i:1">How affordable is <span class="grad">home</span> in New&nbsp;Jersey?</h1>
-        <p class="lead rise" style="--i:2">See what it costs to own or to rent the typical home in every one of the state's 564 towns, measured against what households in the region earn. Every number comes with its source.</p>
-        <div class="ctas rise" style="--i:3">
-          <a class="btn primary lg" href="map.html">Explore the map
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="btn lg" href="#how">How it works</a>
-        </div>
-        <p class="trust rise" style="--i:4">Built from U.S. Census, HUD, NJ Department of Community Affairs and Freddie Mac data. No ads, no accounts, no tracking.</p>
+    <div class="wrap hero-center">
+      <p class="eyebrow rise" style="--i:0"><span class="dot" aria-hidden="true"></span><span id="eyebrow">564 municipalities · updated monthly</span></p>
+      <h1 class="words" aria-label="Which New Jersey towns are actually affordable?"><span aria-hidden="true">Which New Jersey towns are <span class="grad">actually</span> affordable?</span></h1>
+      <p class="lead rise" style="--i:2">What it costs to own or rent the typical home in all 564 municipalities, measured against what households in the region earn. Every number comes with its source.</p>
+      <div class="ctas rise" style="--i:3">
+        <a class="btn primary lg" href="map.html">Explore the map
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn lg" href="#how">How it works</a>
       </div>
 
-      <figure class="mapcard rise" style="--i:2">
-        <div class="mc-head">
-          <div class="seg" role="group" aria-label="Color the map by">
+      <figure class="tiles-card frost rise" style="--i:4">
+        <div class="chip chip-a" id="chip-a" aria-hidden="true"></div>
+        <div class="chip chip-b" id="chip-b" aria-hidden="true"></div>
+        <div class="tc-head">
+          <div class="seg" role="group" aria-label="Arrange the squares">
+            <button type="button" class="segb" data-mode="grid" aria-pressed="true">Ranked</button>
+            <button type="button" class="segb" data-mode="geo" aria-pressed="false">On the map</button>
+          </div>
+          <div class="seg" role="group" aria-label="Color by">
             <button type="button" class="segb" data-score="ownership" aria-pressed="true">Owning</button>
             <button type="button" class="segb" data-score="rental" aria-pressed="false">Renting</button>
           </div>
-          <span class="mc-legend" aria-hidden="true"><span>Less</span><i class="mc-ramp"></i><span>More affordable</span></span>
         </div>
-        <div class="mc-stage">
-          <svg id="njmap" role="img" aria-label="Map of New Jersey's 564 municipalities, colored by ownership affordability score" preserveAspectRatio="xMidYMid meet"></svg>
-          <div class="mc-loading" id="mc-loading"><span class="spin" aria-hidden="true"></span> Drawing 564 towns…</div>
+        <div class="tile-stage" id="tile-stage" role="img" aria-label="564 squares, one per New Jersey municipality, colored and sorted by ownership affordability">
+          <div class="mc-loading" id="mc-loading"><span class="spin" aria-hidden="true"></span> Laying out 564 towns…</div>
         </div>
-        <figcaption class="mc-read" id="mc-read" aria-live="polite">
-          <span class="mc-k">Hover a town</span>
-          <span class="mc-v">Each shape is a municipality. Blue is more affordable, red less, gray the middle.</span>
+        <figcaption class="tc-foot">
+          <span class="tc-read" id="mc-read" aria-live="polite">Each square is one New Jersey municipality. Hover one.</span>
+          <span class="mc-legend" aria-hidden="true"><span>Less</span><i class="mc-ramp"></i><span>More affordable</span><i class="nd-sq"></i><span>No data</span></span>
         </figcaption>
       </figure>
     </div>
   </section>
 
   <!-- STATS -->
-  <section class="stats wrap" aria-label="Key figures">
-    <div class="stat reveal"><b data-count="564">564</b><span>municipalities, none left out</span></div>
-    <div class="stat reveal"><b data-count="2" >2</b><span>separate scores: owning and renting</span></div>
-    <div class="stat reveal"><b id="stat-rate">–</b><span>30-year mortgage rate used</span></div>
-    <div class="stat reveal"><b data-count="7">7</b><span>public data sources, refreshed monthly</span></div>
+  <section class="wrap" aria-label="Key figures">
+    <div class="stats frost reveal">
+      <div class="kpi"><b data-count="564">564</b><span>municipalities, none left out</span></div>
+      <div class="kpi"><b data-count="2">2</b><span>scores: owning and renting</span></div>
+      <div class="kpi"><b id="stat-rate">–</b><span>mortgage rate used</span></div>
+      <div class="kpi"><b data-count="7">7</b><span>public sources, monthly</span></div>
+    </div>
   </section>
 
   <!-- TWO MARKETS -->
@@ -95,7 +100,7 @@
       <p class="sub">A town can be cheap to rent and expensive to own, or the reverse. So each gets its own score, measured against county income rather than the town's own, so a wealthy town can't look affordable just because its residents are wealthy.</p>
     </div>
     <div class="markets">
-      <article class="mk reveal">
+      <article class="mk frost reveal spot">
         <div class="mk-top"><span class="mk-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span>
           <div><h3>Owning</h3><p>Mortgage on the typical home plus the town's average property tax bill, as a share of county income.</p></div></div>
         <div class="mk-lists">
@@ -103,7 +108,7 @@
           <div><h4>Least affordable</h4><ol class="mini" id="own-worst"></ol></div>
         </div>
       </article>
-      <article class="mk reveal">
+      <article class="mk frost reveal spot">
         <div class="mk-top"><span class="mk-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/></svg></span>
           <div><h3>Renting</h3><p>Twelve months of the median rent, as a share of county income.</p></div></div>
         <div class="mk-lists">
@@ -120,10 +125,10 @@
       <p class="kicker">How it works</p>
       <h2>Public data in, plain answers out.</h2>
     </div>
-    <ol class="steps">
-      <li class="step reveal"><span class="num">1</span><h3>Gather</h3><p>Every month the data refreshes from the Census Bureau, HUD, the NJ Department of Community Affairs and Freddie Mac, matched to towns by official ID, never by name.</p></li>
-      <li class="step reveal"><span class="num">2</span><h3>Measure</h3><p>Yearly housing costs are divided by county median income, then ranked across all towns as a 0–100 score with a confidence flag.</p></li>
-      <li class="step reveal"><span class="num">3</span><h3>Check</h3><p>Nothing is published until it passes validation: exactly 564 towns, no unexpected gaps, values in plausible ranges.</p></li>
+    <ol class="steps reveal">
+      <li class="step frost"><span class="num">1</span><h3>Gather</h3><p>Every month the data refreshes from the Census Bureau, HUD, the NJ Department of Community Affairs and Freddie Mac, matched to towns by official ID, never by name.</p></li>
+      <li class="step frost"><span class="num">2</span><h3>Measure</h3><p>Yearly housing costs are divided by county median income, then ranked across all towns as a 0–100 score with a confidence flag.</p></li>
+      <li class="step frost"><span class="num">3</span><h3>Check</h3><p>Nothing is published until it passes validation: exactly 564 towns, no unexpected gaps, values in plausible ranges.</p></li>
     </ol>
     <div class="formula reveal" aria-label="Ownership burden formula">
       <span class="f-l">Ownership burden</span><span class="f-eq">=</span>
@@ -132,25 +137,19 @@
     </div>
   </section>
 
-  <!-- FEATURES -->
-  <section class="sec wrap" id="features">
-    <div class="sec-head reveal">
-      <p class="kicker">Built for checking, not just looking</p>
-      <h2>Everything an advocate or researcher needs to cite it.</h2>
-    </div>
-    <div class="features">
-      <div class="feat reveal"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span><h3>Town profiles</h3><p>Every measure with its source, data period, percentile and confidence badge, plus a plain-English summary.</p></div>
-      <div class="feat reveal"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="16" rx="1.5"/><rect x="17" y="4" width="4" height="16" rx="1.5"/></svg></span><h3>Side-by-side compare</h3><p>Put up to three towns next to each other on every measure.</p></div>
-      <div class="feat reveal"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 21h16"/></svg></span><h3>Download the data</h3><p>The full dataset, a single town or your comparison as CSV, plus a manifest of every source and check.</p></div>
-      <div class="feat reveal"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 5h18M3 12h18M3 19h18"/></svg></span><h3>Accessible table</h3><p>A sortable table of all 564 towns, keyboard-friendly, as an alternative to the map.</p></div>
-      <div class="feat reveal"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg></span><h3>Summaries without AI</h3><p>Written from fixed templates filled with each town's numbers, so every sentence traces back to a source.</p></div>
-      <div class="feat reveal"><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span><h3>Honest about uncertainty</h3><p>Small towns are flagged, never dropped. Missing data says "Unavailable", and nothing is filled in.</p></div>
-    </div>
+  <!-- FEATURES (compact) -->
+  <section class="wrap" id="features" aria-label="What you can do">
+    <ul class="can frost reveal">
+      <li><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span><b>Town profiles</b><span>Every number with its source</span></li>
+      <li><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="16" rx="1.5"/><rect x="14" y="4" width="7" height="16" rx="1.5"/></svg></span><b>Compare</b><span>Up to three towns side by side</span></li>
+      <li><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 21h16"/></svg></span><b>Download</b><span>Full dataset or one town, CSV</span></li>
+      <li><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span><b>Honest</b><span>Uncertain data is flagged, never hidden</span></li>
+    </ul>
   </section>
 
   <!-- BARRIERS -->
   <section class="sec wrap" id="barriers">
-    <div class="barriers reveal">
+    <div class="barriers frost reveal">
       <div class="b-copy">
         <p class="kicker">Beyond price</p>
         <h2>The barriers behind the numbers.</h2>

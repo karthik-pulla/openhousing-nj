@@ -23,13 +23,13 @@
   var MAX_COMPARE = 3;
   var UNAV = "Unavailable";
 
-  // Colors. Affordability uses v1's diverging scheme: red = less affordable,
-  // gray = middle of New Jersey, blue = more affordable (two hues with a neutral
-  // midpoint; both arms matched in lightness). Dark mode has its own steps so the
-  // near-middle classes stay quiet on the dark map. Barriers use one-hue violet.
+  // Colors. Affordability uses v1's diverging scheme: three reds below the state
+  // median (less affordable), three blues above it (more affordable); both arms
+  // matched in lightness. No gray middle class, so gray only ever means "not
+  // enough data". Dark mode has its own steps. Barriers use one-hue violet.
   var DIV = {
-    light: ["#892b2a", "#d75853", "#ea9a93", "#dcdad5", "#86b6ef", "#3987e5", "#184f95"],
-    dark:  ["#f1aea8", "#d75853", "#9e3432", "#3a3a37", "#1c5cab", "#3987e5", "#9ec5f4"]
+    light: ["#892b2a", "#d75853", "#ea9a93", "#86b6ef", "#3987e5", "#184f95"],
+    dark:  ["#f1aea8", "#d75853", "#9e3432", "#1c5cab", "#3987e5", "#9ec5f4"]
   };
   var VIOLET = { light: ["#cacbfb", "#a9a9f7", "#8a85f2", "#6f62e1", "#5549b4", "#3e3388", "#322a71"],
                  dark:  ["#322a71", "#3e3388", "#5549b4", "#6f62e1", "#8a85f2", "#a9a9f7", "#cacbfb"] };
@@ -49,41 +49,41 @@
   // ------------------------------------------------------------------ layers
   // scheme "div": diverging affordability colors. invert: higher value = LESS affordable (burdens).
   var LAYERS = [
-    { group: "Affordability scores", key: "ownership_score", label: "Ownership affordability", scheme: "div",
+    { group: "Affordability score", key: "ownership_score", label: "Owning a home", sub: "Score 0–100 · higher is more affordable", scheme: "div",
       fmt: function (v) { return num(v, 1); }, better: "high", best: "Most affordable", worst: "Least affordable",
       rank: "ownership_rank", ends: ["Less affordable", "More affordable"],
       desc: "0–100 percentile score. Higher means owning the typical home (mortgage at today's rate plus average property tax) takes a smaller share of county median income." },
-    { group: "Affordability scores", key: "rental_score", label: "Rental affordability", scheme: "div",
+    { group: "Affordability score", key: "rental_score", label: "Renting a home", sub: "Score 0–100 · higher is more affordable", scheme: "div",
       fmt: function (v) { return num(v, 1); }, better: "high", best: "Most affordable", worst: "Least affordable",
       rank: "rental_rank", ends: ["Less affordable", "More affordable"],
       desc: "0–100 percentile score. Higher means a year of median rent takes a smaller share of county median income." },
-    { group: "Cost measures", key: "ownership_burden", label: "Owning ÷ county income", scheme: "div", invert: true,
+    { group: "Cost compared with income", key: "ownership_burden", label: "Cost to own vs. income", sub: "Mortgage + property tax as a % of county income", scheme: "div", invert: true,
       fmt: function (v) { return pct(v); }, better: "low", best: "Smallest share", worst: "Largest share",
       ends: ["Larger share", "Smaller share"],
       desc: "Yearly mortgage payment on the typical home plus the average property tax bill, as a share of county median household income." },
-    { group: "Cost measures", key: "rent_burden", label: "Rent ÷ county income", scheme: "div", invert: true,
+    { group: "Cost compared with income", key: "rent_burden", label: "Rent vs. income", sub: "A year of rent as a % of county income", scheme: "div", invert: true,
       fmt: function (v) { return pct(v); }, better: "low", best: "Smallest share", worst: "Largest share",
       ends: ["Larger share", "Smaller share"],
       desc: "Twelve months of median gross rent as a share of county median household income." },
-    { group: "Cost measures", key: "ownership_burden_ami80", label: "Owning ÷ HUD 80% income limit", scheme: "div", invert: true,
+    { group: "Cost compared with income", key: "ownership_burden_ami80", label: "Cost to own for a moderate-income family", sub: "As a % of HUD's income limit for a family of four", scheme: "div", invert: true,
       fmt: function (v) { return pct(v); }, better: "low", best: "Smallest share", worst: "Largest share",
       ends: ["Larger share", "Smaller share"],
       desc: "Ownership cost as a share of HUD's low-income limit (80% of area median income) for a four-person household. 30% or less is considered affordable." },
-    { group: "Cost measures", key: "renters_cost_burdened_share", label: "Renters paying 30%+ (context)", scheme: "div", invert: true,
+    { group: "Cost compared with income", key: "renters_cost_burdened_share", label: "Renters stretched by rent", sub: "% of renters paying 30%+ of income · context only", scheme: "div", invert: true,
       fmt: function (v) { return pct(v); }, better: "low", best: "Smallest share", worst: "Largest share",
       ends: ["Larger share", "Smaller share"],
       desc: "Share of renter households paying 30% or more of their own income on rent. Context only: not part of either score, and unreliable in small towns." },
-    { group: "Barriers (not in the scores)", key: "zri", label: "Zoning restrictiveness", scheme: "violet",
+    { group: "Barriers · shown, not scored", key: "zri", label: "Zoning strictness", sub: "How restrictive local zoning is · 105 towns covered", scheme: "violet",
       fmt: function (v) { return num(v, 2); }, better: null, best: "Most restrictive", worst: "Least restrictive",
       ends: ["Less restrictive", "More restrictive"],
       desc: "National Zoning and Land Use Database restrictiveness index (higher = more restrictive). Covers 105 of 564 towns." },
-    { group: "Barriers (not in the scores)", key: "prospective_need_per_1000_hh", label: "Prospective need per 1,000 households", scheme: "violet",
+    { group: "Barriers · shown, not scored", key: "prospective_need_per_1000_hh", label: "Future affordable homes required", sub: "State target for 2025–2035, per 1,000 households", scheme: "violet",
       fmt: function (v) { return num(v, 1); }, better: null, best: "Highest", worst: "Lowest", ends: ["Lower", "Higher"],
       desc: "Fourth Round (2025–2035) prospective need as calculated by the state in October 2024, per 1,000 households. Qualified Urban Aid towns have none by law; their 0 is not missing data." },
-    { group: "Barriers (not in the scores)", key: "present_need", label: "Present need (units)", scheme: "violet",
+    { group: "Barriers · shown, not scored", key: "present_need", label: "Affordable homes needed now", sub: "State estimate of current need, in homes", scheme: "violet",
       fmt: function (v) { return num(v); }, better: null, best: "Highest", worst: "Lowest", ends: ["Lower", "Higher"],
       desc: "Fourth Round present need (deficient housing occupied by low- and moderate-income households), as calculated by the state in October 2024." },
-    { group: "Barriers (not in the scores)", key: "qualified_urban_aid", label: "Qualified Urban Aid", scheme: "violet",
+    { group: "Barriers · shown, not scored", key: "qualified_urban_aid", label: "Exempt from future targets", sub: "Qualified Urban Aid towns (47)", scheme: "violet",
       categorical: true, fmt: yesno, better: null, best: "Yes first", worst: "No first", ends: ["No", "Yes"],
       desc: "Qualified Urban Aid municipalities (47) have no prospective need obligation under the Affordable Housing Law. They may still have a present need." }
   ];
@@ -149,19 +149,21 @@
   function nodata() { return getComputedStyle(document.documentElement).getPropertyValue("--nodata").trim(); }
   function palette(layer) { var m = isDark() ? "dark" : "light"; return layer.scheme === "div" ? DIV[m] : VIOLET[m]; }
 
-  // ------------------------------------------------------------------ classes (7 quantile groups)
+  // ------------------------------------------------------------------ classes (equal-count groups)
+  // 6 groups for the diverging scheme (split at the median), 7 for violet.
+  function nClasses(layer) { return layer.scheme === "div" ? 6 : 7; }
   function classesFor(layer) {
     if (classCache[layer.key]) return classCache[layer.key];
     var vals = D.rows.map(function (r) { return r[layer.key]; }).filter(has).map(Number).sort(function (a, b) { return a - b; });
-    var breaks = [];
-    for (var i = 1; i < 7; i++) breaks.push(vals[Math.min(vals.length - 1, Math.floor(i * vals.length / 7))]);
+    var breaks = [], k = nClasses(layer);
+    for (var i = 1; i < k; i++) breaks.push(vals[Math.min(vals.length - 1, Math.floor(i * vals.length / k))]);
     var mid = vals.length % 2 ? vals[(vals.length - 1) / 2] : (vals[vals.length / 2 - 1] + vals[vals.length / 2]) / 2;
     return (classCache[layer.key] = { breaks: breaks, min: vals[0], max: vals[vals.length - 1], median: mid, n: vals.length });
   }
   function classIndex(layer, v) {
     var c = classesFor(layer), i = 0;
     while (i < c.breaks.length && Number(v) >= c.breaks[i]) i++;
-    return layer.invert ? 6 - i : i;          // index 0 = least affordable (red) for "div"
+    return layer.invert ? nClasses(layer) - 1 - i : i;   // index 0 = least affordable (red) for "div"
   }
   function colorFor(layer, v) {
     if (!has(v)) return null;
@@ -208,8 +210,9 @@
     document.addEventListener("focusout", function (e) { var t = e.target.closest(sel); if (t) hideTip(t); });
     document.addEventListener("scroll", function () { hideTip(); }, true);
   }
+  var INFO_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25"/><path d="M8 7.2v3.9"/><circle cx="8" cy="5" r=".55" class="i-dot"/></svg>';
   function info(text, label) {
-    return '<button type="button" class="info" data-tip="' + esc(text) + '" aria-label="' + esc(label || "More information") + '">i</button>';
+    return '<button type="button" class="info" data-tip="' + esc(text) + '" aria-label="' + esc(label || "More information") + '">' + INFO_SVG + "</button>";
   }
 
   // ------------------------------------------------------------------ loading
@@ -223,6 +226,7 @@
   function init() {
     wireTips();
     wireUI();
+    wireSheet();
     Promise.all([getJSON(PATHS.data), getJSON(PATHS.manifest)]).then(function (res) {
       var split = res[0];
       D.cols = split.columns;
@@ -276,13 +280,45 @@
       "Moderate-income: HUD 80% income limit, 4 people, costs at most 30% of income.";
   }
 
+  // Layer picker: a button that opens grouped radio options, each with a plain-language
+  // name, a one-line explanation and a color preview for its group.
+  var GROUP_NOTES = {
+    "Affordability score": "The two scores. Blue is more affordable than the typical NJ town, red less.",
+    "Cost compared with income": "The numbers behind the scores. Red means costs take a bigger share of income.",
+    "Barriers · shown, not scored": "Possible causes of unaffordability. They never change a score."
+  };
   function fillLayerSelect() {
-    var sel = $("layer"), groups = {};
-    LAYERS.forEach(function (l) {
-      if (!groups[l.group]) { groups[l.group] = document.createElement("optgroup"); groups[l.group].label = l.group; sel.appendChild(groups[l.group]); }
-      var o = document.createElement("option"); o.value = l.key; o.textContent = l.label; groups[l.group].appendChild(o);
+    var pop = $("layer-pop"), groups = [], html = "";
+    LAYERS.forEach(function (l) { if (groups.indexOf(l.group) < 0) groups.push(l.group); });
+    groups.forEach(function (g) {
+      var first = LAYERS.filter(function (l) { return l.group === g; })[0];
+      var sw = palette(first).map(function (c) { return '<i style="background:' + c + '"></i>'; }).join("");
+      html += '<fieldset class="pk-group"><legend><span class="pk-ramp" aria-hidden="true">' + sw + "</span>" + esc(g) + "</legend>" +
+        '<p class="pk-note">' + esc(GROUP_NOTES[g] || "") + "</p>";
+      LAYERS.filter(function (l) { return l.group === g; }).forEach(function (l) {
+        html += '<label class="pk-opt"><input type="radio" name="layer" value="' + l.key + '"' + (l.key === S.layer ? " checked" : "") + ">" +
+          '<span><b>' + esc(l.label) + "</b><small>" + esc(l.sub || "") + "</small></span></label>";
+      });
+      html += "</fieldset>";
     });
-    sel.value = S.layer;
+    pop.innerHTML = html;
+    updateLayerButton();
+  }
+  function updateLayerButton() {
+    var L = LAYER_BY_KEY[S.layer];
+    $("layer-btn-t").textContent = L.label;
+    $("layer-btn-s").textContent = L.sub || "";
+    document.querySelectorAll('#layer-pop input[name="layer"]').forEach(function (i) { i.checked = i.value === S.layer; });
+  }
+  function setLayer(key) {
+    if (!LAYER_BY_KEY[key] || key === S.layer) return;
+    S.layer = key; S.bestFirst = true;
+    updateLayerButton(); renderList(); renderLegend(); repaint(); writeHash();
+  }
+  function openPicker(open) {
+    var pop = $("layer-pop"), btn = $("layer-btn");
+    pop.hidden = !open; btn.setAttribute("aria-expanded", String(open));
+    if (open) { var cur = pop.querySelector("input:checked"); if (cur) cur.focus(); }
   }
 
   // ------------------------------------------------------------------ list (map view)
@@ -316,6 +352,7 @@
     $("listcount").textContent = rows.length + " of " + D.rows.length;
     var ol = $("list"), frag = document.createDocumentFragment();
     ol.innerHTML = "";
+    if (mobile.matches && S.query && SHEET.state === "peek") setSheet("half");
     rows.forEach(function (r, i) {
       var li = document.createElement("li"), b = document.createElement("button");
       b.type = "button";
@@ -337,14 +374,16 @@
   // ------------------------------------------------------------------ legend
   function renderLegend() {
     var L = LAYER_BY_KEY[S.layer], el = $("legend"), p = palette(L);
-    var help = L.desc + (L.categorical ? "" : " Colors split towns into seven groups of equal size" + (L.scheme === "div" ? "; gray is the middle group." : "."));
+    var help = L.desc + (L.categorical ? "" : L.scheme === "div"
+      ? " Colors split towns into six equal-size groups: reds are below the New Jersey median, blues above it. Gray means not enough data."
+      : " Colors split towns into seven equal-size groups. Gray means not enough data.");
     var html = "<h3>" + esc(L.label) + " " + info(help, "About this layer") + "</h3>";
     if (L.categorical) {
       html += '<div class="cats"><div><i style="background:' + p[5] + '"></i>Yes</div><div><i style="background:' + p[1] + '"></i>No</div></div>';
     } else {
       // p[0] is the least affordable / lowest class, drawn left to right.
       html += '<div class="ramp" aria-hidden="true">' + p.map(function (col) { return '<span style="background:' + col + '"></span>'; }).join("") + "</div>";
-      html += '<div class="ends"><span>' + esc(L.scheme === "div" ? "Less affordable" : L.ends[0]) + "</span><span>" +
+      html += '<div class="ends"><span>' + esc(L.scheme === "div" ? "Less" : L.ends[0]) + "</span><span>" +
               esc(L.scheme === "div" ? "More affordable" : L.ends[1]) + "</span></div>";
     }
     var missing = D.rows.filter(function (x) { return !has(x[L.key]); }).length;
@@ -409,7 +448,9 @@
     var firstLabel = (map.getStyle().layers.find(function (l) { return l.type === "symbol"; }) || {}).id;
     map.addSource("munis", { type: "geojson", data: paintedData(), promoteId: "geoid" });
     map.addLayer({ id: "muni-fill", type: "fill", source: "munis",
-      paint: { "fill-color": ["coalesce", ["get", "color"], nodata()], "fill-opacity": 0.9 } }, firstLabel);
+      paint: { "fill-color": ["coalesce", ["get", "color"], nodata()],
+               // lighter as you zoom in, so streets and labels stay readable
+               "fill-opacity": ["interpolate", ["linear"], ["zoom"], 6, 0.78, 9, 0.62, 11, 0.42, 13, 0.28, 15, 0.2] } }, firstLabel);
     map.addLayer({ id: "muni-line", type: "line", source: "munis",
       paint: { "line-color": isDark() ? "#0a0d13" : "#ffffff", "line-width": ["interpolate", ["linear"], ["zoom"], 7, 0.35, 11, 1.2] } }, firstLabel);
     map.addLayer({ id: "muni-hover", type: "line", source: "munis",
@@ -472,11 +513,18 @@
     else { var s = D.sources[key]; if (s) parts.push("Source: " + (SOURCE_LABELS[key] || key) + ", " + s.vintage + "."); }
     return parts.join(" ");
   }
+  // "no usable measure in any source; ownership burden unavailable" ->
+  // "No usable measure in any source. Ownership burden unavailable."
+  function sentences(text) {
+    return String(text || "").split(/;\s*/).filter(Boolean).map(function (p) {
+      p = p.trim(); return p.charAt(0).toUpperCase() + p.slice(1) + (/[.!?]$/.test(p) ? "" : ".");
+    }).join(" ");
+  }
   function badge(level, reasons) {
     if (!has(level)) return "";
     var cls = level === "insufficient data" ? "none" : level;
     var txt = level === "insufficient data" ? "Insufficient data" : level.charAt(0).toUpperCase() + level.slice(1) + " confidence";
-    var tip = reasons ? ' data-tip="' + esc(reasons) + '" tabindex="0"' : "";
+    var tip = reasons ? ' data-tip="' + esc(sentences(reasons)) + '" tabindex="0"' : "";
     return '<span class="badge ' + cls + '"' + tip + ">" + esc(txt) + "</span>";
   }
   function scoreBlock(title, key, rankKey, confKey, reasonKey, r, n) {
@@ -491,6 +539,7 @@
     var r = D.byId[geoid]; if (!r) return;
     S.selected = geoid;
     $("drawer").hidden = false;
+    if (mobile.matches) setSheet("peek");
     $("p-name").innerHTML = esc(r.name) + ' <span class="type">' + esc(r.mun_type) + "</span>";
     $("p-sub").textContent = r.county + " County · Code " + r.mun_code + " · Pop. " + num(r.population);
     updateProfileButtons();
@@ -502,7 +551,7 @@
       scoreBlock("Renting", "rental_score", "rental_rank", "rental_confidence", "rental_confidence_reasons", r, nRent) + "</div>" +
       '<p class="higher">Higher is more affordable ' + info("Scores are percentiles across New Jersey towns (100 = smallest share of county income). Assumes " +
         a.down_payment_pct + "% down, " + a.loan_term_years + "-year fixed at " + num(a.mortgage_rate_pct, 2) + "%. Excludes " + (a.excluded_costs || []).join(", ") + ".", "How scores work") + "</p>";
-    html += '<section class="chart-sec"><h3>Home value <span id="hv-range"></span> ' + info("Census ACS 5-year median value of owner-occupied homes (owners' own estimates). Each point pools five years and overlaps the next, in dollars of that period's final year, not adjusted to today.", "About this graph") +
+    html += '<section class="chart-sec"><h3>Home value <span id="hv-range"></span> ' + info("Census ACS 5-year median value of owner-occupied homes (owners' own estimates). Each point pools five years and overlaps the next, in dollars of that period's final year, not adjusted to today. The shaded band is the survey's margin of error (90% confidence): the range the true value very likely falls in.", "About this graph") +
       '</h3><div id="hv-chart" class="hv"></div></section>';
     html += '<p class="summary" id="p-summary">' + (D.summaries ? "" : "Loading summary…") + "</p>";
     SECTIONS.forEach(function (sec) {
@@ -556,24 +605,30 @@
       var X = function (y) { return pl + (y - x0) / (x1 - x0) * (W - pl - pr); };
       var Y = function (v) { return pt + (1 - (v - lo) / ((hi - lo) || 1)) * (Ht - pt - pb); };
       var line = pts.map(function (p, i) { return (i ? "L" : "M") + X(p.y).toFixed(1) + " " + Y(p.v).toFixed(1); }).join("");
+      // Likely range: each year's estimate ± its 90% margin of error.
       var band = pts.map(function (p, i) { return (i ? "L" : "M") + X(p.y).toFixed(1) + " " + Y(p.v + (p.m || 0)).toFixed(1); }).join("") +
         pts.slice().reverse().map(function (p) { return "L" + X(p.y).toFixed(1) + " " + Y(p.v - (p.m || 0)).toFixed(1); }).join("") + "Z";
       var first = pts[0], last = pts[pts.length - 1];
       el.innerHTML = '<svg viewBox="0 0 ' + W + " " + Ht + '" role="img" aria-label="Median home value from ' + (first.y - 4) + "–" + first.y + " (" + money(first.v) + ") to " +
         (last.y - 4) + "–" + last.y + " (" + money(last.v) + ')">' +
-        '<path class="hv-band" d="' + band + '"/><path class="hv-line" d="' + line + '"/>' +
+        '<defs><linearGradient id="hvg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="hv-g1"/><stop offset="1" class="hv-g2"/></linearGradient></defs>' +
+        '<path class="hv-band" d="' + band + '" fill="url(#hvg)"/><path class="hv-line" d="' + line + '"/>' +
         '<circle class="hv-end" cx="' + X(last.y) + '" cy="' + Y(last.v) + '" r="3.5"/>' +
         '<text class="hv-lbl" x="' + X(first.y) + '" y="12">' + money(first.v) + '</text>' +
         '<text class="hv-lbl" x="' + X(last.y) + '" y="12" text-anchor="end">' + money(last.v) + "</text>" +
         '<text class="hv-ax" x="' + X(first.y) + '" y="' + (Ht - 4) + '">' + first.y + '</text>' +
         '<text class="hv-ax" x="' + X(last.y) + '" y="' + (Ht - 4) + '" text-anchor="end">' + last.y + "</text>" +
         '<line class="hv-x" y1="' + pt + '" y2="' + (Ht - pb) + '" x1="0" x2="0" visibility="hidden"/><circle class="hv-dot" r="4" cx="0" cy="0" visibility="hidden"/></svg>' +
-        '<div class="hv-read" aria-live="polite"></div>';
+        '<div class="hv-read" aria-live="polite"></div>' +
+        '<div class="hv-key"><span><i class="k-line"></i>Median home value</span><span data-tip="The Census estimates home values from a survey of some households, not every home. ' +
+        'The shaded band is the range the true value very likely falls in (90% confidence). A wider band means a smaller sample and a less certain estimate." tabindex="0">' +
+        '<i class="k-band"></i>Likely range (survey margin of error)</span></div>';
       var svg = el.querySelector("svg"), xl = el.querySelector(".hv-x"), dot = el.querySelector(".hv-dot"), read = el.querySelector(".hv-read");
       var showAt = function (i) {
         var p = pts[i]; xl.setAttribute("x1", X(p.y)); xl.setAttribute("x2", X(p.y)); dot.setAttribute("cx", X(p.y)); dot.setAttribute("cy", Y(p.v));
         xl.setAttribute("visibility", "visible"); dot.setAttribute("visibility", "visible");
-        read.textContent = (p.y - 4) + "–" + p.y + ": " + (p.top ? "at least " : "") + money(p.v) + (p.m ? " ± " + money(p.m) : "");
+        read.textContent = (p.y - 4) + "–" + p.y + ": " + (p.top ? "at least " : "") + money(p.v) +
+          (p.m ? " · likely " + money(Math.max(0, p.v - p.m)) + "–" + money(p.v + p.m) : "");
       };
       var clear = function () { xl.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); read.textContent = ""; };
       svg.addEventListener("mousemove", function (e) {
@@ -747,7 +802,7 @@
   }
   function readHash() {
     var p = {}; location.hash.replace(/^#/, "").split("&").forEach(function (kv) { var a = kv.split("="); if (a[0]) p[a[0]] = decodeURIComponent(a[1] || ""); });
-    if (p.layer && LAYER_BY_KEY[p.layer]) { S.layer = p.layer; $("layer").value = p.layer; }
+    if (p.layer && LAYER_BY_KEY[p.layer]) { S.layer = p.layer; updateLayerButton(); }
     if (p.view && ["map", "table", "compare"].indexOf(p.view) >= 0) S.view = p.view;
     if (p.town && D.byId[p.town]) S.selected = p.town;
   }
@@ -769,7 +824,17 @@
   }
   function wireUI() {
     $("search").addEventListener("input", function (e) { S.query = e.target.value; renderList(); });
-    $("layer").addEventListener("change", function (e) { S.layer = e.target.value; S.bestFirst = true; renderList(); renderLegend(); repaint(); writeHash(); });
+    // Picker: arrow keys preview layers live; click, Enter or Escape closes it.
+    $("layer-btn").addEventListener("click", function (e) { e.stopPropagation(); openPicker($("layer-pop").hidden); });
+    $("layer-pop").addEventListener("change", function (e) { if (e.target.name === "layer") setLayer(e.target.value); });
+    $("layer-pop").addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (e.target.closest(".pk-opt") && e.detail > 0) { setTimeout(function () { openPicker(false); $("layer-btn").focus(); }, 0); }
+    });
+    $("layer-pop").addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === "Escape") { e.preventDefault(); e.stopPropagation(); openPicker(false); $("layer-btn").focus(); }
+    });
+    document.addEventListener("click", function (e) { if (!$("layer-pop").hidden && !e.target.closest(".picker")) openPicker(false); });
     $("sort-best").addEventListener("click", function () { S.bestFirst = true; renderList(); });
     $("sort-worst").addEventListener("click", function () { S.bestFirst = false; renderList(); });
     $("fav-only").addEventListener("change", function (e) { S.favOnly = e.target.checked; renderList(); });
@@ -804,6 +869,7 @@
     document.addEventListener("keydown", function (e) {
       if (e.key !== "Escape") return;
       if (!tipEl.hidden) { hideTip(); return; }
+      if (!$("layer-pop").hidden) { openPicker(false); $("layer-btn").focus(); return; }
       var open = document.querySelector(".popover.open");
       if (open) { open.classList.remove("open"); var b = document.querySelector('[aria-controls="' + open.id + '"]'); if (b) { b.setAttribute("aria-expanded", "false"); b.focus(); } }
       else if (!$("drawer").hidden) closeProfile();
@@ -812,9 +878,59 @@
       var t = isDark() ? "light" : "dark";
       document.documentElement.dataset.theme = t;
       try { localStorage.setItem("oh-theme", t); } catch (e) {}
-      if (D.rows.length) { renderList(); renderLegend(); renderSnapshot(); if (S.selected) openProfile(S.selected, false); }
+      if (D.rows.length) { renderList(); renderLegend(); renderSnapshot(); fillLayerSelect(); if (S.selected) openProfile(S.selected, false); }
       if (map) { mapReady = false; styleOk = false; map.setStyle(styleUrl()); }   // style.load re-adds the layers
     });
+  }
+
+  // ------------------------------------------------------------------ mobile bottom sheet
+  // Below 860px the list is a bottom sheet over a full-screen map with three
+  // heights: peek (search + layer), half, full. Drag the handle or tap it to cycle.
+  var SHEET = { state: "peek" };
+  var mobile = window.matchMedia("(max-width: 860px)");
+  function sheetHeights() {
+    var vh = window.innerHeight, top = document.querySelector(".bar").offsetHeight;
+    var peek = $("sheet-handle").offsetHeight + document.querySelector(".side-top").offsetHeight + 4;
+    return { peek: peek, half: Math.round(vh * 0.52), full: vh - top - 8 };
+  }
+  function setSheet(state, animate) {
+    if (!mobile.matches) { $("side").style.height = ""; return; }
+    SHEET.state = state;
+    var side = $("side");
+    side.classList.toggle("dragging", animate === false);
+    side.style.height = sheetHeights()[state] + "px";
+    side.dataset.sheet = state;
+    $("sheet-handle").setAttribute("aria-label", state === "full" ? "Collapse the list" : "Show more of the list");
+  }
+  function wireSheet() {
+    var h = $("sheet-handle"), side = $("side"), startY = 0, startH = 0, moved = false;
+    h.addEventListener("click", function () {
+      if (moved) { moved = false; return; }
+      setSheet(SHEET.state === "peek" ? "half" : SHEET.state === "half" ? "full" : "peek");
+    });
+    h.addEventListener("pointerdown", function (e) {
+      if (!mobile.matches) return;
+      startY = e.clientY; startH = side.offsetHeight; moved = false;
+      h.setPointerCapture(e.pointerId); side.classList.add("dragging");
+    });
+    h.addEventListener("pointermove", function (e) {
+      if (!h.hasPointerCapture(e.pointerId)) return;
+      var dy = e.clientY - startY; if (Math.abs(dy) > 4) moved = true;
+      var hs = sheetHeights();
+      side.style.height = Math.max(hs.peek, Math.min(hs.full, startH - dy)) + "px";
+    });
+    h.addEventListener("pointerup", function (e) {
+      if (!h.hasPointerCapture(e.pointerId)) return;
+      h.releasePointerCapture(e.pointerId); side.classList.remove("dragging");
+      if (!moved) return;
+      var cur = side.offsetHeight, hs = sheetHeights(), best = "peek";
+      ["peek", "half", "full"].forEach(function (k) { if (Math.abs(hs[k] - cur) < Math.abs(hs[best] - cur)) best = k; });
+      setSheet(best);
+    });
+    $("search").addEventListener("focus", function () { if (mobile.matches && SHEET.state === "peek") setSheet("half"); });
+    window.addEventListener("resize", function () { setSheet(SHEET.state); });
+    (mobile.addEventListener ? mobile.addEventListener("change", function () { setSheet("peek"); }) : null);
+    setSheet("peek");
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
