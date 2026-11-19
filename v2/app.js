@@ -438,6 +438,7 @@
     bounds.features.forEach(function (f) {
       var r = D.byId[f.properties.geoid];
       f.properties.color = r ? colorFor(L, r[L.key]) : null;
+      f.properties.label = r ? r.name.replace(/ (Township|Borough|City|Town|Village)$/, "") : "";
     });
     return bounds;
   }
@@ -457,9 +458,63 @@
       paint: { "line-color": isDark() ? "#ffffff" : "#0b0f19", "line-width": ["case", ["boolean", ["feature-state", "hover"], false], 1.6, 0] } });
     map.addLayer({ id: "muni-sel", type: "line", source: "munis", filter: ["==", ["get", "geoid"], S.selected || ""],
       paint: { "line-color": isDark() ? "#ffffff" : "#0b0f19", "line-width": 2.6 } });
+    // Town names on top of the colors: dark text with a light halo (inverted in
+    // dark mode) so they read over any fill. Appear from zoom 8.5 and grow.
+    map.addSource("muni-pts", { type: "geojson", data: labelPoints() });
+    map.addLayer({ id: "muni-labels", type: "symbol", source: "muni-pts", minzoom: 8.5,
+      layout: { "text-field": ["get", "label"], "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"],
+                "text-size": ["interpolate", ["linear"], ["zoom"], 8.5, 10.5, 11, 13, 14, 15],
+                "text-max-width": 7, "text-padding": 4, "symbol-placement": "point" },
+      paint: { "text-color": isDark() ? "#f2f4f8" : "#141a26", "text-halo-color": isDark() ? "rgba(10,13,19,.9)" : "rgba(255,255,255,.95)",
+               "text-halo-width": 1.6, "text-halo-blur": 0.3 } });
+    // From zoom 8.5 our labels name every NJ municipality, so the base map's own NJ
+    // town labels would duplicate them: hide those (only in NJ, only from 8.5).
+    // Labels outside NJ and at statewide zoom are untouched.
+    ["settlement-minor-label", "settlement-major-label"].forEach(function (id) {
+      var l = map.getLayer(id); if (!l) return;
+      var f = map.getFilter(id);
+      var notNJ = ["step", ["zoom"], true, 8.5, ["!=", ["get", "iso_3166_2"], "US-NJ"]];
+      try { map.setFilter(id, f ? ["all", f, notNJ] : notNJ); } catch (e) { /* keep the base style if the filter is rejected */ }
+    });
+    clarifyBaseLabels();
     mapReady = true;
     mapStatus("");
     showHint();
+  }
+
+  // One label point per town (labels on the polygon source repeat once per map
+  // tile). Point = area-weighted centroid of the town's largest polygon.
+  var labelCache = null;
+  function labelPoints() {
+    if (labelCache) return labelCache;
+    var feats = bounds.features.map(function (f) {
+      var polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates, best = null, bestA = -1;
+      polys.forEach(function (p) {
+        var ring = p[0], a = 0, cx = 0, cy = 0;
+        for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+          var cr = ring[j][0] * ring[i][1] - ring[i][0] * ring[j][1];
+          a += cr; cx += (ring[j][0] + ring[i][0]) * cr; cy += (ring[j][1] + ring[i][1]) * cr;
+        }
+        if (Math.abs(a) > bestA && a !== 0) { bestA = Math.abs(a); best = [cx / (3 * a), cy / (3 * a)]; }
+      });
+      return { type: "Feature", geometry: { type: "Point", coordinates: best || polys[0][0][0] },
+               properties: { label: f.properties.label || "" } };
+    });
+    return (labelCache = { type: "FeatureCollection", features: feats });
+  }
+
+  // Make the base map's own labels (streets, places, water) easier to read over
+  // the colored fills: darker text and a solid halo.
+  function clarifyBaseLabels() {
+    var dark = isDark();
+    map.getStyle().layers.forEach(function (l) {
+      if (l.type !== "symbol" || l.id === "muni-labels" || !l.layout || !l.layout["text-field"]) return;
+      try {
+        map.setPaintProperty(l.id, "text-halo-color", dark ? "rgba(10,13,19,.85)" : "rgba(255,255,255,.92)");
+        map.setPaintProperty(l.id, "text-halo-width", 1.4);
+        if (/road|street|place|settlement|poi|label/.test(l.id)) map.setPaintProperty(l.id, "text-color", dark ? "#dfe4ee" : "#2b3140");
+      } catch (e) { /* some layers don't take these properties; leave them as styled */ }
+    });
   }
 
   function repaint() {
@@ -708,7 +763,9 @@
     hideTip();
     repaint(); markListSelection(); writeHash();
     var b = document.querySelector('.list button[data-geoid="' + prev + '"]');
-    if (b && S.view === "map") b.focus();
+    // Return focus to the town in the list without scrolling the (mobile) sheet out of place.
+    if (b && S.view === "map") b.focus({ preventScroll: true });
+    $("side").scrollTop = 0;
   }
   function markListSelection() {
     document.querySelectorAll(".list button").forEach(function (b) {
