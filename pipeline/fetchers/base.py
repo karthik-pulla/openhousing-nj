@@ -8,7 +8,7 @@ import pandas as pd
 
 from ..common import DATA, GEO, log, today, write_json
 
-INTERIM = DATA / "interim"   # tidy per-source tables; Phase 3 combines them
+INTERIM = DATA / "interim"   # tidy per-source tables; pipeline/index.py combines them
 
 
 @dataclass
