@@ -1,11 +1,12 @@
-/* OpenHousing NJ v2 front end. Plain JavaScript, no build step.
+/* OpenHousing NJ v2 map app. Plain JavaScript, no build step.
  *
  * Reads only published, validated files:
- *   ../data/published/openhousing_nj.web.json   one row per municipality (same columns as the CSV)
- *   ../data/published/summaries.web.json        template summaries (loaded when a profile opens)
- *   ../data/manifest.json                       sources, vintages, publish date
- *   data/boundaries.geojson                     simplified NJOGIS boundaries, joined on geoid
- * No accounts, no tracking. localStorage holds only the theme, favorites and comparison list.
+ *   ../data/published/openhousing_nj.web.json     one row per municipality (same columns as the CSV)
+ *   ../data/published/summaries.web.json          template summaries, each statistic tagged with its sources
+ *   ../data/published/home_value_history.web.json ACS 5-year median home value by release (profile graph)
+ *   ../data/manifest.json                         sources, vintages, fetch dates, publish date
+ *   data/boundaries.geojson                       simplified NJOGIS boundaries, joined on geoid
+ * No accounts, no tracking. localStorage holds only the theme, favorites, comparison list and hint flag.
  */
 (function () {
   "use strict";
@@ -14,23 +15,24 @@
   var PATHS = {
     data: "../data/published/openhousing_nj.web.json",
     summaries: "../data/published/summaries.web.json",
+    history: "../data/published/home_value_history.web.json",
     manifest: "../data/manifest.json",
-    bounds: "data/boundaries.geojson",
-    csv: "../data/published/openhousing_nj.csv"
+    bounds: "data/boundaries.geojson"
   };
   var NJ_BOUNDS = [[-75.6, 38.92], [-73.88, 41.36]];
   var MAX_COMPARE = 3;
   var UNAV = "Unavailable";
 
-  // One-hue sequential ramps (light -> dark), equal lightness steps across hues.
-  // Blue = affordability scores (darker = more affordable); orange = cost shares
-  // (darker = costs take more of income); violet = barriers. In dark mode the
-  // ramp flips so low values sit near the dark map surface.
-  var RAMPS = {
-    blue:   ["#b7d3f6", "#86b6ef", "#5598e7", "#2a78d6", "#1c5cab", "#104281", "#0d366b"],
-    orange: ["#f7c3b0", "#ef9a7b", "#e36f42", "#c94908", "#9e3703", "#752601", "#611e01"],
-    violet: ["#cacbfb", "#a9a9f7", "#8a85f2", "#6f62e1", "#5549b4", "#3e3388", "#322a71"]
+  // Colors. Affordability uses v1's diverging scheme: red = less affordable,
+  // gray = middle of New Jersey, blue = more affordable (two hues with a neutral
+  // midpoint; both arms matched in lightness). Dark mode has its own steps so the
+  // near-middle classes stay quiet on the dark map. Barriers use one-hue violet.
+  var DIV = {
+    light: ["#892b2a", "#d75853", "#ea9a93", "#dcdad5", "#86b6ef", "#3987e5", "#184f95"],
+    dark:  ["#f1aea8", "#d75853", "#9e3432", "#3a3a37", "#1c5cab", "#3987e5", "#9ec5f4"]
   };
+  var VIOLET = { light: ["#cacbfb", "#a9a9f7", "#8a85f2", "#6f62e1", "#5549b4", "#3e3388", "#322a71"],
+                 dark:  ["#322a71", "#3e3388", "#5549b4", "#6f62e1", "#8a85f2", "#a9a9f7", "#cacbfb"] };
 
   // ------------------------------------------------------------------ formatting
   function has(v) { return v !== null && v !== undefined && v !== "" && !(typeof v === "number" && isNaN(v)); }
@@ -39,95 +41,96 @@
   function pct(v, d) { return has(v) ? (v * 100).toFixed(d || 0) + "%" : UNAV; }
   function num(v, d) { return has(v) ? Number(v).toLocaleString("en-US", { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }) : UNAV; }
   function ordinal(n) { n = Math.round(n); var s = (n % 100 >= 11 && n % 100 <= 13) ? "th" : ({ 1: "st", 2: "nd", 3: "rd" })[n % 10] || "th"; return n.toLocaleString("en-US") + s; }
-  function yesno(v) { return has(v) ? (v === true || v === "True" ? "Yes" : "No") : UNAV; }
-  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]; }); }
   function isTrue(v) { return v === true || v === "True"; }
+  function yesno(v) { return has(v) ? (isTrue(v) ? "Yes" : "No") : UNAV; }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]; }); }
+  function fmtDate(iso) { var d = new Date(iso); return isNaN(d) ? (iso || "") : d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }); }
 
   // ------------------------------------------------------------------ layers
+  // scheme "div": diverging affordability colors. invert: higher value = LESS affordable (burdens).
   var LAYERS = [
-    { group: "Affordability scores", key: "ownership_score", label: "Ownership affordability score", ramp: "blue",
+    { group: "Affordability scores", key: "ownership_score", label: "Ownership affordability", scheme: "div",
       fmt: function (v) { return num(v, 1); }, better: "high", best: "Most affordable", worst: "Least affordable",
-      rank: "ownership_rank", conf: "ownership_confidence",
-      desc: "0-100 percentile. Higher = owning the typical home costs a smaller share of county income. Mortgage plus average property tax.",
-      ends: ["Less affordable", "More affordable"] },
-    { group: "Affordability scores", key: "rental_score", label: "Rental affordability score", ramp: "blue",
+      rank: "ownership_rank", ends: ["Less affordable", "More affordable"],
+      desc: "0–100 percentile score. Higher means owning the typical home (mortgage at today's rate plus average property tax) takes a smaller share of county median income." },
+    { group: "Affordability scores", key: "rental_score", label: "Rental affordability", scheme: "div",
       fmt: function (v) { return num(v, 1); }, better: "high", best: "Most affordable", worst: "Least affordable",
-      rank: "rental_rank", conf: "rental_confidence",
-      desc: "0-100 percentile. Higher = the median rent is a smaller share of county income.",
-      ends: ["Less affordable", "More affordable"] },
-    { group: "Cost measures", key: "ownership_burden", label: "Cost of owning ÷ county income", ramp: "orange",
-      fmt: function (v) { return pct(v); }, better: "low", best: "Lowest share", worst: "Highest share",
-      desc: "Yearly mortgage payment on the typical home plus the average property tax bill, as a share of county median household income.",
-      ends: ["Smaller share", "Larger share"] },
-    { group: "Cost measures", key: "rent_burden", label: "Rent ÷ county income", ramp: "orange",
-      fmt: function (v) { return pct(v); }, better: "low", best: "Lowest share", worst: "Highest share",
-      desc: "Twelve months of median gross rent as a share of county median household income.",
-      ends: ["Smaller share", "Larger share"] },
-    { group: "Cost measures", key: "ownership_burden_ami80", label: "Cost of owning ÷ HUD 80% income limit", ramp: "orange",
-      fmt: function (v) { return pct(v); }, better: "low", best: "Lowest share", worst: "Highest share",
-      desc: "Ownership cost as a share of HUD's low-income limit (80% of area median income) for a four-person household. 30% or less is considered affordable.",
-      ends: ["Smaller share", "Larger share"] },
-    { group: "Cost measures", key: "renters_cost_burdened_share", label: "Renters paying 30%+ of income (context)", ramp: "orange",
-      fmt: function (v) { return pct(v); }, better: "low", best: "Lowest share", worst: "Highest share",
-      desc: "Share of renter households paying 30% or more of their own income on rent. Context only: not part of either score. Unreliable in small towns.",
-      ends: ["Smaller share", "Larger share"] },
-    { group: "Barriers (not in the scores)", key: "zri", label: "Zoning restrictiveness (NZLUD)", ramp: "violet",
+      rank: "rental_rank", ends: ["Less affordable", "More affordable"],
+      desc: "0–100 percentile score. Higher means a year of median rent takes a smaller share of county median income." },
+    { group: "Cost measures", key: "ownership_burden", label: "Owning ÷ county income", scheme: "div", invert: true,
+      fmt: function (v) { return pct(v); }, better: "low", best: "Smallest share", worst: "Largest share",
+      ends: ["Larger share", "Smaller share"],
+      desc: "Yearly mortgage payment on the typical home plus the average property tax bill, as a share of county median household income." },
+    { group: "Cost measures", key: "rent_burden", label: "Rent ÷ county income", scheme: "div", invert: true,
+      fmt: function (v) { return pct(v); }, better: "low", best: "Smallest share", worst: "Largest share",
+      ends: ["Larger share", "Smaller share"],
+      desc: "Twelve months of median gross rent as a share of county median household income." },
+    { group: "Cost measures", key: "ownership_burden_ami80", label: "Owning ÷ HUD 80% income limit", scheme: "div", invert: true,
+      fmt: function (v) { return pct(v); }, better: "low", best: "Smallest share", worst: "Largest share",
+      ends: ["Larger share", "Smaller share"],
+      desc: "Ownership cost as a share of HUD's low-income limit (80% of area median income) for a four-person household. 30% or less is considered affordable." },
+    { group: "Cost measures", key: "renters_cost_burdened_share", label: "Renters paying 30%+ (context)", scheme: "div", invert: true,
+      fmt: function (v) { return pct(v); }, better: "low", best: "Smallest share", worst: "Largest share",
+      ends: ["Larger share", "Smaller share"],
+      desc: "Share of renter households paying 30% or more of their own income on rent. Context only: not part of either score, and unreliable in small towns." },
+    { group: "Barriers (not in the scores)", key: "zri", label: "Zoning restrictiveness", scheme: "violet",
       fmt: function (v) { return num(v, 2); }, better: null, best: "Most restrictive", worst: "Least restrictive",
-      desc: "National Zoning and Land Use Database restrictiveness index (higher = more restrictive). Covers 105 of 564 towns; gray = not covered.",
-      ends: ["Less restrictive", "More restrictive"] },
-    { group: "Barriers (not in the scores)", key: "prospective_need_per_1000_hh", label: "Prospective need per 1,000 households", ramp: "violet",
-      fmt: function (v) { return num(v, 1); }, better: null, best: "Highest", worst: "Lowest",
-      desc: "Fourth Round (2025-2035) prospective need as calculated by the state in October 2024, per 1,000 households. Qualified Urban Aid towns have none by law; their 0 is not missing data.",
-      ends: ["Lower", "Higher"] },
-    { group: "Barriers (not in the scores)", key: "present_need", label: "Present need (units)", ramp: "violet",
-      fmt: function (v) { return num(v); }, better: null, best: "Highest", worst: "Lowest",
-      desc: "Fourth Round present need (deficient housing occupied by low- and moderate-income households) as calculated by the state in October 2024.",
-      ends: ["Lower", "Higher"] },
-    { group: "Barriers (not in the scores)", key: "qualified_urban_aid", label: "Qualified Urban Aid municipality", ramp: "violet",
-      categorical: true, fmt: yesno, better: null, best: "Yes first", worst: "No first",
-      desc: "Qualified Urban Aid municipalities (47) have no prospective need obligation under the Affordable Housing Law. They may still have a present need.",
-      ends: ["No", "Yes"] }
+      ends: ["Less restrictive", "More restrictive"],
+      desc: "National Zoning and Land Use Database restrictiveness index (higher = more restrictive). Covers 105 of 564 towns." },
+    { group: "Barriers (not in the scores)", key: "prospective_need_per_1000_hh", label: "Prospective need per 1,000 households", scheme: "violet",
+      fmt: function (v) { return num(v, 1); }, better: null, best: "Highest", worst: "Lowest", ends: ["Lower", "Higher"],
+      desc: "Fourth Round (2025–2035) prospective need as calculated by the state in October 2024, per 1,000 households. Qualified Urban Aid towns have none by law; their 0 is not missing data." },
+    { group: "Barriers (not in the scores)", key: "present_need", label: "Present need (units)", scheme: "violet",
+      fmt: function (v) { return num(v); }, better: null, best: "Highest", worst: "Lowest", ends: ["Lower", "Higher"],
+      desc: "Fourth Round present need (deficient housing occupied by low- and moderate-income households), as calculated by the state in October 2024." },
+    { group: "Barriers (not in the scores)", key: "qualified_urban_aid", label: "Qualified Urban Aid", scheme: "violet",
+      categorical: true, fmt: yesno, better: null, best: "Yes first", worst: "No first", ends: ["No", "Yes"],
+      desc: "Qualified Urban Aid municipalities (47) have no prospective need obligation under the Affordable Housing Law. They may still have a present need." }
   ];
   var LAYER_BY_KEY = {};
   LAYERS.forEach(function (l) { LAYER_BY_KEY[l.key] = l; });
 
-  // Profile metric rows: [column, label, formatter, source key, percentile column, confidence column]
+  // Profile rows: [column, label, formatter, source key, help text]
   var SECTIONS = [
     { title: "Owning", rows: [
-      ["home_value", "Typical home value", money, "home_value"],
-      ["annual_mortgage_pi", "Yearly mortgage payment (principal & interest)", money, "fred"],
-      ["avg_property_tax_bill", "Average residential property tax bill", money, "property_tax_municipal"],
-      ["annual_ownership_cost", "Yearly ownership cost", money, "derived"],
-      ["county_median_hh_income", "County median household income", money, "acs_county"],
-      ["ownership_burden", "Ownership cost ÷ county income", pct, "derived", "ownership_burden_pctl", "ownership_burden_confidence"],
-      ["ownership_burden_town_income", "Ownership cost ÷ town income (display only)", pct, "derived"]
+      ["home_value", "Typical home value", money, "home_value", "Median value of owner-occupied homes (owners' own estimates)."],
+      ["annual_mortgage_pi", "Mortgage, per year", money, "fred", "Principal and interest on the typical home with 20% down, 30-year fixed."],
+      ["avg_property_tax_bill", "Property tax, per year", money, "property_tax_municipal", "Average total tax on a residential property, before credits."],
+      ["annual_ownership_cost", "Ownership cost, per year", money, "derived", "Mortgage plus property tax."],
+      ["county_median_hh_income", "County median income", money, "acs_county", "Median household income of the county."],
+      ["ownership_burden", "Cost ÷ county income", pct, "derived", "The measure behind the ownership score."],
+      ["ownership_burden_town_income", "Cost ÷ town income", pct, "derived", "For comparison only; not used in the score."]
     ]},
     { title: "Renting", rows: [
-      ["median_gross_rent", "Median gross rent (monthly)", rentMoney, "acs_municipal"],
-      ["rent_burden", "Yearly rent ÷ county income", pct, "derived", "rent_burden_pctl", "rent_burden_confidence"],
-      ["rent_burden_town_income", "Yearly rent ÷ town income (display only)", pct, "derived"],
-      ["renters_cost_burdened_share", "Renters paying 30%+ of income (context)", pct, "acs_municipal", null, "renters_cost_burdened_confidence"],
-      ["fmr_2br", "HUD Fair Market Rent, 2 bedrooms", rentMoney, "hud_county"]
+      ["median_gross_rent", "Median rent, per month", rentMoney, "acs_municipal", "Median gross rent (rent plus utilities)."],
+      ["rent_burden", "Yearly rent ÷ county income", pct, "derived", "The measure behind the rental score."],
+      ["renters_cost_burdened_share", "Renters paying 30%+", pct, "acs_municipal", "Context only, not scored. Unreliable in small towns."],
+      ["fmr_2br", "HUD Fair Market Rent, 2 BR", rentMoney, "hud_county", "Area-wide Fair Market Rent for a two-bedroom home."]
     ]},
-    { title: "Moderate-income household (HUD 80% limit, 4 people)", rows: [
-      ["ami80_income_limit", "Income limit", money, "hud_county"],
-      ["ownership_burden_ami80", "Ownership cost ÷ income limit", pct, "derived"],
-      ["ownership_affordable_at_ami80", "Ownership affordable (30% or less)?", yesno, "derived"],
-      ["rent_burden_ami80", "Yearly rent ÷ income limit", pct, "derived"],
-      ["rent_affordable_at_ami80", "Rent affordable (30% or less)?", yesno, "derived"]
+    { title: "Moderate-income household", rows: [
+      ["ami80_income_limit", "HUD 80% income limit", money, "hud_county", "HUD low-income limit for a four-person household."],
+      ["ownership_affordable_at_ami80", "Could afford to own", yesno, "derived", "Yes if ownership cost is 30% or less of the income limit."],
+      ["rent_affordable_at_ami80", "Could afford the rent", yesno, "derived", "Yes if a year of median rent is 30% or less of the income limit."]
     ]},
-    { title: "Barriers (not part of the scores)", rows: [
-      ["zri", "Zoning restrictiveness index (NZLUD)", function (v) { return num(v, 2); }, "nzlud_municipal"],
-      ["present_need", "Fourth Round present need (units)", function (v) { return num(v); }, "fourth_round_municipal"],
-      ["prospective_need_capped", "Fourth Round prospective need (units)", function (v) { return num(v); }, "fourth_round_municipal"],
-      ["prospective_need_per_1000_hh", "Prospective need per 1,000 households", function (v) { return num(v, 1); }, "derived"],
-      ["qualified_urban_aid", "Qualified Urban Aid municipality", yesno, "fourth_round_municipal"],
-      ["households", "Households", function (v) { return num(v); }, "acs_municipal"]
+    { title: "Barriers · not scored", rows: [
+      ["zri", "Zoning restrictiveness", function (v) { return num(v, 2); }, "nzlud_municipal", "NZLUD index; higher is more restrictive."],
+      ["present_need", "Present need", function (v) { return num(v); }, "fourth_round_municipal", "State calculation, October 2024."],
+      ["prospective_need_capped", "Prospective need", function (v) { return num(v); }, "fourth_round_municipal", "After the state's cap; October 2024 calculation."],
+      ["prospective_need_per_1000_hh", "Per 1,000 households", function (v) { return num(v, 1); }, "derived", "Prospective need ÷ households × 1,000."],
+      ["qualified_urban_aid", "Qualified Urban Aid", yesno, "fourth_round_municipal", "No prospective obligation by law; present need may still apply."]
     ]}
   ];
+  // summaries.web.json source keys -> manifest source names
+  var SUM_TO_MANIFEST = { acs: "acs_municipal", home_value: "acs_municipal", property_tax: "property_tax_municipal",
+    hud: "hud_county", fred: "fred_mortgage30", nzlud: "nzlud_municipal", fourth_round: "fourth_round_municipal" };
+  var SOURCE_LABELS = { acs_municipal: "U.S. Census Bureau, American Community Survey", acs_county: "U.S. Census Bureau, American Community Survey (county)",
+    property_tax_municipal: "NJ Dept. of Community Affairs, Property Tax Tables", hud_county: "HUD Income Limits & Fair Market Rents",
+    fred_mortgage30: "Freddie Mac PMMS 30-year rate (via FRED)", nzlud_municipal: "National Zoning and Land Use Database",
+    fourth_round_municipal: "NJ Dept. of Community Affairs, Fourth Round obligations", zillow_municipal: "Zillow Home Value Index",
+    acs_home_value_history: "U.S. Census Bureau, ACS 5-year (B25077)" };
 
   // ------------------------------------------------------------------ state
-  var D = { rows: [], byId: {}, cols: [], manifest: null, summaries: null, sources: {} };
+  var D = { rows: [], byId: {}, cols: [], manifest: null, summaries: null, history: null, sources: {} };
   var S = { layer: "ownership_score", bestFirst: true, query: "", favOnly: false, selected: null,
             view: "map", compare: [], sortCol: "ownership_rank", sortAsc: true, tquery: "" };
   var map = null, mapReady = false, bounds = null, hoverId = null, styleOk = false;
@@ -143,27 +146,70 @@
   var $ = function (id) { return document.getElementById(id); };
   function setStatus(msg, err) { var s = $("status"); s.textContent = msg || ""; s.classList.toggle("err", !!err); }
   function isDark() { return document.documentElement.dataset.theme === "dark"; }
-  function ramp(name) { var r = RAMPS[name].slice(); return isDark() ? r.reverse() : r; }
   function nodata() { return getComputedStyle(document.documentElement).getPropertyValue("--nodata").trim(); }
+  function palette(layer) { var m = isDark() ? "dark" : "light"; return layer.scheme === "div" ? DIV[m] : VIOLET[m]; }
 
-  // ------------------------------------------------------------------ classes (quantiles)
+  // ------------------------------------------------------------------ classes (7 quantile groups)
   function classesFor(layer) {
     if (classCache[layer.key]) return classCache[layer.key];
     var vals = D.rows.map(function (r) { return r[layer.key]; }).filter(has).map(Number).sort(function (a, b) { return a - b; });
-    var k = 7, breaks = [];
-    for (var i = 1; i < k; i++) breaks.push(vals[Math.min(vals.length - 1, Math.floor(i * vals.length / k))]);
+    var breaks = [];
+    for (var i = 1; i < 7; i++) breaks.push(vals[Math.min(vals.length - 1, Math.floor(i * vals.length / 7))]);
     var mid = vals.length % 2 ? vals[(vals.length - 1) / 2] : (vals[vals.length / 2 - 1] + vals[vals.length / 2]) / 2;
-    var out = { breaks: breaks, min: vals[0], max: vals[vals.length - 1], median: mid, n: vals.length };
-    classCache[layer.key] = out;
-    return out;
+    return (classCache[layer.key] = { breaks: breaks, min: vals[0], max: vals[vals.length - 1], median: mid, n: vals.length });
+  }
+  function classIndex(layer, v) {
+    var c = classesFor(layer), i = 0;
+    while (i < c.breaks.length && Number(v) >= c.breaks[i]) i++;
+    return layer.invert ? 6 - i : i;          // index 0 = least affordable (red) for "div"
   }
   function colorFor(layer, v) {
     if (!has(v)) return null;
-    var r = ramp(layer.ramp);
-    if (layer.categorical) return isTrue(v) ? r[5] : r[1];   // r is already flipped for dark mode
-    var c = classesFor(layer), i = 0;
-    while (i < c.breaks.length && Number(v) >= c.breaks[i]) i++;
-    return r[i];
+    var p = palette(layer);
+    if (layer.categorical) return isTrue(v) ? p[5] : p[1];
+    return p[classIndex(layer, v)];
+  }
+  function scoreColor(key, v) { return colorFor(LAYER_BY_KEY[key], v) || nodata(); }
+
+  // ------------------------------------------------------------------ tooltips (hover / focus)
+  var tipEl = null;
+  function tipHTML(el) {
+    if (el.dataset.tip) return esc(el.dataset.tip);
+    if (el.dataset.stat) {
+      var f = el.dataset.stat, srcs = (el.dataset.src || "").split(",").filter(Boolean);
+      var label = (D.summaries && D.summaries.blanks && D.summaries.blanks[f]) || "";
+      return (label ? "<b>" + esc(label) + "</b>" : "") + srcs.map(function (k) {
+        if (k === "derived") return "<span class='tip-src'>Calculated by OpenHousing from:</span>";
+        var m = D.sources[SUM_TO_MANIFEST[k]], name = SOURCE_LABELS[SUM_TO_MANIFEST[k]] || k;
+        return "<span class='tip-src'>" + esc(name) + (m ? "<em>Data: " + esc(m.vintage) + " · Retrieved " + esc(fmtDate(m.fetched_at || m.fetched)) + "</em>" : "") + "</span>";
+      }).join("");
+    }
+    return "";
+  }
+  function showTip(el) {
+    var html = tipHTML(el); if (!html) return;
+    tipEl.innerHTML = html;
+    tipEl.hidden = false;
+    var r = el.getBoundingClientRect(), w = tipEl.offsetWidth, h = tipEl.offsetHeight;
+    var x = Math.min(window.innerWidth - w - 10, Math.max(10, r.left + r.width / 2 - w / 2));
+    var y = r.top - h - 8; if (y < 8) y = r.bottom + 8;
+    tipEl.style.left = x + "px"; tipEl.style.top = y + "px";
+    el.setAttribute("aria-describedby", "tipbox");
+  }
+  function hideTip(el) { tipEl.hidden = true; if (el) el.removeAttribute("aria-describedby"); }
+  function wireTips() {
+    tipEl = document.createElement("div");
+    tipEl.id = "tipbox"; tipEl.className = "tipbox"; tipEl.setAttribute("role", "tooltip"); tipEl.hidden = true;
+    document.body.appendChild(tipEl);
+    var sel = "[data-tip],[data-stat]";
+    document.addEventListener("mouseover", function (e) { var t = e.target.closest(sel); if (t) showTip(t); });
+    document.addEventListener("mouseout", function (e) { var t = e.target.closest(sel); if (t && !t.contains(e.relatedTarget)) hideTip(t); });
+    document.addEventListener("focusin", function (e) { var t = e.target.closest(sel); if (t) showTip(t); });
+    document.addEventListener("focusout", function (e) { var t = e.target.closest(sel); if (t) hideTip(t); });
+    document.addEventListener("scroll", function () { hideTip(); }, true);
+  }
+  function info(text, label) {
+    return '<button type="button" class="info" data-tip="' + esc(text) + '" aria-label="' + esc(label || "More information") + '">i</button>';
   }
 
   // ------------------------------------------------------------------ loading
@@ -175,6 +221,7 @@
   }
 
   function init() {
+    wireTips();
     wireUI();
     Promise.all([getJSON(PATHS.data), getJSON(PATHS.manifest)]).then(function (res) {
       var split = res[0];
@@ -196,25 +243,16 @@
   }
 
   function renderMeta() {
-    var m = D.manifest, d = new Date(m.published_at);
-    var when = isNaN(d) ? m.published_at : d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-    var line = "Data last updated " + when + ". " + D.rows.length + " municipalities.";
+    var m = D.manifest;
+    var line = "Updated " + fmtDate(m.published_at) + " · " + D.rows.length + " municipalities";
     $("updated").textContent = line;
-    $("updated-pop").textContent = line + (m.zillow_included ? "" : " Home values currently come from the Census Bureau (ACS).");
-    var list = $("source-list");
-    list.innerHTML = "";
-    var labels = { acs_municipal: "Census ACS (municipalities)", acs_county: "Census ACS (counties)",
-      property_tax_municipal: "NJ property tax", hud_county: "HUD income limits & rents", fred_mortgage30: "Mortgage rate",
-      nzlud_municipal: "Zoning (NZLUD)", fourth_round_municipal: "Fourth Round obligations", zillow_municipal: "Zillow home values" };
-    m.sources.forEach(function (s) {
-      var li = document.createElement("li");
-      li.innerHTML = "<b>" + esc(labels[s.name] || s.name) + "</b><span>" + esc(s.vintage) + "</span>";
-      list.appendChild(li);
-    });
-    var notices = m.sources.map(function (s) { return s.attribution; })
-      .filter(function (a) { return /not endorsed/.test(a || ""); })
-      .map(function (a) { var i = a.indexOf("This product uses"); return i >= 0 ? a.slice(i) : a; });
-    $("notices").textContent = notices.join(" ");
+    $("updated-pop").textContent = "Data updated " + fmtDate(m.published_at) + "." + (m.zillow_included ? "" : " Home values currently come from the Census Bureau.");
+    $("source-list").innerHTML = m.sources.filter(function (s) { return s.name !== "acs_county"; }).map(function (s) {
+      return "<li><b>" + esc(SOURCE_LABELS[s.name] || s.name) + "</b><span>" + esc(s.vintage) + "</span></li>";
+    }).join("");
+    $("notices").textContent = m.sources.map(function (s) { return s.attribution || ""; })
+      .filter(function (a) { return /not endorsed/.test(a); })
+      .map(function (a) { var i = a.indexOf("This product uses"); return i >= 0 ? a.slice(i) : a; }).join(" ");
   }
 
   function median(a) { a = a.filter(has).map(Number).sort(function (x, y) { return x - y; }); var n = a.length;
@@ -230,12 +268,12 @@
       [rentMoney(median(col("median_gross_rent"))), "Median monthly rent (typical town)"],
       [pct(median(col("ownership_burden"))), "Owning ÷ county income (typical town)"],
       [num(a.mortgage_rate_pct, 2) + "%", "30-year mortgage rate used"],
-      [ownOk + " of " + ownN, "Towns where a moderate-income family could afford to own"],
+      [ownOk + " of " + ownN, "Towns a moderate-income family could afford to own in"],
       [num(sum("prospective_need_capped")), "Fourth Round prospective need (units)"]
     ];
     $("snapgrid").innerHTML = cells.map(function (c) { return "<div><b>" + esc(c[0]) + "</b><span>" + esc(c[1]) + "</span></div>"; }).join("");
-    $("snap-note").textContent = "Each municipality counts once (medians across towns, not across homes). Sources: Census ACS 2020-2024, NJ DCA, HUD, Freddie Mac. " +
-      "Moderate-income = HUD's 80% income limit, 4-person household, costs at most 30% of income.";
+    $("snap-note").textContent = "Medians across towns (each town counts once). Census ACS 2020–2024, NJ DCA, HUD, Freddie Mac. " +
+      "Moderate-income: HUD 80% income limit, 4 people, costs at most 30% of income.";
   }
 
   function fillLayerSelect() {
@@ -249,13 +287,12 @@
 
   // ------------------------------------------------------------------ list (map view)
   function sortedForLayer() {
-    var L = LAYER_BY_KEY[S.layer];
-    var q = S.query.trim().toLowerCase();
+    var L = LAYER_BY_KEY[S.layer], q = S.query.trim().toLowerCase();
     var rows = D.rows.filter(function (r) {
       if (S.favOnly && favorites.indexOf(r.geoid) < 0) return false;
       return !q || (r.name + " " + r.county).toLowerCase().indexOf(q) >= 0;
     });
-    var dir = (L.better === "low") ? 1 : -1;   // "best first" ordering
+    var dir = (L.better === "low") ? 1 : -1;
     if (!S.bestFirst) dir = -dir;
     rows.sort(function (a, b) {
       var va = a[L.key], vb = b[L.key];
@@ -270,14 +307,13 @@
 
   function renderList() {
     var L = LAYER_BY_KEY[S.layer];
-    $("layer-desc").textContent = L.desc;
+    $("layer-info").dataset.tip = L.desc;
     $("sort-best").textContent = L.best;
     $("sort-worst").textContent = L.worst;
     $("sort-best").setAttribute("aria-pressed", String(S.bestFirst));
     $("sort-worst").setAttribute("aria-pressed", String(!S.bestFirst));
     var rows = sortedForLayer();
-    var withVal = rows.filter(function (r) { return has(r[L.key]); }).length;
-    $("listcount").textContent = rows.length + " shown" + (withVal < rows.length ? " (" + (rows.length - withVal) + " without data listed last)" : "");
+    $("listcount").textContent = rows.length + " of " + D.rows.length;
     var ol = $("list"), frag = document.createDocumentFragment();
     ol.innerHTML = "";
     rows.forEach(function (r, i) {
@@ -285,16 +321,12 @@
       b.type = "button";
       b.dataset.geoid = r.geoid;
       if (S.selected === r.geoid) b.setAttribute("aria-current", "true");
-      var rankTxt = L.rank && has(r[L.rank]) ? "#" + r[L.rank] : (i + 1);
-      var c = colorFor(L, r[L.key]);
-      var star = favorites.indexOf(r.geoid) >= 0 ? " ★" : "";
-      var cls = classesFor(L), w = 0, v = r[L.key];
-      if (has(v) && !L.categorical && cls.max > cls.min) w = Math.max(4, Math.round(100 * (v - cls.min) / (cls.max - cls.min)));
-      else if (L.categorical) w = isTrue(v) ? 100 : 0;
-      b.innerHTML = '<span class="n">' + rankTxt + '</span><span class="nm">' + esc(r.name) + star +
-        '<span class="ct">' + esc(r.county) + ' County</span>' +
-        '<span class="bar-track" aria-hidden="true"><span class="bar-fill" style="width:' + w + '%;background:' + (c || "transparent") + '"></span></span></span>' +
-        '<span class="v">' + esc(L.fmt(v)) + "</span>";
+      var rankTxt = L.rank && has(r[L.rank]) ? r[L.rank] : (i + 1);
+      var c = colorFor(L, r[L.key]) || nodata();
+      var star = favorites.indexOf(r.geoid) >= 0 ? ' <span class="star" aria-label="favorite">★</span>' : "";
+      b.innerHTML = '<span class="n">' + rankTxt + '</span><i class="dot" style="background:' + c + '" aria-hidden="true"></i>' +
+        '<span class="nm">' + esc(r.name) + star + '<span class="ct">' + esc(r.county) + ' County</span></span>' +
+        '<span class="v' + (has(r[L.key]) ? "" : " na") + '">' + esc(has(r[L.key]) ? L.fmt(r[L.key]) : "–") + "</span>";
       b.setAttribute("aria-label", r.name + ", " + r.county + " County: " + L.label + " " + L.fmt(r[L.key]));
       li.appendChild(b);
       frag.appendChild(li);
@@ -304,22 +336,19 @@
 
   // ------------------------------------------------------------------ legend
   function renderLegend() {
-    var L = LAYER_BY_KEY[S.layer], el = $("legend"), r = ramp(L.ramp);
-    var html = "<h3>" + esc(L.label) + "</h3>";
+    var L = LAYER_BY_KEY[S.layer], el = $("legend"), p = palette(L);
+    var help = L.desc + (L.categorical ? "" : " Colors split towns into seven groups of equal size" + (L.scheme === "div" ? "; gray is the middle group." : "."));
+    var html = "<h3>" + esc(L.label) + " " + info(help, "About this layer") + "</h3>";
     if (L.categorical) {
-      html += '<div class="cats"><div><i style="background:' + colorFor(L, true) + '"></i>Yes</div>' +
-              '<div><i style="background:' + colorFor(L, false) + '"></i>No</div></div>';
+      html += '<div class="cats"><div><i style="background:' + p[5] + '"></i>Yes</div><div><i style="background:' + p[1] + '"></i>No</div></div>';
     } else {
-      var c = classesFor(L);
-      // r[i] is exactly the color used for class i (low -> high), already flipped for dark mode.
-      html += '<div class="ramp" aria-hidden="true">' + r.map(function (col) {
-        return '<span style="background:' + col + '"></span>'; }).join("") + "</div>";
-      html += '<div class="ticks"><span>' + esc(L.fmt(c.min)) + "</span><span>" + esc(L.fmt(c.median)) + " (median)</span><span>" + esc(L.fmt(c.max)) + "</span></div>";
-      html += '<div class="ends"><span>' + esc(L.ends[0]) + "</span><span>" + esc(L.ends[1]) + "</span></div>";
-      html += '<p class="note">Seven groups with equal numbers of towns.</p>';
+      // p[0] is the least affordable / lowest class, drawn left to right.
+      html += '<div class="ramp" aria-hidden="true">' + p.map(function (col) { return '<span style="background:' + col + '"></span>'; }).join("") + "</div>";
+      html += '<div class="ends"><span>' + esc(L.scheme === "div" ? "Less affordable" : L.ends[0]) + "</span><span>" +
+              esc(L.scheme === "div" ? "More affordable" : L.ends[1]) + "</span></div>";
     }
     var missing = D.rows.filter(function (x) { return !has(x[L.key]); }).length;
-    if (missing) html += '<div class="nd"><i aria-hidden="true"></i>No data (' + missing + " town" + (missing > 1 ? "s" : "") + ")</div>";
+    if (missing) html += '<div class="nd"><i aria-hidden="true"></i>Not enough data (' + missing + ")</div>";
     el.innerHTML = html;
   }
 
@@ -328,32 +357,22 @@
     if (!window.mapboxgl) { mapFailed("The map library didn't load."); return; }
     mapboxgl.accessToken = MAPBOX_TOKEN;
     try {
-      map = new mapboxgl.Map({ container: "map", style: styleUrl(), bounds: NJ_BOUNDS, fitBoundsOptions: { padding: 20 },
-                               attributionControl: true, cooperativeGestures: false });
+      map = new mapboxgl.Map({ container: "map", style: styleUrl(), bounds: NJ_BOUNDS, fitBoundsOptions: { padding: 24 }, attributionControl: true });
     } catch (e) { mapFailed(e.message); return; }
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
     map.on("error", function (e) {
       var msg = e && e.error && e.error.message || "";
       if (/401|403|token|Unauthorized|Forbidden/i.test(msg)) mapFailed("Map tiles were refused (" + msg + ").");
     });
-    // Track style readiness ourselves: map.isStyleLoaded() stays false while
-    // base tiles are still loading, which could skip adding our layers.
+    // Track style readiness ourselves: map.isStyleLoaded() stays false while base
+    // tiles are still loading, which could skip adding our layers.
     map.on("style.load", function () { styleOk = true; addLayers(); });
     loadBounds();
     wireMapEvents();
   }
   function styleUrl() { return isDark() ? "mapbox://styles/mapbox/dark-v11" : "mapbox://styles/mapbox/light-v11"; }
-  function mapStatus(msg) {
-    var el = $("map-status");
-    if (!msg) { el.classList.add("done"); return; }
-    el.classList.remove("done");
-    $("map-status-txt").textContent = msg;
-  }
-  function mapFailed(msg) {
-    mapStatus("");
-    $("map-error").hidden = false;
-    $("map-error-txt").textContent = msg + " Everything else works: use the list or the Table view.";
-  }
+  function mapStatus(msg) { var el = $("map-status"); if (!msg) { el.classList.add("done"); return; } el.classList.remove("done"); $("map-status-txt").textContent = msg; }
+  function mapFailed(msg) { mapStatus(""); $("map-error").hidden = false; $("map-error-txt").textContent = msg + " Everything else works: use the list or the Table view."; }
   function loadBounds() {
     $("map-error").hidden = true;
     mapStatus("Loading town boundaries…");
@@ -361,22 +380,17 @@
     return getJSON(PATHS.bounds).then(function (gj) { clearTimeout(slow); bounds = gj; if (styleOk) addLayers(); })
       .catch(function (e) { clearTimeout(slow); mapFailed("Town boundaries didn't load (" + e.message + ")."); });
   }
-  function resetView() {
-    if (!$("drawer").hidden) closeProfile();
-    if (map) map.fitBounds(NJ_BOUNDS, { padding: 24, duration: 700 });
-  }
+  function resetView() { if (!$("drawer").hidden) closeProfile(); if (map) map.fitBounds(NJ_BOUNDS, { padding: 24, duration: 700 }); }
   function showHint() {
     var seen = false;
     try { seen = localStorage.getItem("oh_v2_hint") === "1"; } catch (e) {}
     if (seen || window.matchMedia("(hover: none)").matches) return;
-    var h = $("hint");
-    h.hidden = false;
-    setTimeout(function () { hideHint(); }, 7000);
+    $("hint").hidden = false;
+    setTimeout(hideHint, 7000);
   }
   function hideHint() {
     var h = $("hint"); if (h.hidden) return;
-    h.classList.add("out");
-    setTimeout(function () { h.hidden = true; }, 400);
+    h.classList.add("out"); setTimeout(function () { h.hidden = true; }, 400);
     try { localStorage.setItem("oh_v2_hint", "1"); } catch (e) {}
   }
 
@@ -385,7 +399,6 @@
     bounds.features.forEach(function (f) {
       var r = D.byId[f.properties.geoid];
       f.properties.color = r ? colorFor(L, r[L.key]) : null;
-      f.properties.name = r ? r.name : "";
     });
     return bounds;
   }
@@ -396,13 +409,13 @@
     var firstLabel = (map.getStyle().layers.find(function (l) { return l.type === "symbol"; }) || {}).id;
     map.addSource("munis", { type: "geojson", data: paintedData(), promoteId: "geoid" });
     map.addLayer({ id: "muni-fill", type: "fill", source: "munis",
-      paint: { "fill-color": ["coalesce", ["get", "color"], nodata()], "fill-opacity": 0.88 } }, firstLabel);
+      paint: { "fill-color": ["coalesce", ["get", "color"], nodata()], "fill-opacity": 0.9 } }, firstLabel);
     map.addLayer({ id: "muni-line", type: "line", source: "munis",
-      paint: { "line-color": isDark() ? "#0b0e14" : "#ffffff", "line-width": ["interpolate", ["linear"], ["zoom"], 7, 0.3, 11, 1.2] } }, firstLabel);
+      paint: { "line-color": isDark() ? "#0a0d13" : "#ffffff", "line-width": ["interpolate", ["linear"], ["zoom"], 7, 0.35, 11, 1.2] } }, firstLabel);
     map.addLayer({ id: "muni-hover", type: "line", source: "munis",
       paint: { "line-color": isDark() ? "#ffffff" : "#0b0f19", "line-width": ["case", ["boolean", ["feature-state", "hover"], false], 1.6, 0] } });
     map.addLayer({ id: "muni-sel", type: "line", source: "munis", filter: ["==", ["get", "geoid"], S.selected || ""],
-      paint: { "line-color": "#3F6AFF", "line-width": 3 } });
+      paint: { "line-color": isDark() ? "#ffffff" : "#0b0f19", "line-width": 2.6 } });
     mapReady = true;
     mapStatus("");
     showHint();
@@ -425,7 +438,8 @@
       map.setFeatureState({ source: "munis", id: hoverId }, { hover: true });
       var r = D.byId[f.properties.geoid], L = LAYER_BY_KEY[S.layer];
       if (!r) return;
-      tip.innerHTML = "<b>" + esc(r.name) + "</b>" + esc(r.county) + " County<br>" + esc(L.label) + ": <b style='display:inline'>" + esc(L.fmt(r[L.key])) + "</b>";
+      tip.innerHTML = "<b>" + esc(r.name) + "</b><span>" + esc(r.county) + " County</span><span class='tv'>" +
+        '<i class="dot" style="background:' + (colorFor(L, r[L.key]) || nodata()) + '"></i>' + esc(L.label) + ": <b>" + esc(L.fmt(r[L.key])) + "</b></span>";
       tip.style.display = "block";
       var x = e.point.x + 14, y = e.point.y + 14, w = tip.offsetWidth, h = tip.offsetHeight, W = map.getCanvas().clientWidth;
       if (x + w > W - 8) x = e.point.x - w - 14;
@@ -444,99 +458,149 @@
     if (!mapReady || !bounds) return;
     var f = bounds.features.find(function (x) { return x.properties.geoid === geoid; }); if (!f) return;
     var b = new mapboxgl.LngLatBounds();
-    (f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates).forEach(function (poly) {
-      poly[0].forEach(function (c) { b.extend(c); });
-    });
-    var drawerOpen = !$("drawer").hidden && window.innerWidth > 860;
-    map.fitBounds(b, { padding: { top: 40, bottom: 40, left: 40, right: drawerOpen ? 480 : 40 }, maxZoom: 12.5, duration: 600 });
+    (f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates).forEach(function (poly) { poly[0].forEach(function (c) { b.extend(c); }); });
+    var wide = window.innerWidth > 860;
+    map.fitBounds(b, { padding: { top: 60, bottom: 60, left: 60, right: wide ? 500 : 60 }, maxZoom: 12.5, duration: 600 });
   }
 
   // ------------------------------------------------------------------ profile
-  function srcLine(key, r) {
-    if (key === "derived") return "Calculated by OpenHousing from the rows above";
-    if (key === "home_value") return has(r.home_value_source) ? r.home_value_source + ", " + (r.home_value_vintage || "") : "";
-    if (key === "fred") { var f = D.sources.fred_mortgage30; return f ? "Rate " + num(r.mortgage_rate_pct, 2) + "%: " + f.vintage : ""; }
-    var s = D.sources[key]; return s ? s.vintage : "";
+  function srcTip(key, r, help) {
+    var parts = [help];
+    if (key === "derived") parts.push("Calculated by OpenHousing.");
+    else if (key === "home_value") parts.push("Source: " + (r.home_value_source || "") + " (" + (r.home_value_vintage || "") + ").");
+    else if (key === "fred") { var f = D.sources.fred_mortgage30; if (f) parts.push("Rate " + num(r.mortgage_rate_pct, 2) + "%: " + f.vintage + "."); }
+    else { var s = D.sources[key]; if (s) parts.push("Source: " + (SOURCE_LABELS[key] || key) + ", " + s.vintage + "."); }
+    return parts.join(" ");
   }
-  function badge(level) {
+  function badge(level, reasons) {
     if (!has(level)) return "";
     var cls = level === "insufficient data" ? "none" : level;
     var txt = level === "insufficient data" ? "Insufficient data" : level.charAt(0).toUpperCase() + level.slice(1) + " confidence";
-    return '<span class="badge ' + cls + '">' + esc(txt) + "</span>";
+    var tip = reasons ? ' data-tip="' + esc(reasons) + '" tabindex="0"' : "";
+    return '<span class="badge ' + cls + '"' + tip + ">" + esc(txt) + "</span>";
+  }
+  function scoreBlock(title, key, rankKey, confKey, reasonKey, r, n) {
+    var v = r[key], col = scoreColor(key, v);
+    return '<div class="sb"><div class="sb-k">' + esc(title) + '</div><div class="sb-main"><i class="circle" style="background:' + col + '" aria-hidden="true"></i>' +
+      '<div><div class="sb-v">' + (has(v) ? num(v, 1) : "–") + "<small>/ 100</small></div>" +
+      '<div class="sb-r">' + (has(r[rankKey]) ? "Rank " + r[rankKey] + " of " + n : "Not scored") + "</div></div></div>" +
+      badge(r[confKey], r[reasonKey]) + "</div>";
   }
 
   function openProfile(geoid, zoom) {
     var r = D.byId[geoid]; if (!r) return;
     S.selected = geoid;
-    var dr = $("drawer");
-    dr.hidden = false;
-    $("p-name").textContent = r.name;
-    $("p-sub").textContent = r.county + " County · " + r.mun_type + " · population " + num(r.population);
+    $("drawer").hidden = false;
+    $("p-name").innerHTML = esc(r.name) + ' <span class="type">' + esc(r.mun_type) + "</span>";
+    $("p-sub").textContent = r.county + " County · Code " + r.mun_code + " · Pop. " + num(r.population);
     updateProfileButtons();
     var nOwn = D.rows.filter(function (x) { return has(x.ownership_score); }).length;
     var nRent = D.rows.filter(function (x) { return has(x.rental_score); }).length;
-    var html = '<div class="scorecards">' +
-      card("Ownership score", r.ownership_score, r.ownership_rank, nOwn, r.ownership_confidence) +
-      card("Rental score", r.rental_score, r.rental_rank, nRent, r.rental_confidence) + "</div>";
+    var a = (D.manifest && D.manifest.assumptions) || {};
+    var html = '<div class="scores">' +
+      scoreBlock("Owning", "ownership_score", "ownership_rank", "ownership_confidence", "ownership_confidence_reasons", r, nOwn) +
+      scoreBlock("Renting", "rental_score", "rental_rank", "rental_confidence", "rental_confidence_reasons", r, nRent) + "</div>" +
+      '<p class="higher">Higher is more affordable ' + info("Scores are percentiles across New Jersey towns (100 = smallest share of county income). Assumes " +
+        a.down_payment_pct + "% down, " + a.loan_term_years + "-year fixed at " + num(a.mortgage_rate_pct, 2) + "%. Excludes " + (a.excluded_costs || []).join(", ") + ".", "How scores work") + "</p>";
+    html += '<section class="chart-sec"><h3>Home value <span id="hv-range"></span> ' + info("Census ACS 5-year median value of owner-occupied homes (owners' own estimates). Each point pools five years and overlaps the next, in dollars of that period's final year, not adjusted to today.", "About this graph") +
+      '</h3><div id="hv-chart" class="hv"></div></section>';
     html += '<p class="summary" id="p-summary">' + (D.summaries ? "" : "Loading summary…") + "</p>";
-    html += '<div id="p-summary-src"></div>';
-    var reasons = [];
-    if (r.ownership_confidence_reasons) reasons.push("Ownership: " + r.ownership_confidence_reasons);
-    if (r.rental_confidence_reasons) reasons.push("Rental: " + r.rental_confidence_reasons);
-    if (reasons.length) html += '<p class="reasons"><b>About these estimates.</b> ' + esc(reasons.join(". ")) + ".</p>";
     SECTIONS.forEach(function (sec) {
-      html += "<h3>" + esc(sec.title) + '</h3><table class="metrics"><tbody>';
+      html += "<h3>" + esc(sec.title) + '</h3><dl class="kv">';
       sec.rows.forEach(function (row) {
-        var col = row[0], v = r[col], extra = "";
-        if (row[4] && has(r[row[4]])) extra += '<span class="pc">' + ordinal(r[row[4]]) + " percentile (higher = more affordable)</span>";
-        var conf = row[5] ? " " + badge(r[row[5]]) : "";
-        var src = srcLine(row[3], r);
-        html += "<tr><th scope='row'>" + esc(row[1]) + (src ? '<span class="src">' + esc(src) + "</span>" : "") + "</th><td>" +
-          esc(row[2](v)) + extra + (conf ? "<span class='pc'>" + conf + "</span>" : "") + "</td></tr>";
+        var v = r[row[0]], txt = row[2](v);
+        html += '<div><dt data-tip="' + esc(srcTip(row[3], r, row[4])) + '" tabindex="0">' + esc(row[1]) + "</dt><dd" + (txt === UNAV ? ' class="na"' : "") + ">" + esc(txt) + "</dd></div>";
       });
-      html += "</tbody></table>";
+      html += "</dl>";
     });
-    html += '<p class="note" style="margin-top:14px">Assumptions: ' + esc(assumptionText()) + ' <a href="methodology.html">How this is calculated</a>.</p>';
     $("d-body").innerHTML = html;
     $("d-body").scrollTop = 0;
     fillSummary(r);
+    fillHistory(r);
     $("p-name").focus();
     if (zoom !== false) zoomTo(geoid);
-    repaint();
-    markListSelection();
-    writeHash();
+    repaint(); markListSelection(); writeHash();
   }
-  function card(title, score, rank, n, conf) {
-    var gauge = has(score) ? '<div class="gauge" aria-hidden="true"><span style="left:' + Math.min(100, Math.max(0, score)) + '%"></span></div>' +
-      '<div class="gauge-l" aria-hidden="true"><span>Less</span><span>More affordable</span></div>' : "";
-    return '<div class="card"><div class="k">' + esc(title) + '</div><div class="big">' + (has(score) ? num(score, 1) : "–") +
-      '<small>/100</small></div>' + gauge + '<div class="sub">' + (has(rank) ? "Ranks " + ordinal(rank) + " of " + n : "Not scored") + "</div>" + badge(conf) + "</div>";
-  }
-  function assumptionText() {
-    var a = (D.manifest && D.manifest.assumptions) || {};
-    return a.down_payment_pct + "% down payment, " + a.loan_term_years + "-year fixed mortgage at " + num(a.mortgage_rate_pct, 2) +
-      "% (" + (a.mortgage_rate_vintage || "") + "). Excludes " + (a.excluded_costs || []).join(", ") + ".";
-  }
+
   function fillSummary(r) {
     var go = function () {
       var t = D.summaries.towns[r.geoid], el = $("p-summary");
       if (!el || S.selected !== r.geoid) return;
-      el.textContent = t ? t.summary : "No summary available.";
-      if (t) {
-        var keys = [];
-        t.sentences.forEach(function (s) { s[1].forEach(function (k) { if (keys.indexOf(k) < 0) keys.push(k); }); });
-        $("p-summary-src").innerHTML = '<p class="note" style="margin-top:6px">Every sentence above is filled in from the data below. Sources:</p><ul class="srcs">' +
-          keys.map(function (k) { var s = D.summaries.sources[k]; return s ? "<li>" + esc(s.name) + " (" + esc(s.vintage) + ")</li>" : ""; }).join("") + "</ul>";
-      }
+      if (!t) { el.textContent = "No summary available."; return; }
+      // Each statistic is underlined and colored; hover or focus shows its source and data period.
+      el.innerHTML = t.sentences.map(function (s) {
+        var segs = s[2] || [s[0]];
+        return segs.map(function (g) {
+          if (typeof g === "string") return esc(g);
+          return '<span class="stat" tabindex="0" data-stat="' + esc(g.f) + '" data-src="' + esc(g.s.join(",")) + '">' + esc(g.t) + "</span>";
+        }).join("");
+      }).join(" ");
     };
     if (D.summaries) return go();
     getJSON(PATHS.summaries).then(function (s) { D.summaries = s; go(); })
       .catch(function () { var el = $("p-summary"); if (el) el.textContent = "The summary couldn't be loaded."; });
   }
+
+  // Home value graph: thin line, endpoints labelled, crosshair + readout on hover/keyboard.
+  function fillHistory(r) {
+    var go = function () {
+      var el = $("hv-chart"); if (!el || S.selected !== r.geoid) return;
+      var H = D.history, pts = (H.towns[r.geoid] || []).map(function (p, i) { return p && has(p[0]) ? { y: H.years[i], v: p[0], m: p[1], top: p[2] } : null; }).filter(Boolean);
+      if (pts.length < 2) { el.innerHTML = '<p class="na">Unavailable</p>'; $("hv-range").textContent = ""; return; }
+      $("hv-range").textContent = (pts[0].y - 4) + "–" + pts[pts.length - 1].y;
+      // Draw at the container's real pixel width so text stays a fixed size.
+      var W = Math.max(240, Math.round(el.clientWidth || 380)), Ht = 124, pl = 4, pr = 6, pt = 22, pb = 20;
+      var lo = Math.min.apply(null, pts.map(function (p) { return p.v - (p.m || 0); }));
+      var hi = Math.max.apply(null, pts.map(function (p) { return p.v + (p.m || 0); }));
+      var x0 = pts[0].y, x1 = pts[pts.length - 1].y;
+      var X = function (y) { return pl + (y - x0) / (x1 - x0) * (W - pl - pr); };
+      var Y = function (v) { return pt + (1 - (v - lo) / ((hi - lo) || 1)) * (Ht - pt - pb); };
+      var line = pts.map(function (p, i) { return (i ? "L" : "M") + X(p.y).toFixed(1) + " " + Y(p.v).toFixed(1); }).join("");
+      var band = pts.map(function (p, i) { return (i ? "L" : "M") + X(p.y).toFixed(1) + " " + Y(p.v + (p.m || 0)).toFixed(1); }).join("") +
+        pts.slice().reverse().map(function (p) { return "L" + X(p.y).toFixed(1) + " " + Y(p.v - (p.m || 0)).toFixed(1); }).join("") + "Z";
+      var first = pts[0], last = pts[pts.length - 1];
+      el.innerHTML = '<svg viewBox="0 0 ' + W + " " + Ht + '" role="img" aria-label="Median home value from ' + (first.y - 4) + "–" + first.y + " (" + money(first.v) + ") to " +
+        (last.y - 4) + "–" + last.y + " (" + money(last.v) + ')">' +
+        '<path class="hv-band" d="' + band + '"/><path class="hv-line" d="' + line + '"/>' +
+        '<circle class="hv-end" cx="' + X(last.y) + '" cy="' + Y(last.v) + '" r="3.5"/>' +
+        '<text class="hv-lbl" x="' + X(first.y) + '" y="12">' + money(first.v) + '</text>' +
+        '<text class="hv-lbl" x="' + X(last.y) + '" y="12" text-anchor="end">' + money(last.v) + "</text>" +
+        '<text class="hv-ax" x="' + X(first.y) + '" y="' + (Ht - 4) + '">' + first.y + '</text>' +
+        '<text class="hv-ax" x="' + X(last.y) + '" y="' + (Ht - 4) + '" text-anchor="end">' + last.y + "</text>" +
+        '<line class="hv-x" y1="' + pt + '" y2="' + (Ht - pb) + '" x1="0" x2="0" visibility="hidden"/><circle class="hv-dot" r="4" cx="0" cy="0" visibility="hidden"/></svg>' +
+        '<div class="hv-read" aria-live="polite"></div>';
+      var svg = el.querySelector("svg"), xl = el.querySelector(".hv-x"), dot = el.querySelector(".hv-dot"), read = el.querySelector(".hv-read");
+      var showAt = function (i) {
+        var p = pts[i]; xl.setAttribute("x1", X(p.y)); xl.setAttribute("x2", X(p.y)); dot.setAttribute("cx", X(p.y)); dot.setAttribute("cy", Y(p.v));
+        xl.setAttribute("visibility", "visible"); dot.setAttribute("visibility", "visible");
+        read.textContent = (p.y - 4) + "–" + p.y + ": " + (p.top ? "at least " : "") + money(p.v) + (p.m ? " ± " + money(p.m) : "");
+      };
+      var clear = function () { xl.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); read.textContent = ""; };
+      svg.addEventListener("mousemove", function (e) {
+        var b = svg.getBoundingClientRect(), x = (e.clientX - b.left) / b.width * W, best = 0;
+        pts.forEach(function (p, i) { if (Math.abs(X(p.y) - x) < Math.abs(X(pts[best].y) - x)) best = i; });
+        showAt(best);
+      });
+      svg.addEventListener("mouseleave", clear);
+      svg.setAttribute("tabindex", "0");
+      var ki = pts.length - 1;
+      svg.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowLeft") { ki = Math.max(0, ki - 1); showAt(ki); e.preventDefault(); }
+        if (e.key === "ArrowRight") { ki = Math.min(pts.length - 1, ki + 1); showAt(ki); e.preventDefault(); }
+      });
+      svg.addEventListener("focus", function () { showAt(ki); });
+      svg.addEventListener("blur", clear);
+    };
+    if (D.history) return go();
+    getJSON(PATHS.history).then(function (h) { D.history = h; go(); })
+      .catch(function () { var el = $("hv-chart"); if (el) el.innerHTML = '<p class="na">Unavailable</p>'; });
+  }
+
   function closeProfile() {
     var prev = S.selected;
     $("drawer").hidden = true;
     S.selected = null;
+    hideTip();
     repaint(); markListSelection(); writeHash();
     var b = document.querySelector('.list button[data-geoid="' + prev + '"]');
     if (b && S.view === "map") b.focus();
@@ -549,11 +613,13 @@
   function updateProfileButtons() {
     var g = S.selected; if (!g) return;
     var fav = favorites.indexOf(g) >= 0, inCmp = S.compare.indexOf(g) >= 0;
-    $("fav-btn").textContent = fav ? "★ Favorite" : "☆ Add to favorites";
-    $("fav-btn").setAttribute("aria-pressed", String(fav));
-    $("cmp-btn").textContent = inCmp ? "✓ In comparison" : "+ Compare";
-    $("cmp-btn").disabled = !inCmp && S.compare.length >= MAX_COMPARE;
-    $("cmp-btn").title = $("cmp-btn").disabled ? "You can compare up to " + MAX_COMPARE + " towns" : "";
+    var fb = $("fav-btn"), cb = $("cmp-btn");
+    fb.setAttribute("aria-pressed", String(fav)); fb.dataset.tip = fav ? "Remove from favorites" : "Add to favorites";
+    fb.setAttribute("aria-label", fb.dataset.tip); fb.querySelector("span").textContent = fav ? "★" : "☆";
+    cb.setAttribute("aria-pressed", String(inCmp));
+    cb.disabled = !inCmp && S.compare.length >= MAX_COMPARE;
+    cb.dataset.tip = inCmp ? "Remove from comparison" : (cb.disabled ? "You can compare up to " + MAX_COMPARE + " towns" : "Add to comparison");
+    cb.setAttribute("aria-label", cb.dataset.tip);
   }
 
   // ------------------------------------------------------------------ favorites & compare
@@ -568,31 +634,35 @@
     if (i >= 0) S.compare.splice(i, 1);
     else if (S.compare.length < MAX_COMPARE) S.compare.push(g);
     store("oh_v2_compare", S.compare);
-    $("compare-count").textContent = S.compare.length;
     updateProfileButtons(); renderCompare();
+  }
+  function rankCell(key, r) {
+    var rank = key === "ownership" ? r.ownership_rank : r.rental_rank, sc = r[key + "_score"];
+    return has(rank) ? '<i class="dot" style="background:' + scoreColor(key + "_score", sc) + '" aria-hidden="true"></i>' + esc(ordinal(rank)) : UNAV;
   }
   function renderCompare() {
     $("compare-count").textContent = S.compare.length;
     var wrap = $("compare-wrap"), towns = S.compare.map(function (g) { return D.byId[g]; }).filter(Boolean);
     $("dl-compare").disabled = !towns.length;
-    $("compare-hint").textContent = towns.length ? "Comparing " + towns.length + " of up to " + MAX_COMPARE + ". Missing values show as \"Unavailable\"."
-      : "Add up to three municipalities from a town profile (select \"+ Compare\").";
+    $("compare-hint").textContent = towns.length ? "" : "Open a town and choose Compare to add it here (up to three).";
     if (!towns.length) { wrap.innerHTML = ""; return; }
     var h = '<table class="dt cmp"><caption class="sr">Side-by-side comparison</caption><thead><tr><th scope="col">Measure</th>';
     towns.forEach(function (t) {
       h += '<th scope="col" class="l">' + esc(t.name) + '<br><span class="muted">' + esc(t.county) + ' County</span><br>' +
-        '<button type="button" class="linkbtn" data-open="' + t.geoid + '">Profile</button> · ' +
-        '<button type="button" class="linkbtn" data-remove="' + t.geoid + '">Remove</button></th>';
+        '<button type="button" class="linkbtn" data-open="' + t.geoid + '">Profile</button> · <button type="button" class="linkbtn" data-remove="' + t.geoid + '">Remove</button></th>';
     });
     h += "</tr></thead><tbody>";
-    var rows = [["ownership_score", "Ownership score", function (v) { return num(v, 1); }], ["ownership_rank", "Ownership rank", function (v) { return has(v) ? ordinal(v) : UNAV; }],
+    var rows = [["ownership_score", "Ownership score", function (v) { return num(v, 1); }], ["__own_rank", "Ownership rank"],
       ["ownership_confidence", "Ownership confidence", function (v) { return has(v) ? v : UNAV; }],
-      ["rental_score", "Rental score", function (v) { return num(v, 1); }], ["rental_rank", "Rental rank", function (v) { return has(v) ? ordinal(v) : UNAV; }],
+      ["rental_score", "Rental score", function (v) { return num(v, 1); }], ["__rent_rank", "Rental rank"],
       ["rental_confidence", "Rental confidence", function (v) { return has(v) ? v : UNAV; }]];
     SECTIONS.forEach(function (sec) { sec.rows.forEach(function (r) { rows.push([r[0], r[1], r[2]]); }); });
     rows.forEach(function (row) {
       h += '<tr><th scope="row" class="l">' + esc(row[1]) + "</th>";
-      towns.forEach(function (t) { h += '<td class="l">' + esc(row[2](t[row[0]])) + "</td>"; });
+      towns.forEach(function (t) {
+        var cell = row[0] === "__own_rank" ? rankCell("ownership", t) : row[0] === "__rent_rank" ? rankCell("rental", t) : esc(row[2](t[row[0]]));
+        h += '<td class="l">' + cell + "</td>";
+      });
       h += "</tr>";
     });
     wrap.innerHTML = h + "</tbody></table>";
@@ -601,26 +671,23 @@
   // ------------------------------------------------------------------ table view
   var TCOLS = [
     ["name", "Municipality", null, "l"], ["county", "County", null, "l"],
-    ["ownership_rank", "Ownership rank", function (v) { return has(v) ? num(v) : UNAV; }],
-    ["ownership_score", "Ownership score", function (v) { return num(v, 1); }],
-    ["ownership_burden", "Owning ÷ county income", function (v) { return pct(v); }],
-    ["ownership_confidence", "Ownership confidence", function (v) { return has(v) ? v : UNAV; }, "l"],
-    ["rental_rank", "Rental rank", function (v) { return has(v) ? num(v) : UNAV; }],
-    ["rental_score", "Rental score", function (v) { return num(v, 1); }],
-    ["rent_burden", "Rent ÷ county income", function (v) { return pct(v); }],
-    ["rental_confidence", "Rental confidence", function (v) { return has(v) ? v : UNAV; }, "l"],
+    ["ownership_rank", "Own rank", "rank:ownership"], ["ownership_score", "Own score", function (v) { return num(v, 1); }],
+    ["ownership_burden", "Owning ÷ income", function (v) { return pct(v); }],
+    ["ownership_confidence", "Own confidence", function (v) { return has(v) ? v : UNAV; }, "l"],
+    ["rental_rank", "Rent rank", "rank:rental"], ["rental_score", "Rent score", function (v) { return num(v, 1); }],
+    ["rent_burden", "Rent ÷ income", function (v) { return pct(v); }],
+    ["rental_confidence", "Rent confidence", function (v) { return has(v) ? v : UNAV; }, "l"],
     ["home_value", "Home value", money], ["median_gross_rent", "Median rent", rentMoney],
-    ["renters_cost_burdened_share", "Renters 30%+ (context)", function (v) { return pct(v); }],
+    ["renters_cost_burdened_share", "Renters 30%+", function (v) { return pct(v); }],
     ["prospective_need_capped", "Prospective need", function (v) { return num(v); }],
-    ["prospective_need_per_1000_hh", "Per 1,000 households", function (v) { return num(v, 1); }],
-    ["qualified_urban_aid", "Urban Aid", yesno, "l"], ["zri", "Zoning (NZLUD)", function (v) { return num(v, 2); }]
+    ["prospective_need_per_1000_hh", "Per 1,000 hh", function (v) { return num(v, 1); }],
+    ["qualified_urban_aid", "Urban Aid", yesno, "l"], ["zri", "Zoning", function (v) { return num(v, 2); }]
   ];
   function renderTableHead() {
-    var tr = "<tr>" + TCOLS.map(function (c) {
+    document.querySelector("#table thead").innerHTML = "<tr>" + TCOLS.map(function (c) {
       var sort = S.sortCol === c[0] ? (S.sortAsc ? "ascending" : "descending") : "none";
       return '<th scope="col" class="' + (c[3] || "") + '" aria-sort="' + sort + '"><button type="button" data-sort="' + c[0] + '">' + esc(c[1]) + "</button></th>";
     }).join("") + "</tr>";
-    document.querySelector("#table thead").innerHTML = tr;
   }
   function renderTable() {
     renderTableHead();
@@ -634,15 +701,15 @@
       if (typeof va === "string" || typeof vb === "string") return asc * String(va).localeCompare(String(vb));
       return asc * (va - vb) || a.name.localeCompare(b.name);
     });
-    var html = rows.map(function (r) {
+    document.querySelector("#table tbody").innerHTML = rows.map(function (r) {
       return "<tr>" + TCOLS.map(function (c, i) {
         var v = r[c[0]];
         if (i === 0) return '<th scope="row" class="l"><button type="button" class="linkbtn" data-open="' + r.geoid + '">' + esc(r.name) + "</button></th>";
+        if (typeof c[2] === "string" && c[2].indexOf("rank:") === 0) return '<td class="rk">' + rankCell(c[2].slice(5), r).replace(/(\d+)(st|nd|rd|th)/, "$1") + "</td>";
         var txt = c[2] ? c[2](v) : (has(v) ? v : UNAV);
         return '<td class="' + (c[3] || "") + (txt === UNAV ? " muted" : "") + '">' + esc(txt) + "</td>";
       }).join("") + "</tr>";
     }).join("");
-    document.querySelector("#table tbody").innerHTML = html;
   }
 
   // ------------------------------------------------------------------ downloads
@@ -675,8 +742,8 @@
     if (S.view !== "map") parts.push("view=" + S.view);
     if (S.layer !== "ownership_score") parts.push("layer=" + S.layer);
     if (S.selected) parts.push("town=" + S.selected);
-    var h = parts.length ? "#" + parts.join("&") : " ";
-    if (location.hash !== h.trim()) history.replaceState(null, "", h === " " ? location.pathname + location.search : h);
+    var h = parts.length ? "#" + parts.join("&") : "";
+    if (location.hash !== h) history.replaceState(null, "", h || location.pathname + location.search);
   }
   function readHash() {
     var p = {}; location.hash.replace(/^#/, "").split("&").forEach(function (kv) { var a = kv.split("="); if (a[0]) p[a[0]] = decodeURIComponent(a[1] || ""); });
@@ -691,6 +758,15 @@
   }
 
   // ------------------------------------------------------------------ events
+  function wirePopover(btnId, popId) {
+    var b = $(btnId), p = $(popId);
+    b.addEventListener("click", function (e) {
+      e.stopPropagation();
+      document.querySelectorAll(".popover.open").forEach(function (o) { if (o !== p) o.classList.remove("open"); });
+      var open = !p.classList.contains("open"); p.classList.toggle("open", open); b.setAttribute("aria-expanded", String(open));
+    });
+    document.addEventListener("click", function (e) { if (!p.contains(e.target) && e.target !== b) { p.classList.remove("open"); b.setAttribute("aria-expanded", "false"); } });
+  }
   function wireUI() {
     $("search").addEventListener("input", function (e) { S.query = e.target.value; renderList(); });
     $("layer").addEventListener("change", function (e) { S.layer = e.target.value; S.bestFirst = true; renderList(); renderLegend(); repaint(); writeHash(); });
@@ -706,6 +782,8 @@
       var rows = S.compare.map(function (g) { return D.byId[g]; }).filter(Boolean);
       if (rows.length) download("openhousing_comparison_" + rows.map(function (r) { return slug(r.name); }).join("_") + ".csv", csvFor(rows));
     });
+    $("reset-view").addEventListener("click", resetView);
+    $("retry").addEventListener("click", function () { if (!map) initMap(); else loadBounds(); });
     document.querySelectorAll(".tab").forEach(function (b) {
       b.addEventListener("click", function () { if (!$("drawer").hidden) closeProfile(); setView(b.dataset.view); });
     });
@@ -721,14 +799,11 @@
       var rm = e.target.closest("button[data-remove]"); if (rm) { toggleCompare(rm.dataset.remove); return; }
       var o = e.target.closest("button[data-open]"); if (o) openProfile(o.dataset.open, false);
     });
-    $("reset-view").addEventListener("click", resetView);
-    $("retry").addEventListener("click", function () { if (!map) initMap(); else loadBounds(); });
     wirePopover("snap-btn", "snap-pop");
-    var pop = $("sources-pop"), pb = $("sources-btn");
-    pb.addEventListener("click", function (e) { e.stopPropagation(); var open = !pop.classList.contains("open"); pop.classList.toggle("open", open); pb.setAttribute("aria-expanded", String(open)); });
-    document.addEventListener("click", function (e) { if (!pop.contains(e.target) && e.target !== pb) { pop.classList.remove("open"); pb.setAttribute("aria-expanded", "false"); } });
+    wirePopover("sources-btn", "sources-pop");
     document.addEventListener("keydown", function (e) {
       if (e.key !== "Escape") return;
+      if (!tipEl.hidden) { hideTip(); return; }
       var open = document.querySelector(".popover.open");
       if (open) { open.classList.remove("open"); var b = document.querySelector('[aria-controls="' + open.id + '"]'); if (b) { b.setAttribute("aria-expanded", "false"); b.focus(); } }
       else if (!$("drawer").hidden) closeProfile();
@@ -737,20 +812,9 @@
       var t = isDark() ? "light" : "dark";
       document.documentElement.dataset.theme = t;
       try { localStorage.setItem("oh-theme", t); } catch (e) {}
-      if (D.rows.length) { renderList(); renderLegend(); }
+      if (D.rows.length) { renderList(); renderLegend(); renderSnapshot(); if (S.selected) openProfile(S.selected, false); }
       if (map) { mapReady = false; styleOk = false; map.setStyle(styleUrl()); }   // style.load re-adds the layers
-      if (D.rows.length) renderSnapshot();
     });
-  }
-
-  function wirePopover(btnId, popId) {
-    var b = $(btnId), p = $(popId);
-    b.addEventListener("click", function (e) {
-      e.stopPropagation();
-      document.querySelectorAll(".popover.open").forEach(function (o) { if (o !== p) o.classList.remove("open"); });
-      var open = !p.classList.contains("open"); p.classList.toggle("open", open); b.setAttribute("aria-expanded", String(open));
-    });
-    document.addEventListener("click", function (e) { if (!p.contains(e.target) && e.target !== b) { p.classList.remove("open"); b.setAttribute("aria-expanded", "false"); } });
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();

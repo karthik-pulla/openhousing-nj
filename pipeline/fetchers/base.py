@@ -24,6 +24,9 @@ class FetchResult:
     extra: dict = field(default_factory=dict)
 
     def coverage(self) -> dict:
+        if self.key == "geoid_year":
+            return {"rows": len(self.table), "municipalities_covered": int(self.table.geoid.nunique()),
+                    "years": sorted(int(y) for y in self.table.year.unique())}
         if self.key != "geoid":
             return {"rows": len(self.table)}
         munis = pd.read_csv(GEO / "municipalities.csv", dtype=str)
@@ -35,7 +38,8 @@ class FetchResult:
 
     def save(self) -> dict:
         INTERIM.mkdir(parents=True, exist_ok=True)
-        if self.key in self.table and self.table[self.key].duplicated().any():
+        keys = ["geoid", "year"] if self.key == "geoid_year" else [self.key]
+        if all(k in self.table for k in keys) and self.table.duplicated(keys).any():
             raise RuntimeError(f"{self.name}: duplicate {self.key} values")
         self.table.to_csv(INTERIM / f"{self.name}.csv", index=False)
         fetched_at = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()

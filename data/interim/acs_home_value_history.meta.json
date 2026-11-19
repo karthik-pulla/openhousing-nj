@@ -1,0 +1,52 @@
+{
+  "name": "acs_home_value_history",
+  "fetched": "2026-11-19",
+  "fetched_at": "2026-11-19T21:34:20+00:00",
+  "key": "geoid_year",
+  "vintage": "ACS 5-year releases 2005-2009 to 2020-2024",
+  "source": "U.S. Census Bureau, American Community Survey 5-year estimates, table B25077 (median value)",
+  "url": "https://api.census.gov/data/",
+  "attribution": "Source: U.S. Census Bureau, American Community Survey 5-year estimates.",
+  "columns": [
+    "geoid",
+    "year",
+    "period",
+    "median_home_value",
+    "moe",
+    "topcoded"
+  ],
+  "coverage": {
+    "rows": 9020,
+    "municipalities_covered": 564,
+    "years": [
+      2009,
+      2010,
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ]
+  },
+  "notes": [
+    "Overlapping 5-year periods; dollars of each period's final year; owner-reported values.",
+    "Years where the GEOID's Census name differs from today's are dropped (boundary change)."
+  ],
+  "first_year": 2009,
+  "last_year": 2024,
+  "dropped": [
+    "2009 3402160900: 'Princeton borough' (now 'Princeton')",
+    "2010 3402160900: 'Princeton borough' (now 'Princeton')",
+    "2011 3402160900: 'Princeton borough' (now 'Princeton')",
+    "2012 3402160900: 'Princeton borough' (now 'Princeton')"
+  ]
+}

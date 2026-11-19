@@ -3,7 +3,9 @@
   "use strict";
   var P = { data: "../data/published/openhousing_nj.web.json", manifest: "../data/manifest.json",
             meta: "../data/published/index_meta.json", bounds: "data/boundaries.geojson" };
-  var BLUE = ["#b7d3f6", "#86b6ef", "#5598e7", "#2a78d6", "#1c5cab", "#104281", "#0d366b"];
+  // Same diverging affordability colors as the map: red = less, gray = middle, blue = more affordable.
+  var DIV = { light: ["#892b2a", "#d75853", "#ea9a93", "#dcdad5", "#86b6ef", "#3987e5", "#184f95"],
+              dark:  ["#f1aea8", "#d75853", "#9e3432", "#3a3a37", "#1c5cab", "#3987e5", "#9ec5f4"] };
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   var $ = function (id) { return document.getElementById(id); };
   var has = function (v) { return v !== null && v !== undefined && !(typeof v === "number" && isNaN(v)); };
@@ -20,7 +22,7 @@
     var t = isDark() ? "light" : "dark";
     document.documentElement.dataset.theme = t;
     try { localStorage.setItem("oh-theme", t); } catch (e) {}
-    paint(false);
+    paint(false); fillMarkets();
   });
   var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); countUp(e.target); io.unobserve(e.target); } });
@@ -81,7 +83,7 @@
     $("updated-line").textContent = "Current data published " + when + ". Missing data is shown as missing; nothing is estimated or filled in.";
     var labels = { acs_municipal: "U.S. Census Bureau · ACS", acs_county: null, property_tax_municipal: "NJ DCA · Property Tax Tables",
       hud_county: "HUD · Income Limits & Fair Market Rents", fred_mortgage30: "Freddie Mac PMMS · via FRED", nzlud_municipal: "NZLUD · Eviction Lab",
-      fourth_round_municipal: "NJ DCA · Fourth Round obligations", zillow_municipal: "Zillow · Home Value Index" };
+      fourth_round_municipal: "NJ DCA · Fourth Round obligations", zillow_municipal: "Zillow · Home Value Index", acs_home_value_history: null };
     $("source-pills").innerHTML = m.sources.filter(function (s) { return labels[s.name] !== null; }).map(function (s) {
       return "<li><b>" + esc(labels[s.name] || s.source) + "</b><span>" + esc(s.vintage) + "</span></li>";
     }).join("") + "<li><b>NJOGIS · Municipal Boundaries</b><span>Current</span></li>";
@@ -91,12 +93,13 @@
   }
 
   function fillMarkets() {
+    var brs = { ownership_score: classes("ownership_score"), rental_score: classes("rental_score") };
     var mk = function (key, rank, el, best) {
       var scored = rows.filter(function (r) { return has(r[key]); }).sort(function (a, b) { return a[rank] - b[rank]; });
       var pick = best ? scored.slice(0, 3) : scored.slice(-3).reverse();
       $(el).innerHTML = pick.map(function (r) {
-        return '<li><a href="map.html#town=' + r.geoid + '"><span class="t">' + esc(r.name) + "<small>" + esc(r.county) + " County · " + ordinal(r[rank]) + " of " + scored.length +
-          '</small></span><span class="s">' + Number(r[key]).toFixed(1) + "</span></a></li>";
+        return '<li><a href="map.html#town=' + r.geoid + '"><i class="dot" style="background:' + colorFor(r[key], brs[key]) + '" aria-hidden="true"></i><span class="t">' + esc(r.name) +
+          "<small>" + esc(r.county) + " County · rank " + r[rank] + " of " + scored.length + '</small></span><span class="s">' + Number(r[key]).toFixed(1) + "</span></a></li>";
       }).join("");
     };
     mk("ownership_score", "ownership_rank", "own-best", true);
@@ -114,8 +117,7 @@
   function colorFor(val, br) {
     if (!has(val)) return getComputedStyle(document.documentElement).getPropertyValue("--nodata").trim();
     var i = 0; while (i < br.length && val >= br[i]) i++;
-    var r = isDark() ? BLUE.slice().reverse() : BLUE;
-    return r[i];
+    return DIV[isDark() ? "dark" : "light"][i];
   }
 
   function drawMap(gj) {
@@ -164,7 +166,7 @@
 
   function readout(r) {
     var el = $("mc-read");
-    if (!r) { el.innerHTML = '<span class="mc-k">Hover a town</span><span class="mc-v">Each shape is a municipality. Darker blue means more affordable.</span>'; return; }
+    if (!r) { el.innerHTML = '<span class="mc-k">Hover a town</span><span class="mc-v">Each shape is a municipality. Blue is more affordable, red less, gray the middle.</span>'; return; }
     var key = score + "_score", rank = score + "_rank", n = rows.filter(function (x) { return has(x[key]); }).length;
     var label = score === "ownership" ? "Ownership" : "Rental";
     var v = has(r[key]) ? label + " score " + Number(r[key]).toFixed(1) + " · ranks " + ordinal(r[rank]) + " of " + n + " · click to open"

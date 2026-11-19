@@ -181,7 +181,8 @@
   var LABELS = { acs_municipal: "U.S. Census Bureau, American Community Survey (municipalities)", acs_county: "U.S. Census Bureau, American Community Survey (counties)",
     property_tax_municipal: "NJ Department of Community Affairs, Property Tax Tables", hud_county: "HUD Income Limits and Fair Market Rents (HUD USER API)",
     fred_mortgage30: "Freddie Mac Primary Mortgage Market Survey, 30-year fixed (via FRED)", nzlud_municipal: "National Zoning and Land Use Database (Eviction Lab)",
-    fourth_round_municipal: "NJ Department of Community Affairs, Fourth Round obligations (Oct 2024)", zillow_municipal: "Zillow Home Value Index" };
+    fourth_round_municipal: "NJ Department of Community Affairs, Fourth Round obligations (Oct 2024)", zillow_municipal: "Zillow Home Value Index",
+    acs_home_value_history: "U.S. Census Bureau, ACS 5-year median home value by release (profile graph)" };
   Promise.all([fetch("../data/manifest.json").then(function (r) { return r.json(); }),
                fetch("../data/published/index_meta.json").then(function (r) { return r.json(); })])
   .then(function (res) {

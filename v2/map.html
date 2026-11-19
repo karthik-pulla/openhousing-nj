@@ -64,15 +64,15 @@
   <section class="view" id="map-view" aria-label="Map view">
     <aside class="side" aria-label="Layer and town list">
       <div class="side-top">
-        <label class="lbl" for="search">Find a municipality</label>
+        <label class="lbl sr" for="search">Find a municipality</label>
         <div class="searchbox">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
           <input id="search" class="input" type="search" placeholder="Search a town or county" autocomplete="off">
         </div>
 
-        <label class="lbl" for="layer">Map layer</label>
+        <div class="lbl-row"><label class="lbl" for="layer">Map layer</label>
+          <button type="button" class="info" id="layer-info" data-tip="" aria-label="About this layer">i</button></div>
         <select id="layer" class="input"></select>
-        <p class="layer-desc" id="layer-desc"></p>
 
         <div class="row">
           <div class="seg" role="group" aria-label="Sort order">
@@ -85,8 +85,8 @@
       </div>
       <ol class="list" id="list" aria-label="Municipalities, ranked by the selected layer"></ol>
       <footer class="side-foot">
-        <a class="btn sm" id="dl-all" href="../data/published/openhousing_nj.csv" download>Download all data (CSV)</a>
         <p class="updated" id="updated"></p>
+        <a class="dl-link" id="dl-all" href="../data/published/openhousing_nj.csv" download>Download CSV</a>
       </footer>
     </aside>
 
@@ -107,12 +107,12 @@
   <section class="view" id="table-view" aria-label="Table of all municipalities" hidden>
     <div class="tv-head">
       <h1 class="h1">All 564 municipalities</h1>
+      <button type="button" class="info" data-tip="Select a column heading to sort. Select a town's name to open its profile. Missing values show as Unavailable." aria-label="How to use the table">i</button>
       <label class="lbl sr" for="tsearch">Filter the table</label>
       <input id="tsearch" class="input" type="search" placeholder="Filter by town or county" autocomplete="off">
       <span class="sp"></span>
       <a class="btn sm" href="../data/published/openhousing_nj.csv" download>Download all data (CSV)</a>
     </div>
-    <p class="hint">Select a column heading to sort. Select a town's name to open its profile. Missing values are shown as "Unavailable".</p>
     <div class="tablewrap" tabindex="0" aria-label="Scrollable table">
       <table class="dt" id="table">
         <caption class="sr">Affordability scores, measures and barriers for every New Jersey municipality</caption>
@@ -135,18 +135,19 @@
   <!-- TOWN PROFILE -->
   <aside class="drawer" id="drawer" aria-labelledby="p-name" hidden>
     <div class="d-head">
-      <div>
+      <div class="d-title">
         <h2 class="p-name" id="p-name" tabindex="-1"></h2>
         <p class="p-sub" id="p-sub"></p>
       </div>
-      <button type="button" class="iconbtn" id="close-drawer" aria-label="Close town profile">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-      </button>
-    </div>
-    <div class="d-actions">
-      <button type="button" class="btn sm" id="fav-btn" aria-pressed="false"></button>
-      <button type="button" class="btn sm" id="cmp-btn"></button>
-      <button type="button" class="btn sm" id="dl-town">Download (CSV)</button>
+      <div class="d-actions">
+        <button type="button" class="ibtn" id="fav-btn" aria-pressed="false" data-tip="Add to favorites" aria-label="Add to favorites"><span aria-hidden="true">☆</span></button>
+        <button type="button" class="ibtn" id="cmp-btn" aria-pressed="false" data-tip="Add to comparison" aria-label="Add to comparison">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="7" height="16" rx="1.5"/><rect x="14" y="4" width="7" height="16" rx="1.5"/></svg></button>
+        <button type="button" class="ibtn" id="dl-town" data-tip="Download this town (CSV)" aria-label="Download this town as CSV">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg></button>
+        <button type="button" class="ibtn" id="close-drawer" aria-label="Close town profile">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
     </div>
     <div class="d-body" id="d-body"></div>
   </aside>

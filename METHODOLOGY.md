@@ -76,6 +76,10 @@ The configured priority is **Zillow ZHVI → ACS median value** (`ownership.home
 - **Zillow, when enabled:** the ZHVI "All Homes (SFR, Condo/Co-op), middle tier, smoothed, seasonally adjusted" city series. Zillow "cities" are often unincorporated communities, so values reach municipalities through a documented crosswalk (§7.1). A municipality uses the Zillow region named after itself if one exists. Otherwise it uses the mean of the community regions inside it, weighted by each community's 2020 Census housing units in the municipality.
 - **Redfin is not used.** The planned Zillow → Redfin → ACS cascade dropped Redfin because its public files are no longer downloadable and its terms bar redistribution and automated access (see [`docs/SOURCES_VERIFICATION.md`](docs/SOURCES_VERIFICATION.md)).
 
+### 3.5 Home value history (profile graph; not scored)
+
+Each town profile graphs the ACS median value of owner-occupied homes (B25077) from every 5-year release, 2005–2009 through 2020–2024 (`data/published/home_value_history.csv`). Caveats: consecutive releases overlap by four years, so changes are smoothed and not independent; values are in dollars of each period's final year (not adjusted to today); open-ended top categories changed from $1,000,000+ to $2,000,000+ (top-coded points are flagged); the shaded band is the 90% margin of error. Because a GEOID can be reused for a different area, a year is kept only if Census's name for that GEOID matches today's. This drops Princeton's 2009–2012 values, which describe the former Princeton borough. Pine Valley's 2022 merger into Pine Hill (population about 12) is not detectable this way and is negligible.
+
 ## 4. Scores and ranks
 
 Each measure $x$ is converted to an **affordability percentile** across the $N_x$ municipalities that have it:
@@ -170,7 +174,7 @@ Missing means missing. ACS "jam" values (large negative codes) become empty, nev
 
 ### 7.3 Written summaries
 
-Each municipality's summary is assembled from fixed sentence templates ([`templates/summary_templates.yaml`](templates/summary_templates.yaml)) chosen by deterministic rules (`config.yaml` → `summaries`) and filled with values from the dataset. No language model is involved. Every sentence records the data columns and sources it used. Rounding in summaries and on the site: home values and annual costs to the nearest $1,000 (nearest $100 below $100,000), rents to the nearest $10, shares to whole percent, per-1,000 rates to 0.1.
+Each municipality's summary is assembled from fixed sentence templates ([`templates/summary_templates.yaml`](templates/summary_templates.yaml)) chosen by deterministic rules (`config.yaml` → `summaries`) and filled with values from the dataset. No language model is involved. Every sentence records the data columns and sources it used. Every statistic in a summary is tagged with the dataset column it came from and its sources; on the site it is underlined, and hovering or focusing it shows the source, data period and retrieval date. Rounding in summaries and on the site: home values and annual costs to the nearest $1,000 (nearest $100 below $100,000), rents to the nearest $10, shares to whole percent, per-1,000 rates to 0.1.
 
 ## 8. Sources
 
@@ -179,6 +183,7 @@ Verified 2026-11-19; details and terms in [`docs/SOURCES_VERIFICATION.md`](docs/
 | Source | Used for | Vintage in current data | Access |
 |---|---|---|---|
 | U.S. Census Bureau, ACS 5-year (tables B19013, B25077, B25064, B25070, B25088, B25003, B25001, B01003) | Incomes, home value, rent, renter burden, households, population, MOEs | ACS 2020–2024 | Census Data API, https://api.census.gov/data/2024/acs/acs5 |
+| U.S. Census Bureau, ACS 5-year releases 2005–2009 … 2020–2024 (B25077) | Home value history graph | 2009–2024 releases | Census Data API |
 | U.S. Census Bureau, 2020 Census DHC (H1, place parts within county subdivisions) | Crosswalk weights for unincorporated places | 2020 | Census Data API |
 | NJOGIS, NJ Municipal Boundaries | GEOID ↔ `MUN_CODE`, map boundaries, GNIS point-in-polygon | Current | https://services2.arcgis.com/XVOqAjTOJ5P6ngMu/arcgis/rest/services/NJ_Municipal_Boundaries_3424/FeatureServer/0 |
 | NJ DCA, Division of Local Government Services, Property Tax Tables | Average residential tax bill | Tax year 2025 | https://www.nj.gov/dca/dlgs/resources/Property_Tax_info.shtml |
@@ -203,7 +208,8 @@ A build is published only if every error-level check passes ([`pipeline/validate
 - no Zillow values unless cleared;
 - every source fetched successfully;
 - no score's coverage drops by more than 10 towns versus the published data;
-- every municipality has a template summary with no unfilled fields or prohibited wording.
+- the home value history covers every municipality, with no duplicate or implausible values;
+- every municipality has a template summary with no unfilled fields or prohibited wording, and every statistic in it is tagged with its sources.
 
 Warnings, which don't block publication, cover score changes of more than 15 points since the last publication and stale sources. If validation fails, the previously published dataset stays live, and the monthly automation opens an issue describing the failure.
 

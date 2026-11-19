@@ -91,6 +91,7 @@
   },
   "vintages": {
     "acs_county": "ACS 2020-2024 5-year",
+    "acs_home_value_history": "ACS 5-year releases 2005-2009 to 2020-2024",
     "acs_municipal": "ACS 2020-2024 5-year",
     "fourth_round_municipal": "DCA Fourth Round calculation, October 2024 (obligations for 2025-2035)",
     "fred_mortgage30": "Freddie Mac PMMS, mean of 4 weeks 2026-10-29 to 2026-11-19",

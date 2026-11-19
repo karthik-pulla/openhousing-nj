@@ -159,3 +159,23 @@ def test_every_town_has_a_traceable_summary(df):
         assert t["summary"] and S.check_text(t["summary"]) == []
         for s in t["sentences"]:
             assert s["sources"] and set(s["sources"]) <= keys and s["fields"]
+
+
+def test_statistics_are_tagged_with_sources(df):
+    """Every number in a summary is a tagged segment whose sources exist; segments rebuild the text."""
+    if not S.OUT.exists():
+        pytest.skip("summaries not built")
+    out = json.loads(S.OUT.read_text())
+    keys = set(out["sources"])
+    for t in list(out["towns"].values())[:80]:
+        for s in t["sentences"]:
+            segs = s["segments"]
+            assert "".join(g if isinstance(g, str) else g["t"] for g in segs) == s["text"]
+            for g in segs:
+                if isinstance(g, dict):
+                    assert g["f"] in out["blanks"] and g["s"] and set(g["s"]) <= keys
+                else:
+                    # "30% or more" is the fixed cost-burden definition, not a statistic
+                    # (likewise the Census top-code ceilings quoted in confidence reasons)
+                    plain = g.replace("30% or more", "").replace("$2,000,000", "").replace("$3,500", "")
+                    assert not __import__("re").search(r"\$\d|\d%", plain), f"untagged number in {g!r}"

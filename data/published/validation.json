@@ -1,5 +1,5 @@
 {
-  "validated_at": "2026-11-19T20:21:24+00:00",
+  "validated_at": "2026-11-19T21:34:23+00:00",
   "passed": true,
   "errors": 0,
   "warnings": 0,
@@ -75,6 +75,12 @@
       "level": "error",
       "passed": true,
       "detail": "564 summaries; 0 towns without one; 0 with problems; 0 with a sentence lacking sources"
+    },
+    {
+      "check": "history",
+      "level": "error",
+      "passed": true,
+      "detail": "564 towns, years 2009-2024; 0 towns missing; 0 duplicate rows; 0 implausible values"
     },
     {
       "check": "freshness",

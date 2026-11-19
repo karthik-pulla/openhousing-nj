@@ -118,3 +118,11 @@ def test_every_interim_table_has_vintage_and_source():
     for meta in INTERIM.glob("*.meta.json"):
         m = json.loads(meta.read_text())
         assert m["vintage"] and m["source"] and m["url"], meta.name
+
+
+def test_home_value_history():
+    h = interim("acs_home_value_history", dtype={"geoid": str})
+    munis = set(pd.read_csv(GEO / "municipalities.csv", dtype=str).geoid)
+    assert set(h.geoid) == munis and not h.duplicated(["geoid", "year"]).any()
+    # Princeton's code belonged to Princeton borough before the 2013 merger: those years are dropped.
+    assert h[h.geoid == "3402160900"].year.min() >= 2013

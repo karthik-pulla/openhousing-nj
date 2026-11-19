@@ -52,6 +52,64 @@ SENTENCE_SOURCES = {
 }
 
 
+# Each template blank that shows a statistic -> (description, sources). Blanks not
+# listed (town name, county, wording like "could afford") are plain text.
+# "derived" = calculated by OpenHousing from the listed sources.
+BLANKS = {
+    "home_value": ("Typical home value", ["home_value"]),
+    "annual_ownership_cost": ("Yearly ownership cost: 12 × mortgage payment + average property tax bill", ["derived", "home_value", "fred", "property_tax"]),
+    "avg_property_tax_bill": ("Average residential property tax bill, before credits", ["property_tax"]),
+    "ownership_burden": ("Yearly ownership cost ÷ county median household income", ["derived", "acs"]),
+    "ownership_rank": ("Rank among towns with an ownership score (1st = most affordable)", ["derived"]),
+    "ownership_n": ("Towns with an ownership score", ["derived"]),
+    "median_gross_rent": ("Median gross rent (rent + utilities), monthly", ["acs"]),
+    "rent_burden": ("12 × median rent ÷ county median household income", ["derived", "acs"]),
+    "rental_rank": ("Rank among towns with a rental score (1st = most affordable)", ["derived"]),
+    "rental_n": ("Towns with a rental score", ["derived"]),
+    "renters_cost_burdened_share": ("Renter households paying 30%+ of income on rent", ["acs"]),
+    "ami80_income_limit": ("HUD low-income limit (80% of area median income), 4-person household", ["hud"]),
+    "prospective_need_capped": ("Fourth Round prospective need after the cap", ["fourth_round"]),
+    "prospective_need_per_1000_hh": ("Prospective need ÷ households × 1,000", ["derived", "fourth_round", "acs"]),
+    "present_need": ("Fourth Round present need", ["fourth_round"]),
+    "nzlud_n": ("New Jersey towns covered by NZLUD", ["nzlud"]),
+    "acs_vintage": ("ACS data period", ["acs"]),
+}
+
+
+def _segments(tmpl: str, values: dict) -> list:
+    """Split a filled template into plain text and tagged statistics.
+
+    Returns a list of strings and {"t": text, "f": blank, "s": [sources]} dicts
+    whose concatenation equals the normalised sentence text.
+    """
+    out = []
+    for literal, field, _, _ in string.Formatter().parse(tmpl):
+        if literal:
+            out.append(literal)
+        if field:
+            txt = str(values[field])
+            if field in BLANKS:
+                out.append({"t": txt, "f": field, "s": BLANKS[field][1]})
+            else:
+                out.append(txt)
+    # normalise whitespace exactly as the plain text is normalised, merging plain strings
+    merged = []
+    for seg in out:
+        if isinstance(seg, str):
+            seg = re.sub(r"\s+", " ", seg)
+            if merged and isinstance(merged[-1], str):
+                merged[-1] += seg
+            else:
+                merged.append(seg)
+        else:
+            merged.append(seg)
+    if merged and isinstance(merged[0], str):
+        merged[0] = merged[0].lstrip()
+    if merged and isinstance(merged[-1], str):
+        merged[-1] = merged[-1].rstrip()
+    return merged
+
+
 # --------------------------------------------------------------------------- formatting
 
 def money(v: float) -> str:
@@ -107,7 +165,11 @@ class Renderer:
         if missing:
             raise KeyError(f"template {sid!r} needs {sorted(missing)}")
         text = " ".join(tmpl.format(**values).split())
-        return {"id": sid, "text": text, "fields": fields, "sources": SENTENCE_SOURCES[sid]}
+        segs = _segments(tmpl, values)
+        joined = "".join(s if isinstance(s, str) else s["t"] for s in segs)
+        if joined != text:
+            raise RuntimeError(f"segment rebuild mismatch in {sid!r}: {joined!r} != {text!r}")
+        return {"id": sid, "text": text, "fields": fields, "sources": SENTENCE_SOURCES[sid], "segments": segs}
 
     def _band(self, rank, n) -> str | None:
         if not _has(rank):
@@ -270,9 +332,11 @@ def build(df: pd.DataFrame | None = None) -> dict:
         towns[r.geoid] = {"name": r["name"], "summary": text, "sentences": sents}
     if problems:
         raise RuntimeError("summary problems: " + "; ".join(problems[:20]))
+    sources = source_meta()
+    sources["derived"] = {"name": "Calculated by OpenHousing", "vintage": "from the sources listed with it", "attribution": ""}
     return {"generated": today(), "generator": "pipeline/summaries.py + templates/summary_templates.yaml "
             "(rule-based templates; no language model)", "rules": cfg["summaries"],
-            "sources": source_meta(), "towns": towns}
+            "blanks": {k: v[0] for k, v in BLANKS.items()}, "sources": sources, "towns": towns}
 
 
 def main() -> None:

@@ -21,6 +21,7 @@ Checks
   sources          every fetcher in the last run succeeded
   coverage         no score covers many fewer towns than the published dataset (error)
   jumps            towns whose score moved more than N points since last publish (warning)
+  history          home value history covers every town, no duplicates or implausible values
   summaries        every town has a template summary with no unfilled blanks, printed
                    missing values or banned wording, and every sentence lists its sources
   freshness        mortgage rate and tax data not stale (warning)
@@ -239,6 +240,20 @@ def validate(df: pd.DataFrame, previous: pd.DataFrame | None, cfg: dict) -> Repo
                     f"{len(towns)} summaries; {len(missing)} towns without one; {len(bad)} with problems; "
                     f"{len(untraced)} with a sentence lacking sources", missing + bad + untraced)
 
+    # home value history (graph data)
+    with guard(rep, "history"):
+        hp = INTERIM / "acs_home_value_history.csv"
+        if not hp.exists():
+            rep.add("history", "error", False, "acs_home_value_history.csv missing")
+        else:
+            h = pd.read_csv(hp, dtype={"geoid": str})
+            missing_towns = sorted(set(df.geoid) - set(h.geoid))
+            dup = int(h.duplicated(["geoid", "year"]).sum())
+            bad = h[(h.median_home_value < 5000) | (h.median_home_value > 3000000)]
+            rep.add("history", "error", not (missing_towns or dup or len(bad)),
+                    f"{h.geoid.nunique()} towns, years {h.year.min()}-{h.year.max()}; {len(missing_towns)} towns missing; "
+                    f"{dup} duplicate rows; {len(bad)} implausible values", missing_towns)
+
     # freshness
     with guard(rep, "freshness"):
         stale = []
@@ -272,7 +287,8 @@ def build_manifest(df: pd.DataFrame, report: dict, published_at: str) -> dict:
                   "index_meta": "data/published/index_meta.json",
                   "summaries": "data/published/summaries.json",
                   "web_data": "data/published/openhousing_nj.web.json",
-                  "web_summaries": "data/published/summaries.web.json"},
+                  "web_summaries": "data/published/summaries.web.json",
+                  "home_value_history": "data/published/home_value_history.csv"},
         "scores": meta["scores"],
         "context_measures": meta["context_measures"],
         "assumptions": meta["assumptions"],
@@ -299,11 +315,25 @@ def publish(df: pd.DataFrame, report: dict) -> None:
     (PUBLISHED / "openhousing_nj.web.json").write_text(
         df.to_json(orient="split", index=False, double_precision=6) + "\n")
     full = json.loads((BUILD / "summaries.json").read_text())
-    web = {"generated": full["generated"], "sources": full["sources"],
+    web = {"generated": full["generated"], "sources": full["sources"], "blanks": full.get("blanks", {}),
            "towns": {g: {"summary": t["summary"],
-                         "sentences": [[s["text"], s["sources"]] for s in t["sentences"]]}
+                         "sentences": [[s["text"], s["sources"], s.get("segments", [s["text"]])] for s in t["sentences"]]}
                      for g, t in full["towns"].items()}}
     (PUBLISHED / "summaries.web.json").write_text(json.dumps(web, separators=(",", ":")) + "\n")
+    # Home value history (ACS 5-year releases) for the profile graph, plus a CSV for researchers.
+    hist = pd.read_csv(INTERIM / "acs_home_value_history.csv", dtype={"geoid": str})
+    hist.to_csv(PUBLISHED / "home_value_history.csv", index=False)
+    years = sorted(int(y) for y in hist.year.unique())
+    towns = {}
+    for g, grp in hist.groupby("geoid"):
+        by = {int(r.year): r for r in grp.itertuples()}
+        towns[g] = [[None if pd.isna(by[y].median_home_value) else int(by[y].median_home_value),
+                     None if pd.isna(by[y].moe) else int(by[y].moe), bool(by[y].topcoded)] if y in by else None
+                    for y in years]
+    hmeta = json.loads((INTERIM / "acs_home_value_history.meta.json").read_text())
+    (PUBLISHED / "home_value_history.web.json").write_text(json.dumps(
+        {"years": years, "vintage": hmeta["vintage"], "notes": hmeta["notes"], "towns": towns},
+        separators=(",", ":")) + "\n")
     write_json(PUBLISHED / "validation.json", report)
     write_json(MANIFEST, build_manifest(df, report, published_at))
     log.info("published %s (%d rows) and %s", PUBLISHED_CSV.name, len(df), MANIFEST.name)
