@@ -44,19 +44,29 @@ sources:
 
 # --------------------------------------------------------------------------- index
 index:
-  # A. Affordability score (the outcome). Each component is converted to a
-  # percentile rank across municipalities (higher = more affordable) and
-  # combined as a weighted mean. Weights are relative; they are rescaled over the
-  # components a town has. Barriers (zoning, obligations) are never in the score.
-  weights:
-    ownership_burden: 1          # annual ownership cost / county median household income
-    rent_burden: 1               # 12 x median gross rent / county median household income
-    renters_cost_burdened: 1     # share of renter households paying 30%+ of income on rent
-  # Income used as the denominator for the score. "county" avoids comparing a
-  # wealthy town to its own wealthy residents and matches Mount Laurel's
-  # regional framing. Town-income burdens are also published, for display.
+  # A. Affordability (the outcome): two separate scores, because owning and
+  # renting are largely separate markets (decision 2026-11-19). Each measure is
+  # converted to a percentile rank across municipalities (higher = more affordable);
+  # a score is the weighted mean of its measures' percentiles, rescaled over the
+  # measures a town has. Both scores measure PRICES relative to regional income.
+  # Barriers (zoning, obligations) are never in either score.
+  scores:
+    ownership:
+      weights:
+        ownership_burden: 1      # annual ownership cost / county median household income
+    rental:
+      weights:
+        rent_burden: 1           # 12 x median gross rent / county median household income
+  # Shown on town profiles as context, NOT scored: the share of renter households
+  # paying 30%+ of their own income on rent. It reflects residents' incomes rather
+  # than housing prices (rank correlation with the price measures is about 0) and is
+  # unreliable in small towns. Add it to a score's weights to include it.
+  context_measures: [renters_cost_burdened]
+  # Income used as the denominator. "county" avoids comparing a wealthy town to its
+  # own wealthy residents and matches Mount Laurel's regional framing. Town-income
+  # burdens are also published, for display.
   denominator: county
-  # A town needs at least this many components to get a score.
+  # A town needs at least this many of a score's measures to get that score.
   min_components: 1
 
 ownership:
@@ -80,8 +90,13 @@ confidence:
   # Common practice (e.g. Esri's ACS reliability tiers): CV <= 12% high, 12-40% medium, > 40% low.
   cv_high_max: 0.12
   cv_medium_max: 0.40
-  # Overall flag = the weakest confidence among the components the score uses;
-  # a missing component caps the overall flag at "medium", two or more at "low".
+  # Source-based cap: an ACS median home value is a 5-year average of what owners
+  # think their home is worth, not a current market price, so a home value from
+  # ACS can be at most this confident even when its margin of error is small.
+  acs_home_value_max_confidence: medium
+  # A score's flag = the weakest confidence among the measures it uses; a missing
+  # measure caps the flag at "medium", two or more at "low". No measure at all =
+  # "insufficient data" (the town is kept, with no score).
   overall_rule: weakest_component
   # Zillow vs ACS home value: a town is flagged when its Zillow/ACS ratio differs
   # from the statewide median ratio by more than this factor (ACS is owner-reported

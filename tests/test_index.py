@@ -65,17 +65,31 @@ def test_no_town_dropped(built):
     assert len(built) == 564 and built.geoid.is_unique
 
 
-def test_every_town_has_confidence(built):
-    assert built.confidence.isin(["high", "medium", "low", "insufficient data"]).all()
-    assert (built.affordability_score.isna() == (built.confidence == "insufficient data")).all()
+SCORES = list(CFG["index"]["scores"])
 
 
-def test_scores_and_ranks_consistent(built):
-    s = built.dropna(subset=["affordability_score"])
-    assert s.affordability_score.between(0, 100).all()
-    assert s.affordability_rank.min() == 1 and s.affordability_rank.max() <= len(s)
-    top = s.sort_values("affordability_rank")
-    assert top.affordability_score.is_monotonic_decreasing
+@pytest.mark.parametrize("score", SCORES)
+def test_every_town_has_confidence(built, score):
+    conf = built[f"{score}_confidence"]
+    assert conf.isin(["high", "medium", "low", "insufficient data"]).all()
+    assert (built[f"{score}_score"].isna() == (conf == "insufficient data")).all()
+
+
+@pytest.mark.parametrize("score", SCORES)
+def test_scores_and_ranks_consistent(built, score):
+    s = built.dropna(subset=[f"{score}_score"])
+    assert s[f"{score}_score"].between(0, 100).all()
+    assert s[f"{score}_rank"].min() == 1 and s[f"{score}_rank"].max() <= len(s)
+    assert s.sort_values(f"{score}_rank")[f"{score}_score"].is_monotonic_decreasing
+
+
+def test_two_separate_price_scores():
+    scores = CFG["index"]["scores"]
+    assert set(scores) == {"ownership", "rental"}
+    assert set(scores["ownership"]["weights"]) == {"ownership_burden"}
+    assert set(scores["rental"]["weights"]) == {"rent_burden"}
+    # renter hardship is context only
+    assert all("renters_cost_burdened" not in s["weights"] for s in scores.values())
 
 
 @pytest.mark.parametrize("town", ["Newark City", "Princeton", "Cherry Hill Township", "Cape May Point Borough"])
@@ -98,13 +112,19 @@ def test_ownership_cost_hand_check(built, town):
         assert r.rent_burden == pytest.approx(12 * acs.median_gross_rent / county.median_hh_income, rel=1e-9)
 
 
-def test_score_is_mean_of_component_percentiles(built):
-    cols = ["ownership_burden_pctl", "rent_burden_pctl", "renters_cost_burdened_pctl"]
-    w = pd.Series(CFG["index"]["weights"]).rename(lambda c: f"{c}_pctl")[cols]
-    p = built[cols]
+@pytest.mark.parametrize("score", SCORES)
+def test_score_is_weighted_mean_of_its_percentiles(built, score):
+    w = pd.Series(CFG["index"]["scores"][score]["weights"], dtype=float)
+    p = built[[f"{c}_pctl" for c in w.index]]
+    p.columns = w.index
     expect = (p.fillna(0) * w).sum(axis=1) / (p.notna() * w).sum(axis=1)
-    ok = built.affordability_score.notna()
-    assert np.allclose(built.affordability_score[ok], expect[ok])
+    ok = built[f"{score}_score"].notna()
+    assert np.allclose(built.loc[ok, f"{score}_score"], expect[ok])
+
+
+def test_acs_home_value_capped_at_medium(built):
+    acs = built.home_value_source == "ACS median value"
+    assert not (built.loc[acs, "ownership_burden_confidence"] == "high").any()
 
 
 def test_home_value_source_recorded(built):
@@ -119,8 +139,9 @@ def test_zillow_absent_until_cleared(built):
         assert built.zhvi.isna().all()
 
 
-def test_barriers_not_in_score():
-    assert set(CFG["index"]["weights"]) == {"ownership_burden", "rent_burden", "renters_cost_burdened"}
+def test_barriers_not_in_any_score():
+    measures = {m for sc in CFG["index"]["scores"].values() for m in sc["weights"]}
+    assert measures <= {"ownership_burden", "rent_burden", "renters_cost_burdened"}
 
 
 def test_urban_aid_zeros_are_real(built):
@@ -131,4 +152,5 @@ def test_urban_aid_zeros_are_real(built):
 def test_tiny_towns_kept_not_scored(built):
     for t in ["Tavistock Borough", "Walpack Township"]:
         r = built[built.name == t].iloc[0]
-        assert r.confidence == "insufficient data" and np.isnan(r.affordability_score)
+        for score in SCORES:
+            assert r[f"{score}_confidence"] == "insufficient data" and np.isnan(r[f"{score}_score"])

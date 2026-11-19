@@ -85,10 +85,10 @@ def main(argv=None) -> int:
             df.to_csv(index.BUILD / "openhousing_nj.csv", index=False)
             write_json(index.BUILD / "index_meta.json", meta)
             summary["steps"]["index"] = {"ok": True, "seconds": round(time.time() - t0, 1),
-                                         "scored": meta["scored"], "unscored": meta["unscored"],
-                                         "confidence": meta["confidence_counts"]}
-            log.info("index: %d of %d scored; confidence %s", meta["scored"], meta["rows"],
-                     meta["confidence_counts"])
+                                         "scores": meta["scores"]}
+            for name, sm in meta["scores"].items():
+                log.info("index %s score: %d of %d scored; confidence %s", name, sm["scored"],
+                         meta["rows"], sm["confidence_counts"])
         except Exception as e:
             log.error("index failed: %s", e)
             summary["steps"]["index"] = {"ok": False, "error": f"{type(e).__name__}: {e}"}

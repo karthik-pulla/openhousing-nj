@@ -1,17 +1,57 @@
 {
   "built": "2026-11-19",
   "rows": 564,
-  "scored": 562,
-  "unscored": [
-    "Tavistock Borough",
-    "Walpack Township"
-  ],
-  "confidence_counts": {
-    "medium": 311,
-    "low": 128,
-    "high": 123,
-    "insufficient data": 2
+  "scores": {
+    "ownership": {
+      "measures": {
+        "ownership_burden": 1
+      },
+      "scored": 561,
+      "unscored": [
+        "Teterboro Borough",
+        "Tavistock Borough",
+        "Walpack Township"
+      ],
+      "confidence_counts": {
+        "medium": 554,
+        "low": 7,
+        "insufficient data": 3
+      }
+    },
+    "rental": {
+      "measures": {
+        "rent_burden": 1
+      },
+      "scored": 548,
+      "unscored": [
+        "Buena Vista Township",
+        "Chesilhurst Borough",
+        "Tavistock Borough",
+        "Cape May Point Borough",
+        "Sea Isle City",
+        "Shiloh Borough",
+        "East Greenwich Township",
+        "Logan Township",
+        "Wenonah Borough",
+        "Alexandria Township",
+        "Delaware Township",
+        "Loch Arbour Village",
+        "Barnegat Light Borough",
+        "Harvey Cedars Borough",
+        "Mantoloking Borough",
+        "Walpack Township"
+      ],
+      "confidence_counts": {
+        "high": 413,
+        "medium": 106,
+        "low": 29,
+        "insufficient data": 16
+      }
+    }
   },
+  "context_measures": [
+    "renters_cost_burdened"
+  ],
   "home_value_source_counts": {
     "ACS median value": 561,
     "null": 3
@@ -22,11 +62,6 @@
   "zillow_included": false,
   "zillow_cleared_for_publication": false,
   "statewide_zillow_to_acs_ratio": null,
-  "weights": {
-    "ownership_burden": 1,
-    "rent_burden": 1,
-    "renters_cost_burdened": 1
-  },
   "denominator": "county",
   "assumptions": {
     "down_payment_pct": 20,
@@ -50,6 +85,7 @@
   "confidence_rules": {
     "cv_high_max": 0.12,
     "cv_medium_max": 0.4,
+    "acs_home_value_max_confidence": "medium",
     "overall_rule": "weakest_component",
     "value_disagreement_factor": 1.3
   },

@@ -7,16 +7,18 @@ validation decides whether it gets published.
 
 Two separate layers:
 
-A. Affordability (the outcome)
-   ownership_burden      = annual ownership cost / county median household income
-                           annual ownership cost = 12 x monthly mortgage P&I on the
-                           typical home (rate from FRED, down payment and term from
-                           config) + the town's average residential property tax bill
-   rent_burden           = 12 x median gross rent / county median household income
-   renters_cost_burdened = share of renter households paying 30%+ of income on rent
-   Each becomes a percentile (higher = more affordable); the score is their
-   weighted mean (config index.weights), rescaled over the components a town has.
-   Town-income and 80%-AMI versions are computed for display, not scoring.
+A. Affordability (the outcome): two separate scores, because owning and
+   renting are largely separate markets.
+   ownership score <- ownership_burden = annual ownership cost / county median
+                      household income, where annual ownership cost = 12 x monthly
+                      mortgage P&I on the typical home (rate from FRED, down payment
+                      and term from config) + the town's average residential tax bill
+   rental score    <- rent_burden = 12 x median gross rent / county median household income
+   Each measure becomes a percentile (higher = more affordable); a score is the
+   weighted mean of its measures (config index.scores), rescaled over the
+   measures a town has. Context only, not scored: renters_cost_burdened (share
+   of renter households paying 30%+ of their own income), town-income burdens,
+   and the HUD 80%-AMI view.
 
 B. Barriers (causes; never folded into the score)
    NZLUD zoning restrictiveness, Fourth Round present/prospective need,
@@ -199,10 +201,6 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
     pctls = pd.DataFrame({c: percentile_rank(df[c]) for c in COMPONENTS})
     for c in COMPONENTS:
         df[f"{c}_pctl"] = pctls[c]
-    df["affordability_score"], df["components_used"] = weighted_score(
-        pctls, icfg["weights"], icfg["min_components"])
-    df["affordability_rank"] = df.affordability_score.rank(ascending=False, method="min").astype("Int64")
-    df["scored_municipalities"] = int(df.affordability_score.notna().sum())
 
     # ---------------------------------------------------------------- confidence
     val_conf = pd.Series(None, index=df.index, dtype=object)
@@ -211,6 +209,8 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
     val_conf[is_z & (df.zillow_method != "town region")] = "medium"
     acs_used = df.home_value_source == "ACS median value"
     val_conf[acs_used] = cv_level(df.acs_median_home_value, df.acs_median_home_value_moe, ccfg)[acs_used]
+    cap = LEVELS[ccfg["acs_home_value_max_confidence"]]
+    val_conf[acs_used] = val_conf[acs_used].map(lambda v: NAMES[min(LEVELS[v], cap)] if isinstance(v, str) else v)
     val_conf[acs_used & df.acs_median_home_value_topcoded.fillna(False)] = "low"
     comp_conf = pd.DataFrame({
         "ownership_burden": val_conf.where(df.ownership_burden.notna()),
@@ -222,34 +222,54 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
     for c in COMPONENTS:
         df[f"{c}_confidence"] = comp_conf[c]
 
-    used = [c for c in COMPONENTS if icfg["weights"].get(c, 0) > 0]
-    pts = comp_conf[used].apply(lambda s: s.map(LEVELS))
-    weakest = pts.min(axis=1)
-    missing = pts.isna().sum(axis=1)
-    overall = weakest.where(missing == 0, np.minimum(weakest, LEVELS["medium"]))
-    overall = overall.where(missing < 2, LEVELS["low"])
-    df["confidence"] = overall.map(NAMES)
-    df.loc[df.affordability_score.isna(), "confidence"] = "insufficient data"
-
-    reasons = []
-    for i, r in df.iterrows():
+    # ---------------------------------------------------------------- scores
+    def reasons_for(r, used, score) -> str:
         why = []
-        if pd.isna(r.affordability_score):
-            why.append("no usable affordability measure in any source")
+        if pd.isna(score):
+            why.append("no usable measure in any source")
         for c in used:
-            lvl = comp_conf.at[i, c]
-            if lvl is None or (isinstance(lvl, float) and np.isnan(lvl)):
+            lvl = comp_conf.at[r.Index, c]
+            if not isinstance(lvl, str):
                 why.append(f"{c.replace('_', ' ')} unavailable")
             elif lvl == "low":
                 why.append(f"{c.replace('_', ' ')} has a large ACS margin of error")
-        if r.home_value_source == "ACS median value" and r.acs_median_home_value_topcoded:
-            why.append("ACS home value is top-coded (at least $2,000,000)")
-        if r.zillow_method not in (None, "town region") and isinstance(r.zillow_method, str):
-            why.append("Zillow value is from community regions inside the town")
-        if r.value_sources_disagree is True:
-            why.append("Zillow and ACS home values disagree more than usual")
-        reasons.append("; ".join(why))
-    df["confidence_reasons"] = reasons
+        if "ownership_burden" in used:
+            if r.home_value_source == "ACS median value":
+                why.append("home value is the ACS 5-year owner-reported median, not a current market price")
+            if r.home_value_source == "ACS median value" and r.acs_median_home_value_topcoded is True:
+                why.append("ACS home value is top-coded (at least $2,000,000)")
+            if isinstance(r.zillow_method, str) and r.zillow_method != "town region":
+                why.append("Zillow value is from community regions inside the town")
+            if r.value_sources_disagree is True:
+                why.append("Zillow and ACS home values disagree more than usual")
+        if "rent_burden" in used and r.median_gross_rent_topcoded is True:
+            why.append("ACS rent is top-coded (at least $3,500)")
+        return "; ".join(why)
+
+    score_meta = {}
+    for sname, scfg in icfg["scores"].items():
+        w = scfg["weights"]
+        unknown = set(w) - set(COMPONENTS)
+        if unknown:
+            raise ValueError(f"score {sname!r} uses unknown measures {sorted(unknown)}")
+        score, n_used = weighted_score(pctls[list(w)], w, icfg["min_components"])
+        used = [c for c, v in w.items() if v > 0]
+        pts = comp_conf[used].apply(lambda col: col.map(LEVELS))
+        weakest = pts.min(axis=1)
+        missing = pts.isna().sum(axis=1)
+        lvl = weakest.where(missing == 0, np.minimum(weakest, LEVELS["medium"]))
+        lvl = lvl.where(missing < 2, LEVELS["low"])
+        conf = lvl.map(NAMES).astype(object)
+        conf[score.isna()] = "insufficient data"
+        df[f"{sname}_score"] = score
+        df[f"{sname}_rank"] = score.rank(ascending=False, method="min").astype("Int64")
+        df[f"{sname}_confidence"] = conf
+        df[f"{sname}_confidence_reasons"] = [reasons_for(r, used, sc) for r, sc in
+                                             zip(df.itertuples(), score)]
+        score_meta[sname] = {
+            "measures": w, "scored": int(score.notna().sum()),
+            "unscored": df.loc[score.isna(), "name"].tolist(),
+            "confidence_counts": conf.value_counts().to_dict()}
 
     # ---------------------------------------------------------------- B. barriers
     df = df.merge(nz, on="geoid", how="left", validate="one_to_one")
@@ -262,7 +282,7 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
     df["total_need_per_1000_hh"] = (df.present_need + df.prospective_need_capped) / hh * 1000
 
     df["data_built"] = today()
-    df = df.drop(columns=["census_name", "scored_municipalities"])
+    df = df.drop(columns=["census_name"])
 
     if len(df) != 564 or df.geoid.duplicated().any():
         raise RuntimeError(f"index has {len(df)} rows / duplicate GEOIDs; expected 564 unique")
@@ -270,15 +290,14 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
     meta = {
         "built": today(),
         "rows": len(df),
-        "scored": int(df.affordability_score.notna().sum()),
-        "unscored": df.loc[df.affordability_score.isna(), "name"].tolist(),
-        "confidence_counts": df.confidence.value_counts().to_dict(),
+        "scores": score_meta,
+        "context_measures": icfg["context_measures"],
         "home_value_source_counts": df.home_value_source.value_counts(dropna=False).to_dict(),
         "home_value_priority_used": priority,
         "zillow_included": "zillow" in priority,
         "zillow_cleared_for_publication": cfg["sources"]["zillow"]["cleared_for_publication"],
         "statewide_zillow_to_acs_ratio": None if np.isnan(state_ratio) else round(float(state_ratio), 3),
-        "weights": icfg["weights"], "denominator": icfg["denominator"],
+        "denominator": icfg["denominator"],
         "assumptions": {"down_payment_pct": own["down_payment_pct"], "loan_term_years": own["loan_term_years"],
                         "mortgage_rate_pct": rate, "mortgage_rate_vintage": fred["vintage"],
                         "excluded_costs": own["excluded_costs"],
@@ -302,8 +321,10 @@ def main(argv=None) -> None:
     out.mkdir(parents=True, exist_ok=True)
     df.to_csv(out / "openhousing_nj.csv", index=False)
     write_json(out / "index_meta.json", meta)
-    log.info("index: %d rows, %d scored; confidence %s; home values %s -> %s",
-             meta["rows"], meta["scored"], meta["confidence_counts"], meta["home_value_source_counts"], out)
+    for name, sm in meta["scores"].items():
+        log.info("%s score: %d of %d scored; confidence %s", name, sm["scored"], meta["rows"],
+                 sm["confidence_counts"])
+    log.info("home values %s -> %s", meta["home_value_source_counts"], out)
 
 
 if __name__ == "__main__":
