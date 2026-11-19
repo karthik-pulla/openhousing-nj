@@ -25,6 +25,8 @@ Checked 2026-11-19 by fetching each endpoint and reading each source's own terms
 5. **HUD areas.** Several NJ counties are in Small Area FMR areas (Bergen-Passaic, Monmouth-Ocean, Jersey City, Philadelphia metro). We use the area-wide ("MSA level") FMR and flag it.
 6. **Property tax.** The table gives the average bill on a residential property before credits (ANCHOR, Senior Freeze). Deriving an "effective rate" gives absurd values for the mutual-housing townships Winfield (23%) and Audubon Park (6.9%), so the index should use the bill, not a derived rate.
 
+7. **Zillow: the API terms aren't the research-data terms (2026-11-19).** The owner pasted Zillow's "Terms of Use" for the **Zillow API**. That document licenses "Zillow Data" retrieved through the Zillow API by approved licensees holding a ZWSID. Its links point to 2023 archive.org copies, and its copyright line reads 2006-2014. We don't use the API. We download the public research CSV, so these terms don't govern our use. (If they did, they would rule out storing the data, bulk download, and redistribution.) The terms that apply to the research CSVs are still unknown: whatever zillow.com/research/data says about use and attribution, plus Zillow's general Terms of Use. Zillow stays local until those are found.
+
 ## Attribution block for the site and the CSV
 
 - Source: U.S. Census Bureau, American Community Survey 2020–2024 5-year estimates.
