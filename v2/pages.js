@@ -16,6 +16,49 @@
   });
   var paintDots = null;
 
+  // ---------------------------------------------------------------- figure "decode" animation (landing page)
+  // A figure is written with putNum(el, text). When it scrolls into view, its digits cycle
+  // through random values and lock in from left to right, then flash once. Only the
+  // display animates: the final text is always the real value. Reduced motion -> no animation.
+  var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var decode = function (el) {
+    var target = el.dataset.final, n = target.length, t0 = null, dur = 900 + n * 70, last = 0;
+    var box = el.closest(".metric, .kpi"); if (box) box.classList.add("lit");
+    el.classList.remove("num-done"); el.classList.add("num-run");
+    var frame = function (now) {
+      if (t0 === null) t0 = now;
+      var p = Math.min(1, (now - t0) / dur);
+      if (now - last > 45 || p === 1) {
+        last = now;
+        var locked = Math.floor(Math.pow(p, 1.4) * (n + 1)), html = "";
+        for (var i = 0; i < n; i++) {
+          var ch = target.charAt(i);
+          if (i < locked || !/[0-9]/.test(ch)) html += esc(ch);
+          else html += '<span class="nd">' + Math.floor(Math.random() * 10) + "</span>";
+        }
+        el.innerHTML = html;
+      }
+      if (p < 1) requestAnimationFrame(frame);
+      else { el.textContent = target; el.classList.remove("num-run"); el.classList.add("num-done"); }
+    };
+    requestAnimationFrame(frame);
+  };
+  var numIO = !calm && "IntersectionObserver" in window ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.dataset.seen = "1"; numIO.unobserve(e.target);
+      if (e.target.dataset.final) decode(e.target);
+    });
+  }, { threshold: 0.6 }) : null;
+  var putNum = function (el, text) {
+    if (!el) return;
+    text = String(text);
+    if (!numIO || !/[0-9]/.test(text)) { el.textContent = text; return; }
+    el.dataset.final = text;
+    if (el.dataset.seen) decode(el);
+  };
+  if (numIO) document.querySelectorAll("[data-m], [data-kpi]").forEach(function (el) { numIO.observe(el); });
+
   // What each published source is used for, and how it may be used.
   var SOURCES = {
     acs_municipal: { name: "U.S. Census Bureau, American Community Survey (5-year)", status: "used",
@@ -67,7 +110,7 @@
       .map(function (x) { var i = x.indexOf("This product uses"); return i >= 0 ? x.slice(i) : x; });
     var n = $("notices"); if (n) n.textContent = notes.join(" ") + " Map data © Mapbox © OpenStreetMap.";
 
-    var k = document.querySelector('[data-kpi="sources"]'); if (k) k.textContent = m.sources.length;
+    putNum(document.querySelector('[data-kpi="sources"]'), m.sources.length);
     var vin = {}; m.sources.forEach(function (x) { vin[x.name] = x.vintage || ""; });
     var setS = function (k, t) { if (t) document.querySelectorAll('[data-ms="' + k + '"]').forEach(function (el) { el.textContent = t; }); };
     var acs = /(\d{4})-(\d{4})/.exec(vin.acs_municipal || ""); if (acs) setS("acs", "Census ACS " + acs[1] + "–" + acs[2]);
@@ -177,7 +220,7 @@
     };
     var usd = function (x, step) { return x === null ? "–" : "$" + (Math.round(x / step) * step).toLocaleString("en-US"); };
     var pct = function (x) { return x === null ? "–" : Math.round(x * 100) + "%"; };
-    var setM = function (k, v) { var el = document.querySelector('[data-m="' + k + '"]'); if (el) el.textContent = v; };
+    var setM = function (k, v) { putNum(document.querySelector('[data-m="' + k + '"]'), v); };
 
     fetch("../data/published/openhousing_nj.web.json").then(function (r) { return r.json(); }).then(function (d) {
       var ix = {}; d.columns.forEach(function (c, i) { ix[c] = i; });
@@ -185,7 +228,7 @@
                   "avg_property_tax_bill", "mortgage_rate_pct", "ownership_affordable_at_ami80", "renters_cost_burdened_share"];
       rows = d.data.map(function (a) { var o = {}; pick.forEach(function (c) { o[c] = a[ix[c]]; }); return o; });
       var count = function (c) { return rows.filter(function (x) { return has(x[c]); }).length; };
-      var set = function (k, v) { var el = document.querySelector('[data-kpi="' + k + '"]'); if (el) el.textContent = v; };
+      var set = function (k, v) { putNum(document.querySelector('[data-kpi="' + k + '"]'), v); };
       set("towns", rows.length); set("own", count("ownership_score")); set("rent", count("rental_score"));
 
       setM("home_value", usd(median("home_value"), 100));
