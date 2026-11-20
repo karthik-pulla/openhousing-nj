@@ -15,12 +15,16 @@ OpenHousing NJ is a free, open map and dataset that answers that question for ev
 |---|---|
 | **Ownership affordability score** | Yearly cost of owning the typical home (mortgage at today's rate + the town's average property tax bill) as a share of **county** median household income, ranked as a 0–100 percentile |
 | **Rental affordability score** | Yearly median rent as a share of county median household income, ranked the same way |
-| **Context** (not scored) | Share of renters paying 30%+ of income; whether a household at HUD's 80% income limit could afford the typical home or rent; burdens using the town's own income |
-| **Barriers** (never in the scores) | Zoning restrictiveness (NZLUD, 105 towns); Fourth Round present and prospective need (NJ DCA, Oct 2024), per 1,000 households; Qualified Urban Aid status |
+| **Context** (not scored) | Share of renters paying 30%+ of income; whether a household at HUD's 80% income limit could afford the typical home or rent; burdens using the town's own income; price-to-income (v1's measure); the state's equalized average residential value |
+| **Barriers** (never in the scores) | Zoning restrictiveness, accessory units, parking minimums and districts allowing apartments (NZLUD, 105 towns); Fourth Round present and prospective need (NJ DCA, Oct 2024), per 1,000 households; Qualified Urban Aid status |
 | **Confidence flags** | High / medium / low / insufficient data for every score, with the reason. Small towns are flagged, never dropped. |
+| **Rank ranges** | The middle 90% of each town's rank over 1,000 redraws of the Census inputs within their margins of error |
+| **Over time** | Price-to-income and rent-to-income for every town and statewide in every ACS 5-year release since 2005–2009 |
+| **Regions** | Household-weighted summaries for the 21 counties, 6 housing regions and the state |
+| **Release archive** | Every published release kept by date (`data/archive/`), a generated changelog, and per-town change history |
 | **Town summaries** | Plain-English paragraphs assembled from fixed templates and the town's numbers. No AI writes them. |
 
-The v2 site has a short home page (what OpenHousing is, what it does, how), separate Methodology, Sources and Data pages, and a map app with layer switching, a "New Jersey" reset button, an NJ snapshot, town profiles with sources and data periods, side-by-side comparison of up to three towns, favorites, CSV downloads, a sortable table view, keyboard navigation and a color-blind-safe palette. It is a static site with no accounts, no tracking and no backend.
+The v2 site has a home page, separate Methodology, Sources, Data and Data dictionary pages, and a map app with layer switching, an Advanced assumptions panel (down payment, rate, term, income basis, property tax; recalculated in the browser and shareable by URL), a chart view for any two measures (filters, correlations, CSV export), a regions view, a "New Jersey" reset button, an NJ snapshot, town profiles with sources and data periods, side-by-side comparison of up to three towns, favorites, CSV downloads, a sortable table view, keyboard navigation and a color-blind-safe palette. It is a static site with no accounts, no tracking and no backend.
 
 ## Data sources
 
@@ -36,8 +40,12 @@ scripts/refresh_data.py      one command: rebuild everything from the sources
 pipeline/
   geography.py               the 564-municipality backbone, keyed on Census GEOID
   crosswalk.py               name-based sources (Zillow) and NZLUD -> GEOID
-  fetchers/                  one module per source (acs, zillow, property_tax, hud, fred, nzlud, fourth_round)
+  fetchers/                  one module per source (acs, acs_history, acs_trend, zillow, property_tax, hud, fred, nzlud, fourth_round)
   index.py                   scores, ranks, confidence flags, barriers layer
+  uncertainty.py             rank ranges (Monte Carlo over ACS margins of error)
+  regions.py                 county / housing-region / statewide summaries
+  dictionary.py              the data dictionary (a test fails if a column has no entry)
+  archive.py                 dated release archive, changelog, per-town change history
   summaries.py               template summaries (wording in templates/summary_templates.yaml)
   validate.py                checks; publishes only if they pass; writes data/manifest.json
 data/
@@ -46,11 +54,12 @@ data/
   static/                    files with no API: NZLUD, Fourth Round CSV + source PDF, 2020 Census place parts
   interim/                   one tidy table per source, each with a .meta.json (vintage, source, coverage)
   build/                     latest build + validation report (not yet published)
-  published/                 the validated, live dataset (CSV, web JSON, summaries)
+  published/                 the validated, live dataset (CSV, web JSON, summaries, dictionary, history, regions)
+  archive/                   every published release by date (csv.gz + manifest), index.json, CHANGELOG.md
   manifest.json              sources, vintages, fetch times, coverage, validation results
   raw/                       cached downloads (gitignored)
 v2/                          the v2 website: index.html (home), map.html (map app), methodology.html, sources.html,
-                             data.html; app.js/app.css (map + shared styles), pages.js/pages.css (text pages),
+                             data.html, dictionary.html; app.js/app.css (map + shared styles), pages.js/pages.css (text pages),
                              data/boundaries.geojson
 tests/                       pytest suite
 docs/                        AUTOMATION.md, SOURCES_VERIFICATION.md
@@ -120,7 +129,7 @@ Set `sources.zillow.cleared_for_publication: true` in `config.yaml`, add Zillow'
 
 ### Changing the website's code
 
-The pages load `app.js`, `app.css`, `pages.js` and `pages.css` with a version tag (`?v=20261119p`). After editing any of them, change the tag in every page in `v2/` (`index`, `map`, `methodology`, `sources`, `data`) (e.g. to today's date) so visitors' browsers load the new files instead of a cached copy. Data files don't need this; they are fetched fresh.
+The pages load `app.js`, `app.css`, `pages.js` and `pages.css` with a version tag (`?v=20261120b`). After editing any of them, change the tag in every page in `v2/` (`index`, `map`, `methodology`, `sources`, `data`) (e.g. to today's date) so visitors' browsers load the new files instead of a cached copy. Data files don't need this; they are fetched fresh.
 
 ### Changing an assumption or weight
 
@@ -134,8 +143,10 @@ Edit `config.yaml` (down payment, loan term, rate averaging, score weights, conf
 - **Joins use IDs, never names.**
 - **Barriers explain; they never change the score.** Obligations are never described as "met" or "failed".
 
-## Citation
+## Citation and license
 
-> OpenHousing NJ (v2). Housing affordability scores for New Jersey municipalities. https://github.com/karthik-pulla/nj-housing-index
+> OpenHousing NJ. *OpenHousing NJ dataset*, release YYYY-MM-DD. https://github.com/karthik-pulla/nj-housing-index
 
-Please also cite the underlying sources listed above, especially NZLUD: Mleczko, M. and Desmond, M. (2023), *National Zoning and Land Use Database*.
+Use the release date of the file you used; every release is kept in `data/archive/releases/`. See [CITATION.cff](CITATION.cff). Please also cite the underlying sources listed above, especially NZLUD: Mleczko, M. and Desmond, M. (2023), *National Zoning and Land Use Database*.
+
+Code: MIT ([LICENSE](LICENSE)). OpenHousing's own data work: CC BY 4.0; source data keeps its own terms ([data/LICENSE.md](data/LICENSE.md)).

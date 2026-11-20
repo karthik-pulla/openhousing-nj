@@ -1,0 +1,89 @@
+column,group,label,unit,source,description
+geoid,Town,Census GEOID,code,Census / NJOGIS,10-digit Census county subdivision code. The key every source is joined on.
+mun_code,Town,NJ municipal code,code,NJOGIS,New Jersey's 4-digit municipal code (county + town).
+name,Town,Municipality,text,Census / NJOGIS,"Municipality name with its type (Borough, Township, City, Town, Village)."
+mun_type,Town,Type,text,Census,Form of municipality.
+county,Town,County,text,Census,County name.
+county_fips,Town,County FIPS,code,Census,5-digit county FIPS code.
+population,Town,Population,people,ACS,Total population.
+households,Town,Households,households,ACS,Occupied housing units.
+renter_households,Town,Renter households,households,ACS,Renter-occupied housing units.
+town_median_hh_income,Income,Town median household income,dollars/year,ACS,Median household income of the town's residents (B19013).
+town_median_hh_income_moe,Income,Margin of error,dollars,ACS,90% margin of error of town median household income.
+town_median_hh_income_topcoded,Income,Top-coded,true/false,ACS,"True if the Census reports only that the median is at least $250,000."
+acs_median_home_value,Owning,ACS median home value,dollars,ACS,"Median value of owner-occupied homes, as estimated by owners (B25077)."
+acs_median_home_value_moe,Owning,Margin of error,dollars,ACS,90% margin of error of the ACS median home value.
+acs_median_home_value_topcoded,Owning,Top-coded,true/false,ACS,"True if the Census reports only that the median is at least $2,000,000."
+median_gross_rent,Renting,Median gross rent,dollars/month,ACS,Median monthly rent plus utilities paid by renters (B25064).
+median_gross_rent_moe,Renting,Margin of error,dollars,ACS,90% margin of error of median gross rent.
+median_gross_rent_topcoded,Renting,Top-coded,true/false,ACS,"True if the Census reports only that the median is at least $3,500."
+renters_cost_burdened_share,Renting,Renters paying 30%+ of income,share (0-1),ACS,Share of renter households (with computed ratio) paying 30% or more of their own income on rent (B25070).
+renters_cost_burdened_share_moe,Renting,Margin of error,share,ACS,Approximate 90% margin of error of the cost-burdened share.
+county_median_hh_income,Income,County median household income,dollars/year,ACS (county),Median household income of the county. The income used in both scores.
+county_median_hh_income_moe,Income,Margin of error,dollars,ACS (county),90% margin of error of county median household income.
+avg_property_tax_bill,Owning,Average residential property tax bill,dollars/year,DCA,"Average total property tax on a residential property, before credits and deductions."
+tax_year,Owning,Tax year,year,DCA,Tax year of the property tax data.
+dca_equalized_avg_res_value,Owning,State-assessed average residential value,dollars,DCA / OpenHousing,"DCA average residential assessment divided by the town's equalization ratio: an average market value from tax assessments, not a median. Used as the home value only where the Census has none."
+hud_area_name,Income,HUD area,text,HUD,HUD Fair Market Rent / income limit area containing the town.
+ami80_income_limit,Income,HUD 80% income limit (4 people),dollars/year,HUD,HUD low-income limit (80% of area median income) for a four-person household.
+fmr_2br,Renting,"HUD Fair Market Rent, 2 bedrooms",dollars/month,HUD,Area-wide Fair Market Rent for a two-bedroom home.
+zhvi,Zillow (empty until cleared),Zillow Home Value Index,dollars,Zillow,Empty: Zillow is not published until its terms are confirmed.
+zhvi_month,Zillow (empty until cleared),ZHVI month,month,Zillow,Empty until Zillow is cleared.
+zillow_method,Zillow (empty until cleared),Zillow matching method,text,OpenHousing,Empty until Zillow is cleared.
+zillow_regions,Zillow (empty until cleared),Zillow regions used,text,Zillow,Empty until Zillow is cleared.
+zhvi_1yr_change,Zillow (empty until cleared),ZHVI 1-year change,share,Zillow,Empty until Zillow is cleared.
+zhvi_5yr_change,Zillow (empty until cleared),ZHVI 5-year change,share,Zillow,Empty until Zillow is cleared.
+home_value,Owning,Typical home value (used),dollars,see home_value_source,"The home value used for owning costs: Zillow if cleared, else the ACS median, else the DCA equalized average."
+home_value_source,Owning,Home value source,text,OpenHousing,Which source home_value came from.
+home_value_vintage,Owning,Home value data period,text,OpenHousing,Data period of home_value.
+value_sources_disagree,Zillow (empty until cleared),Zillow and ACS disagree,true/false,OpenHousing,Empty until Zillow is cleared.
+mortgage_rate_pct,Owning,Mortgage rate used,percent,FRED,30-year fixed rate: mean of the latest four weekly Freddie Mac PMMS readings.
+annual_mortgage_pi,Owning,"Mortgage payment, per year",dollars/year,OpenHousing,"Principal and interest on home_value with 20% down, 30-year fixed at mortgage_rate_pct."
+annual_ownership_cost,Owning,"Ownership cost, per year",dollars/year,OpenHousing,"annual_mortgage_pi + avg_property_tax_bill. Leaves out insurance, PMI, HOA fees, maintenance, utilities."
+annual_rent,Renting,"Rent, per year",dollars/year,OpenHousing,12 x median_gross_rent.
+ownership_burden,Measures,Cost to own ÷ county income,share,OpenHousing,annual_ownership_cost / county_median_hh_income. The measure behind the ownership score.
+rent_burden,Measures,Rent ÷ county income,share,OpenHousing,annual_rent / county_median_hh_income. The measure behind the rental score.
+renters_cost_burdened,Measures,Renters paying 30%+ (measure copy),share,ACS,"Same as renters_cost_burdened_share; context only, not scored."
+ownership_burden_town_income,Measures,Cost to own ÷ town income,share,OpenHousing,annual_ownership_cost / town_median_hh_income. Display only.
+rent_burden_town_income,Measures,Rent ÷ town income,share,OpenHousing,annual_rent / town_median_hh_income. Display only.
+ownership_burden_ami80,Measures,Cost to own ÷ HUD 80% limit,share,OpenHousing,annual_ownership_cost / ami80_income_limit.
+rent_burden_ami80,Measures,Rent ÷ HUD 80% limit,share,OpenHousing,annual_rent / ami80_income_limit.
+price_to_income,Measures,Home value ÷ town income,ratio,OpenHousing,home_value / town_median_hh_income: years of town income the typical home costs (v1's measure). Not scored.
+price_to_county_income,Measures,Home value ÷ county income,ratio,OpenHousing,home_value / county_median_hh_income. Not scored.
+ownership_affordable_at_ami80,Measures,Owning affordable at 80% AMI,true/false,OpenHousing,True if ownership_burden_ami80 is 30% or less.
+rent_affordable_at_ami80,Measures,Renting affordable at 80% AMI,true/false,OpenHousing,True if rent_burden_ami80 is 30% or less.
+ownership_burden_pctl,Scores and ranks,Ownership burden percentile,0-100,OpenHousing,"Hazen percentile of ownership_burden across towns, flipped so 100 = smallest burden."
+rent_burden_pctl,Scores and ranks,Rent burden percentile,0-100,OpenHousing,"Hazen percentile of rent_burden, flipped so 100 = smallest burden."
+renters_cost_burdened_pctl,Scores and ranks,Cost-burdened renters percentile,0-100,OpenHousing,Percentile of renters_cost_burdened (context only).
+ownership_burden_confidence,Reliability,Ownership measure confidence,high/medium/low,OpenHousing,"Reliability of ownership_burden from the ACS coefficient of variation, capped at medium for ACS home values."
+rent_burden_confidence,Reliability,Rent measure confidence,high/medium/low,OpenHousing,Reliability of rent_burden from the ACS coefficient of variation.
+renters_cost_burdened_confidence,Reliability,Cost-burdened share confidence,high/medium/low,OpenHousing,Reliability of renters_cost_burdened.
+ownership_score,Scores and ranks,Ownership score,0-100,OpenHousing,Ownership affordability score (= ownership_burden_pctl). Higher is more affordable.
+ownership_rank,Scores and ranks,Ownership rank,rank,OpenHousing,Rank by ownership_score; 1 = most affordable.
+ownership_confidence,Reliability,Ownership score confidence,text,OpenHousing,high / medium / low / insufficient data.
+ownership_confidence_reasons,Reliability,Ownership confidence reasons,text,OpenHousing,Why the ownership confidence is what it is (semicolon-separated).
+rental_score,Scores and ranks,Rental score,0-100,OpenHousing,Rental affordability score (= rent_burden_pctl). Higher is more affordable.
+rental_rank,Scores and ranks,Rental rank,rank,OpenHousing,Rank by rental_score; 1 = most affordable.
+rental_confidence,Reliability,Rental score confidence,text,OpenHousing,high / medium / low / insufficient data.
+rental_confidence_reasons,Reliability,Rental confidence reasons,text,OpenHousing,Why the rental confidence is what it is.
+ownership_rank_low,Reliability,"Ownership rank, likely best",rank,OpenHousing,"5th percentile of the ownership rank over 1,000 redraws of the ACS inputs within their margins of error (always includes the published rank)."
+ownership_rank_high,Reliability,"Ownership rank, likely worst",rank,OpenHousing,95th percentile of the ownership rank over the same redraws.
+rental_rank_low,Reliability,"Rental rank, likely best",rank,OpenHousing,"5th percentile of the rental rank over 1,000 redraws."
+rental_rank_high,Reliability,"Rental rank, likely worst",rank,OpenHousing,"95th percentile of the rental rank over 1,000 redraws."
+zri,Barriers (not scored),Zoning restrictiveness index,index,NZLUD,NZLUD zoning restrictiveness (higher = more restrictive). 105 towns.
+nzlud_min_lot_size,Barriers (not scored),Minimum lot size rule,0/1,NZLUD,1 if the town sets a minimum lot size.
+nzlud_one_acre_more,Barriers (not scored),One-acre-plus minimum lots,0/1,NZLUD,1 if any district requires lots of one acre or more.
+nzlud_inclusionary,Barriers (not scored),Inclusionary zoning,0/1,NZLUD,1 if the town has inclusionary zoning.
+nzlud_open_space,Barriers (not scored),Open space requirement,0/1,NZLUD,1 if the town requires open space in developments.
+nzlud_adu,Barriers (not scored),Accessory units allowed,0/1,NZLUD,1 if accessory dwelling units are allowed anywhere in the town.
+nzlud_parking_median,Barriers (not scored),Parking required per home,spaces,NZLUD,Median parking spaces required per residential unit.
+nzlud_mf_per,Barriers (not scored),Districts allowing apartments,share (0-1),NZLUD,Share of residential districts (incl. mixed use) that allow multifamily housing by right.
+zoning_data_available,Barriers (not scored),Zoning data available,true/false,OpenHousing,True for the 105 towns NZLUD covers.
+housing_region,Barriers (not scored),Housing region,1-6,DCA,The state's affordable-housing region (Fourth Round).
+present_need,Barriers (not scored),Present need,homes,DCA,Fourth Round present need (October 2024 calculation).
+prospective_need,Barriers (not scored),Prospective need (uncapped),homes,DCA,Fourth Round prospective need before the state's cap.
+prospective_need_capped,Barriers (not scored),Prospective need,homes,DCA,Fourth Round prospective need after the cap (2025-2035 obligation).
+qualified_urban_aid,Barriers (not scored),Qualified Urban Aid,true/false,DCA,True for the 47 towns with no prospective obligation by law.
+prospective_need_per_1000_hh,Barriers (not scored),"Prospective need per 1,000 households","homes per 1,000 hh",OpenHousing,"prospective_need_capped / households x 1,000."
+total_need_per_1000_hh,Barriers (not scored),"Total need per 1,000 households","homes per 1,000 hh",OpenHousing,"(present_need + prospective_need_capped) / households x 1,000."
+data_built,Record,Build date,date,OpenHousing,Date the row was built.

@@ -1,4 +1,4 @@
-/* Shared script for the text pages (landing, methodology, sources, data):
+/* Shared script for the text pages (landing, methodology, sources, data, dictionary):
    theme toggle, last-updated date and required notices from the data manifest,
    the source list on the sources page, and the town grid and figures on the landing page. */
 (function () {
@@ -135,6 +135,57 @@
   }).catch(function () {
     var body = $("sources-body"); if (body) body.innerHTML = "<p>The source list couldn't be loaded. See <code>data/manifest.json</code> in the repository.</p>";
   });
+  // ---------------------------------------------------------------- data page: releases + citation
+  var njDate = function (iso) {
+    try { return new Date(iso).toLocaleDateString("en-CA", { timeZone: "America/New_York" }); } catch (e) { return String(iso).slice(0, 10); }
+  };
+  var rel = $("releases");
+  if (rel || document.querySelector("[data-release]")) {
+    fetch("../data/archive/index.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (A) {
+      var list = A.releases || [];
+      if (list[0]) document.querySelectorAll("[data-release]").forEach(function (el) { el.textContent = list[0].release; });
+      if (!rel) return;
+      rel.innerHTML = '<table class="st" aria-label="Archived releases"><thead><tr><th>Release</th><th>What changed</th><th>File</th></tr></thead><tbody>' +
+        list.map(function (e) {
+          var c = e.changes, what;
+          if (!c) what = "First archived release.";
+          else {
+            var src = Object.keys(c.sources_updated || {});
+            what = (src.length ? "New data: " + src.map(function (k) { return esc(k.replace(/_/g, " ")) + " (" + esc(c.sources_updated[k].to || "") + ")"; }).join(", ") + ". " : "No source changed its data period. ") +
+              esc(c.ownership_rank_changed + " ownership and " + c.rental_rank_changed + " rental ranks changed (" +
+                  c.ownership_rank_moved_10plus + " and " + c.rental_rank_moved_10plus + " by 10+ places).");
+          }
+          return "<tr><td>" + esc(e.release) + "</td><td>" + what + '</td><td><a href="../' + esc(e.csv) + '" download>CSV (gzip)</a> · <a href="../' + esc(e.manifest) + '">manifest</a></td></tr>';
+        }).join("") + "</tbody></table>";
+    }).catch(function () { if (rel) rel.innerHTML = '<p class="muted">The release list couldn’t be loaded. See <code>data/archive/</code> in the repository.</p>'; });
+  }
+
+  // ---------------------------------------------------------------- dictionary page
+  var dict = $("dict-body");
+  if (dict || document.querySelector("[data-ncols]")) {
+    fetch("../data/published/data_dictionary.web.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (D) {
+      var cols = D.columns || [];
+      document.querySelectorAll("[data-ncols]").forEach(function (el) { el.textContent = cols.length; });
+      if (!dict) return;
+      var draw = function (q) {
+        q = (q || "").trim().toLowerCase();
+        var groups = [], by = {};
+        cols.filter(function (c) {
+          return !q || [c.column, c.label, c.description, c.source, c.group].join(" ").toLowerCase().indexOf(q) >= 0;
+        }).forEach(function (c) { if (!by[c.group]) { by[c.group] = []; groups.push(c.group); } by[c.group].push(c); });
+        dict.innerHTML = groups.length ? groups.map(function (g) {
+          return "<h2>" + esc(g) + '</h2><table class="st dict" aria-label="' + esc(g) + ' columns"><thead><tr><th>Column</th><th>Meaning</th><th>Unit</th><th>Source</th></tr></thead><tbody>' +
+            by[g].map(function (c) {
+              return '<tr id="col-' + esc(c.column) + '"><td><code>' + esc(c.column) + "</code></td><td><b>" + esc(c.label) + "</b><br>" + esc(c.description) +
+                "</td><td>" + esc(c.unit) + "</td><td>" + esc(c.source) + "</td></tr>";
+            }).join("") + "</tbody></table>";
+        }).join("") : '<p class="muted">No column matches.</p>';
+      };
+      draw("");
+      var qi = $("dict-q"); if (qi) qi.addEventListener("input", function () { draw(qi.value); });
+    }).catch(function () { if (dict) dict.innerHTML = '<p class="muted">The dictionary couldn’t be loaded. See <code>data/published/data_dictionary.csv</code>.</p>'; });
+  }
+
   // ---------------------------------------------------------------- landing page
   // One square per municipality, coloured by its published score with the same
   // six equal-count groups and colours as the map. No score -> the "not enough data" colour.

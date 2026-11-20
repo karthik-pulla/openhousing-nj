@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+title: "OpenHousing NJ"
+message: "If you use this dataset, please cite it with the release date of the file you used (data/archive/releases/<date>/)."
+type: dataset
+authors:
+  - name: "OpenHousing NJ contributors"
+abstract: >-
+  Housing affordability for every New Jersey municipality: ownership and rental
+  affordability scores, the measures behind them, uncertainty ranges, barriers
+  (zoning and affordable-housing obligations) and their public sources, refreshed monthly.
+repository-code: "https://github.com/karthik-pulla/nj-housing-index"
+license: CC-BY-4.0
+keywords: [housing, affordability, New Jersey, municipalities, open data]

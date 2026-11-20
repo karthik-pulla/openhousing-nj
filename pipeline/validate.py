@@ -305,6 +305,7 @@ def build_manifest(df: pd.DataFrame, report: dict, published_at: str) -> dict:
                   "home_value_history": "data/published/home_value_history.csv",
                   "affordability_history": "data/published/affordability_history.csv",
                   "regions": "data/published/regions.csv",
+                  "data_dictionary": "data/published/data_dictionary.csv",
                   "town_changes": "data/published/town_changes.web.json",
                   "archive_index": "data/archive/index.json",
                   "changelog": "data/archive/CHANGELOG.md"},
@@ -354,7 +355,8 @@ def publish(df: pd.DataFrame, report: dict) -> None:
         {"years": years, "vintage": hmeta["vintage"], "notes": hmeta["notes"], "towns": towns},
         separators=(",", ":")) + "\n")
     publish_affordability_history()
-    from . import regions
+    from . import dictionary, regions
+    dictionary.write(list(df.columns))
     reg = regions.build(df)
     reg.to_csv(PUBLISHED / "regions.csv", index=False)
     (PUBLISHED / "regions.web.json").write_text(reg.to_json(orient="split", index=False, double_precision=6) + "\n")

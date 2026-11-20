@@ -498,3 +498,83 @@ td.rk .dot,.cmp .dot{margin-right:6px;vertical-align:-1px}
   [data-theme="dark"] .drawer{background:rgba(10,13,19,.97)}
   body.profile-open .side,body.profile-open .legend,body.profile-open .map-status,body.profile-open .map-hint{visibility:hidden}
 }
+
+/* ---------------------------------------------------------------- researcher features */
+.linkbtn{border:0;background:none;color:var(--accent-ink);font-weight:600;cursor:pointer;padding:0;font-size:inherit}
+.linkbtn:hover{text-decoration:underline;text-underline-offset:2px}
+.btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+/* advanced assumptions */
+.popover.adv{width:min(360px,calc(100vw - 24px))}
+.adv-row{display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:10px;margin:10px 0;font-size:13px}
+.adv-row label{font-weight:600}
+.adv-row input[type=range]{width:100%;accent-color:var(--accent)}
+.adv-num{display:inline-flex;align-items:center;gap:3px;font-size:12.5px;color:var(--muted)}
+.adv-num input{width:64px;padding:5px 6px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;font-variant-numeric:tabular-nums}
+.adv-row select{grid-column:2 / 4;max-width:none}
+.adv-basis{border:0;padding:0;margin:12px 0 8px;display:grid;gap:6px;font-size:13px}
+.adv-basis legend{font-weight:600;margin-bottom:4px}
+.adv-basis label{display:flex;align-items:center;gap:7px;cursor:pointer}
+.adv-basis input{accent-color:var(--accent)}
+.adv-basis small{color:var(--muted)}
+.adv-foot{display:flex;justify-content:flex-end;margin-top:10px}
+.adv-chip{display:inline-flex;align-items:center;gap:8px;font-size:12px;padding:5px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);max-width:420px}
+.adv-chip[hidden]{display:none}
+.adv-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adv-note{font-size:12.5px;padding:8px 11px;border-radius:10px;background:var(--accent-soft);color:var(--text);margin-bottom:10px;line-height:1.5}
+/* rank range */
+.rr{display:inline-block;margin-left:6px;font-size:11.5px;color:var(--muted);text-decoration:underline dotted;text-underline-offset:3px;cursor:help}
+/* over-time chart */
+.tr-state{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:4 4;opacity:.8}
+.k-dash{width:16px;height:0;border-top:1.5px dashed var(--muted);display:inline-block}
+.seg.mini{display:inline-flex;margin-left:8px;vertical-align:middle;padding:1px}
+.seg.mini .segb{padding:2px 8px;font-size:11.5px}
+/* release history: a small, quiet button at the end of the profile */
+.hist{margin-top:18px;padding-top:10px;border-top:1px solid var(--border)}
+.hist-btn{display:inline-flex;align-items:center;gap:6px;border:0;background:none;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;padding:4px 0}
+.hist-btn:hover,.hist-btn[aria-expanded="true"]{color:var(--text)}
+.hist-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hist-body{margin-top:8px;font-size:12.5px;display:grid;gap:10px}
+.hist-body[hidden]{display:none}
+.rel{padding:9px 11px;border:1px solid var(--border);border-radius:10px}
+.rel-h{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:4px}
+.rel-h a{font-size:12px}
+.chg{list-style:none;padding:0;margin:0;display:grid;gap:3px}
+.chg li{display:flex;justify-content:space-between;gap:12px}
+.chg li span:last-child{font-variant-numeric:tabular-nums;color:var(--text)}
+.muted{color:var(--muted)}
+.small{font-size:11.5px}
+/* chart view */
+#chart-view,#regions-view{flex-direction:column;padding:20px 22px;gap:10px;overflow:auto}
+.sc-controls{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;font-size:13px}
+.sc-controls label{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.sc-controls select{max-width:280px}
+.sc-stats{font-size:12.5px;color:var(--text)}
+.sc-stats .muted{display:block;margin-top:2px}
+.scwrap{position:relative;border:1px solid var(--border);border-radius:var(--r-lg);background:var(--bg);padding:10px 12px 8px}
+.scwrap svg{display:block;width:100%;height:auto}
+.sc-grid{stroke:var(--border);stroke-width:1}
+.sc-axis{stroke:var(--border-strong);stroke-width:1}
+.sc-tk{font-size:11px;fill:var(--muted);font-variant-numeric:tabular-nums}
+.sc-lab{font-size:12px;fill:var(--text);font-weight:600}
+.sc-pt{stroke:var(--bg);stroke-width:1;opacity:.85}
+.sc-pt.hot,.sc-pt.sel{stroke:var(--text);stroke-width:2;opacity:1}
+.sc-key{display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:11.5px;color:var(--muted);margin-top:6px}
+.sc-key i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.sc-tip{position:absolute;pointer-events:none;border-radius:var(--r);padding:8px 10px;font-size:12px;line-height:1.45;z-index:5;max-width:260px}
+.sc-tip[hidden]{display:none}
+.sc-tip b{display:block}
+.sc-tip span{display:block;color:var(--muted)}
+/* regions view */
+#regions-view .tablewrap{flex:none}
+#rtable thead th{white-space:normal;vertical-align:bottom;min-width:84px}
+#rtable thead th button[data-tip]{text-decoration:underline dotted;text-underline-offset:3px}
+#rtable tfoot td,#rtable tfoot th{font-weight:700;background:var(--bg2);border-top:1px solid var(--border-strong)}
+@media (max-width: 860px){
+  #chart-view,#regions-view{padding:12px}
+  .sc-controls select{max-width:100%}
+  .adv-chip{order:6;max-width:100%}
+}
+/* an open header popover sits above the (mobile) profile sheet */
+.bar:has(.popover.open){z-index:95}
+/* the phone layout sets #map-view to block; keep it hidden when another view is open */
+#map-view[hidden]{display:none}

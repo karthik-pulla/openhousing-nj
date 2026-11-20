@@ -76,9 +76,16 @@ The configured priority is **Zillow ZHVI → ACS median value** (`ownership.home
 - **Zillow, when enabled:** the ZHVI "All Homes (SFR, Condo/Co-op), middle tier, smoothed, seasonally adjusted" city series. Zillow "cities" are often unincorporated communities, so values reach municipalities through a documented crosswalk (§7.1). A municipality uses the Zillow region named after itself if one exists. Otherwise it uses the mean of the community regions inside it, weighted by each community's 2020 Census housing units in the municipality.
 - **Redfin is not used.** The planned Zillow → Redfin → ACS cascade dropped Redfin because its public files are no longer downloadable and its terms bar redistribution and automated access (see [`docs/SOURCES_VERIFICATION.md`](docs/SOURCES_VERIFICATION.md)).
 
+- **NJ DCA equalized average residential value (last resort).** For towns where the ACS publishes no median home value (currently Teterboro, Tavistock and Walpack), `home_value` is the DCA average residential assessment divided by the town's equalization ratio (`dca_equalized_avg_res_value`, published for every town as context). It is an average from tax records, not a survey median; its rank correlation with the ACS median is 0.85 across towns, but the ratio varies widely in small or unusual towns. Scores built on it are always **low** confidence, with the reason stated.
+- **Price-to-income** (`price_to_income` = `home_value` ÷ town median household income; v1's measure) and `price_to_county_income` are published as context, not scored.
+
 ### 3.5 Home value history (profile graph; not scored)
 
 Each town profile graphs the ACS median value of owner-occupied homes (B25077) from every 5-year release, 2005–2009 through 2020–2024 (`data/published/home_value_history.csv`). Caveats: consecutive releases overlap by four years, so changes are smoothed and not independent; values are in dollars of each period's final year (not adjusted to today); open-ended top categories changed from $1,000,000+ to $2,000,000+ (top-coded points are flagged); the shaded band is each estimate's 90% margin of error, labelled on the graph as the likely range. Because a GEOID can be reused for a different area, a year is kept only if Census's name for that GEOID matches today's. This drops Princeton's 2009–2012 values, which describe the former Princeton borough. Pine Valley's 2022 merger into Pine Hill (population about 12) is not detectable this way and is negligible.
+
+### 3.6 Affordability over time (profile graph; not scored)
+
+`data/published/affordability_history.csv`: for every municipality and ACS 5-year release (2005–2009 to 2020–2024), `price_to_income` = B25077 median home value ÷ the county's B19013 median household income, and `rent_to_income` = 12 × B25064 median gross rent ÷ the same county income. Numerator and denominator come from the same release. The statewide line uses New Jersey's own state-level medians. Mortgage rates and taxes are not included (not available for every past year), so this tracks prices against incomes, not full costs. Same caveats as §3.5 (overlap, nominal dollars, top-coding flags, renamed GEOIDs dropped). Rents coded "less than $100" are treated as missing.
 
 ## 4. Scores and ranks
 
@@ -131,7 +138,15 @@ Each score carries `high`, `medium`, `low` or `insufficient data` (`*_confidence
 4. **Combination.** A score's flag is the weakest flag among its measures. One missing measure caps it at medium and two or more missing make it low; no measure at all gives "insufficient data" and no score. (With one measure per score, only the last case occurs.)
 5. **Source disagreement** (when Zillow is enabled). A municipality is flagged when its Zillow/ACS ratio differs from the statewide median ratio by more than a factor of 1.30 in either direction (`confidence.value_disagreement_factor`). The comparison is relative because ACS runs below Zillow everywhere.
 
-Current distribution: ownership 554 medium, 7 low, 3 insufficient; rental 413 high, 106 medium, 29 low, 16 insufficient.
+Current distribution: ownership 554 medium, 10 low; rental 413 high, 106 medium, 29 low, 16 insufficient.
+
+### 5.1 Rank ranges
+
+`*_rank_low` / `*_rank_high` ([`pipeline/uncertainty.py`](pipeline/uncertainty.py)): 1,000 Monte Carlo draws (`index.rank_range`, fixed seed). Each draw samples every town's ACS home value and median rent from Normal(estimate, MOE/1.645) and each county's median income once (so towns in a county move together), clipped at a small positive floor; administrative inputs (rate, tax bills), Zillow/DCA values and top-coded values stay fixed. Every town is re-ranked in each draw; the published range is the 5th–95th percentile of its ranks, widened to include the published rank (towns at the extremes can only move toward the middle). Median width is about 41 places for ownership.
+
+### 5.2 Regional summaries
+
+`data/published/regions.csv` ([`pipeline/regions.py`](pipeline/regions.py)): for each county, housing region (1–6, from the Fourth Round data) and the state: household-weighted means of town ownership burden and price-to-income, renter-household-weighted mean rent burden, median-town home value and rent, the share of households (renters) living in towns where owning (renting) is unaffordable at the HUD 80% limit, summed obligations, and need per 1,000 households. Calculated only from the published town rows.
 
 ## 6. Barriers layer (never in a score)
 
@@ -167,6 +182,8 @@ Rules apply in order; each link records the rule that made it ([`pipeline/crossw
 4. **census_place**: the name equals a 2020 Census place (usually a CDP) with land in the county. The region is linked to every municipality holding at least 10% of that place's 2020 housing units, recording the housing units for weighting.
 
 Every region is either linked or recorded as unmatched or excluded with a reason; the build fails if any region is unaccounted for. Current file: 548 NJ regions; 540 linked to 485 municipalities; 6 borough/township twins (Chatham, Chester, Freehold, Hopewell, Mendham, Rockaway) left unassigned by decision, because Zillow's region likely spans both; 2 excluded as unplaceable (Asbury, Newfoundland).
+
+**Statistical recheck** ([`scripts/twin_region_stats.py`](scripts/twin_region_stats.py), output `data/crosswalks/zillow_unmatched_stats.csv`). Each excluded region was tested against each candidate town and, for twins, both towns together, using two numbers Zillow publishes: its size rank (on the 392 regions that are exactly one town, log housing units is linear in log size rank, residual SD 0.55) and its 2024 price level against each candidate's ACS median (typical log ratio 0.164, SD 0.139). Combined as a normal log-likelihood, a single town would be assigned only if it beat every alternative by a likelihood ratio of 10. None did: "both towns" fits best for Chatham, Chester and Freehold; the strongest single-town result is Hopewell borough at 4.2. All eight stay unassigned.
 
 ### 7.2 Missing data
 
@@ -227,7 +244,11 @@ Warnings, which don't block publication, cover score changes of more than 15 poi
 10. **Obligations** are DCA's October 2024 calculations, not adopted or court-approved figures, and not construction outcomes.
 11. **Zillow crosswalk** (when enabled) maps postal-style place names to municipalities; community regions are approximations of municipal areas.
 
-## 11. Reproducibility
+## 11. Release archive
+
+Each publish keeps a dated copy (`data/archive/releases/<YYYY-MM-DD, NJ time>/openhousing_nj.csv.gz` and its manifest), regenerates `data/archive/index.json` and `CHANGELOG.md` (sources whose data period changed, how many ranks moved, new or removed columns), and writes `data/published/town_changes.web.json` with tracked fields for every town in every release. Older releases are never modified. Code is MIT-licensed; OpenHousing's data work is CC BY 4.0 and source data keeps its own terms (`data/LICENSE.md`, `CITATION.cff`).
+
+## 12. Reproducibility
 
 ```bash
 uv venv --python 3.12 .venv && uv pip install --python .venv -r requirements.txt

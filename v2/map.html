@@ -15,7 +15,7 @@
   })();
 </script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
-<link href="app.css?v=20261119p" rel="stylesheet">
+<link href="app.css?v=20261120b" rel="stylesheet">
 </head>
 <body>
 <a class="skip" href="#table-view" data-view-link="table">Skip to the table of all municipalities</a>
@@ -29,9 +29,33 @@
   <nav class="views" aria-label="Views">
     <button type="button" class="tab" data-view="map" aria-pressed="true">Map</button>
     <button type="button" class="tab" data-view="table" aria-pressed="false">Table</button>
+    <button type="button" class="tab" data-view="chart" aria-pressed="false">Chart</button>
+    <button type="button" class="tab" data-view="regions" aria-pressed="false">Regions</button>
     <button type="button" class="tab" data-view="compare" aria-pressed="false">Compare <span class="count" id="compare-count">0</span></button>
   </nav>
   <span class="sp"></span>
+  <div class="adv-chip" id="adv-chip" hidden><span id="adv-chip-t"></span><button type="button" class="linkbtn" id="adv-chip-reset">Reset</button></div>
+  <div class="pop-wrap">
+    <button type="button" class="btn ghost" id="adv-btn" aria-expanded="false" aria-controls="adv-pop" data-tip="Change the assumptions behind the scores">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span class="hide-sm">Assumptions</span></button>
+    <div class="popover adv" id="adv-pop" role="dialog" aria-label="Advanced: change the assumptions">
+      <h2 class="pop-h">Advanced: assumptions</h2>
+      <p class="notices">Recalculate every town's costs, scores and ranks in your browser. The published data doesn't change.</p>
+      <div class="adv-row"><label for="adv-dp">Down payment</label>
+        <input type="range" id="adv-dp" min="0" max="50" step="1"><span class="adv-num"><input type="number" id="adv-dp-n" min="0" max="100" step="1" aria-label="Down payment, percent">%</span></div>
+      <div class="adv-row"><label for="adv-rate">Mortgage rate</label>
+        <input type="range" id="adv-rate" min="2" max="12" step="0.05"><span class="adv-num"><input type="number" id="adv-rate-n" min="0" max="20" step="0.01" aria-label="Mortgage rate, percent">%</span></div>
+      <div class="adv-row"><label for="adv-term">Loan term</label>
+        <select id="adv-term" class="input"><option value="30">30 years</option><option value="20">20 years</option><option value="15">15 years</option></select></div>
+      <fieldset class="adv-basis"><legend>Compare costs with</legend>
+        <label><input type="radio" name="adv-basis" value="county"> County median income <small>(published)</small></label>
+        <label><input type="radio" name="adv-basis" value="town"> Town median income</label>
+        <label><input type="radio" name="adv-basis" value="ami80"> HUD 80% limit, family of four</label>
+      </fieldset>
+      <label class="chk"><input type="checkbox" id="adv-tax"> Include property tax</label>
+      <div class="adv-foot"><button type="button" class="btn sm" id="adv-reset">Reset to published</button></div>
+    </div>
+  </div>
   <div class="pop-wrap">
     <button type="button" class="btn ghost hide-sm" id="snap-btn" aria-expanded="false" aria-controls="snap-pop">NJ snapshot</button>
     <div class="popover" id="snap-pop" role="dialog" aria-label="New Jersey snapshot">
@@ -130,6 +154,41 @@
     </div>
   </section>
 
+  <!-- CHART VIEW -->
+  <section class="view" id="chart-view" aria-label="Chart two measures" hidden>
+    <div class="tv-head">
+      <h1 class="h1">Compare two measures</h1>
+      <button type="button" class="info" data-tip="Each dot is a town. Choose any two measures to see how they relate across New Jersey, filter by county or housing region, and download the points. Towns missing either value are left out." aria-label="How to use the chart"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25"/><path d="M8 7.2v3.9"/><circle cx="8" cy="5" r=".55" class="i-dot"/></svg></button>
+      <span class="sp"></span>
+      <button type="button" class="btn sm" id="dl-chart">Download these points (CSV)</button>
+    </div>
+    <div class="sc-controls">
+      <label>Across <select id="cx" class="input"></select></label>
+      <button type="button" class="ibtn" id="cswap" data-tip="Swap the axes" aria-label="Swap the axes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l-3 3 3 3M4 7h13M17 20l3-3-3-3M20 17H7"/></svg></button>
+      <label>Up <select id="cy" class="input"></select></label>
+      <label><span class="sr">County</span><select id="ccounty" class="input"></select></label>
+      <label><span class="sr">Housing region</span><select id="cregion" class="input"></select></label>
+      <label class="chk"><input type="checkbox" id="clog"> Log scale</label>
+    </div>
+    <p class="sc-stats" id="sc-stats"></p>
+    <div class="scwrap" id="scatter-wrap"><div id="scatter"></div><div class="sc-tip glass" id="sc-tip" hidden></div></div>
+  </section>
+
+  <!-- REGIONS VIEW -->
+  <section class="view" id="regions-view" aria-label="County and housing region summaries" hidden>
+    <div class="tv-head">
+      <h1 class="h1">Counties and housing regions</h1>
+      <div class="seg" role="group" aria-label="Group towns by">
+        <button type="button" class="segb" data-rlevel="county" aria-pressed="true">Counties</button>
+        <button type="button" class="segb" data-rlevel="housing_region" aria-pressed="false">Housing regions</button>
+      </div>
+      <span class="sp"></span>
+      <a class="btn sm" href="../data/published/regions.csv" download>Download summaries (CSV)</a>
+    </div>
+    <p class="hint">Calculated from the town data. Averages are weighted by households (renter households for rent), so larger towns count more. Housing regions are the six regions the state uses for affordable-housing obligations. *Moderate income = HUD's 80% limit for a family of four; "out of reach" = costs above 30% of that income. Select a county to see its towns.</p>
+    <div class="tablewrap" tabindex="0" aria-label="Scrollable summary table"><table class="dt" id="rtable"></table></div>
+  </section>
+
   <!-- COMPARE VIEW -->
   <section class="view" id="compare-view" aria-label="Compare municipalities" hidden>
     <div class="tv-head">
@@ -163,6 +222,6 @@
 </main>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
-<script src="app.js?v=20261119p"></script>
+<script src="app.js?v=20261120b"></script>
 </body>
 </html>

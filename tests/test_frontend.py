@@ -34,12 +34,12 @@ def test_site_reads_only_published_files():
     for p in paths:
         # published data, the manifest, boundaries, and the state's Fourth Round report (linked, not parsed)
         assert p.startswith(("../data/published/", "../data/manifest.json", "data/boundaries.geojson",
-                             "../data/static/fourth_round/")), p
+                             "../data/static/fourth_round/", "../data/archive/")), p
         target = (V2 / p).resolve()
         assert target.exists(), f"{p} does not exist (run the pipeline / build_boundaries.py)"
 
 
-@pytest.mark.parametrize("page", ["index.html", "map.html", "methodology.html", "sources.html", "data.html",
+@pytest.mark.parametrize("page", ["index.html", "map.html", "methodology.html", "sources.html", "data.html", "dictionary.html",
                                   "app.js", "app.css", "pages.js", "pages.css"])
 def test_no_secrets_or_private_terms_in_site(page):
     text = (V2 / page).read_text()
@@ -67,7 +67,7 @@ def test_localstorage_is_guarded(src):
 
 def test_pages_link_to_each_other():
     """Every text page carries the same navigation: Map, Methodology, Sources, Data."""
-    for f in ("index.html", "methodology.html", "sources.html", "data.html"):
+    for f in ("index.html", "methodology.html", "sources.html", "data.html", "dictionary.html"):
         html = (V2 / f).read_text()
         for target in ("map.html", "methodology.html", "sources.html", "data.html"):
             assert f'href="{target}"' in html, f"{f} lacks a link to {target}"
@@ -77,7 +77,8 @@ def test_pages_link_to_each_other():
 
 def test_data_page_downloads_published_files():
     html = (V2 / "data.html").read_text()
-    for f in ("openhousing_nj.csv", "home_value_history.csv"):
+    assert 'href="dictionary.html"' in html and "../data/archive/CHANGELOG.md" in html
+    for f in ("openhousing_nj.csv", "home_value_history.csv", "affordability_history.csv", "regions.csv", "data_dictionary.csv"):
         assert f'href="../data/published/{f}" download' in html
         assert (DATA / "published" / f).exists()
 

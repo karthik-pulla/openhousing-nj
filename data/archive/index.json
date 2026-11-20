@@ -3,7 +3,7 @@
   "releases": [
     {
       "release": "2026-11-19",
-      "published_at": "2026-11-20T01:08:42+00:00",
+      "published_at": "2026-11-20T01:17:34+00:00",
       "rows": 564,
       "csv": "data/archive/releases/2026-11-19/openhousing_nj.csv.gz",
       "manifest": "data/archive/releases/2026-11-19/manifest.json",

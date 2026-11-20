@@ -132,6 +132,15 @@ table.st th{font-weight:600;background:var(--bg2)}
 .badge-s.match{color:var(--muted);border:1px solid currentColor}
 .badge-s.not{color:var(--c-low);border:1px solid currentColor}
 
+/* dictionary */
+.crumb{font-size:13px;color:var(--muted);margin-bottom:6px}
+.dict-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:18px 0 4px}
+.dict-tools .input{flex:1;min-width:220px;max-width:420px}
+table.st.dict td:first-child{white-space:nowrap}
+table.st.dict code{font-size:12.5px}
+table.st.dict td{font-size:13.5px}
+.muted{color:var(--muted)}
+
 /* footer */
 .foot{border-top:1px solid var(--border);padding:22px 0 28px;font-size:13.5px;color:var(--muted)}
 .foot-in{max-width:1080px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}

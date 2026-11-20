@@ -1,6 +1,6 @@
 {
   "dataset": "OpenHousing NJ v2",
-  "published_at": "2026-11-20T01:08:42+00:00",
+  "published_at": "2026-11-20T01:17:34+00:00",
   "rows": 564,
   "files": {
     "csv": "data/published/openhousing_nj.csv",
@@ -11,6 +11,7 @@
     "home_value_history": "data/published/home_value_history.csv",
     "affordability_history": "data/published/affordability_history.csv",
     "regions": "data/published/regions.csv",
+    "data_dictionary": "data/published/data_dictionary.csv",
     "town_changes": "data/published/town_changes.web.json",
     "archive_index": "data/archive/index.json",
     "changelog": "data/archive/CHANGELOG.md"
@@ -275,7 +276,7 @@
     }
   ],
   "validation": {
-    "validated_at": "2026-11-20T01:08:42+00:00",
+    "validated_at": "2026-11-20T01:17:34+00:00",
     "passed": true,
     "errors": 0,
     "warnings": 0,

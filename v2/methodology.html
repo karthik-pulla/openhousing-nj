@@ -13,8 +13,8 @@
     document.documentElement.dataset.theme = t;
   })();
 </script>
-<link href="app.css?v=20261119p" rel="stylesheet">
-<link href="pages.css?v=20261119p" rel="stylesheet">
+<link href="app.css?v=20261120b" rel="stylesheet">
+<link href="pages.css?v=20261120b" rel="stylesheet">
 </head>
 <body class="page">
 <a class="skip" href="#main">Skip to content</a>
@@ -53,6 +53,10 @@
     <li><a href="#ranks">From numbers to scores</a></li>
     <li><a href="#context">Context we show but don't score</a></li>
     <li><a href="#confidence">Confidence flags</a></li>
+    <li><a href="#rank-ranges">Rank ranges</a></li>
+    <li><a href="#over-time">Affordability over time</a></li>
+    <li><a href="#regions">Counties and regions</a></li>
+    <li><a href="#advanced">Changing the assumptions</a></li>
     <li><a href="#barriers">Barriers: zoning and obligations</a></li>
     <li><a href="#limits">What this can't tell you</a></li>
     <li><a href="#sources">Sources</a></li>
@@ -80,6 +84,7 @@
   <p>The monthly payment uses the standard fixed-rate formula: <code>loan × r ÷ (1 − (1 + r)<sup>−n</sup>)</code>, where <code>r</code> is the annual rate ÷ 12 and <code>n</code> is the number of monthly payments.</p>
   <table class="st" aria-label="Ownership cost assumptions"><tbody id="assumptions"></tbody></table>
   <p><strong>Typical home value.</strong> <span id="home-value-text"></span></p>
+  <p><strong>When the Census has no home value.</strong> For a few very small towns the Census publishes no median home value. For those towns only, we use the state's <em>equalized average residential value</em>: the NJ Department of Community Affairs' average residential assessment divided by the town's equalization ratio, which the state sets each year to bring assessments to market value. It is an average from tax records, not a median from a survey, so those towns are always flagged <strong>low confidence</strong> and their profiles say so. <span id="dca-text"></span> The same value is published for every town as context.</p>
   <p><strong>Property taxes</strong> come from the NJ Department of Community Affairs' Property Tax Tables: the average total tax (county, municipal and school) on a residential property, before credits such as ANCHOR or Senior Freeze. New Jersey's property taxes are among the highest in the country and are a large part of the cost of owning, which is why they're included.</p>
 
   <h2 id="renting">Cost of renting</h2>
@@ -109,6 +114,26 @@
     <li>If a score has no usable measure at all, the town shows "insufficient data" and no score. <span id="unscored-text"></span></li>
   </ul>
   <p>Each town's profile lists the specific reasons for its flags.</p>
+
+  <h2 id="rank-ranges">Rank ranges</h2>
+  <p>A rank looks exact, but the Census figures behind it are survey estimates. To show how much a rank could move, we redraw every uncertain input 1,000 times within its margin of error and recompute every town's rank each time:</p>
+  <ul>
+    <li>Each town's median home value and median rent are drawn from a normal distribution centered on the estimate, with a spread of margin of error ÷ 1.645.</li>
+    <li>Each county's median income is drawn once per round, so every town in the county moves together.</li>
+    <li>The mortgage rate, property tax bills and other administrative figures stay fixed, as do top-coded values (only a lower bound is known).</li>
+  </ul>
+  <p>The <strong>likely range</strong> shown next to each rank is the middle 90% of the ranks the town got. A narrow range means the rank is dependable; a wide one means the town could sit much higher or lower. Towns at the very top or bottom can only move toward the middle, so their range is widened to include the published rank. The random seed is fixed, so the same data always gives the same ranges. Ranges are published as <code>ownership_rank_low</code>, <code>ownership_rank_high</code>, <code>rental_rank_low</code> and <code>rental_rank_high</code>.</p>
+
+  <h2 id="over-time">Affordability over time</h2>
+  <p>Each town profile has a graph of affordability in every Census ACS 5-year release since 2005–2009:</p>
+  <div class="formula"><code>price-to-income = median home value ÷ county median household income</code><br><code>rent-to-income = 12 × median gross rent ÷ county median household income</code></div>
+  <p>Both parts of each ratio come from the same release, so every point compares like with like. The dashed line is New Jersey as a whole, from the state's own Census medians. These ratios leave out mortgage rates and taxes, which we don't have for every past year, so they show how prices moved against incomes, not full ownership costs. Releases overlap by four years, so changes are gradual, and dollars are not adjusted for inflation (both parts of the ratio are in the same year's dollars). Years where Census reused a town's code for a different area are dropped. The full series is in <code>affordability_history.csv</code> on the <a href="data.html">Data</a> page.</p>
+
+  <h2 id="regions">Counties and regions</h2>
+  <p>The Regions view summarizes the town data for each county, each of the state's six affordable-housing regions, and New Jersey as a whole. Averages of town measures are weighted by households (renter households for rent), so a large town counts more than a small one; "typical home value" and "median rent" are the middle town. Counts and obligations are simple sums. Nothing new is estimated: every figure is calculated from the published town rows.</p>
+
+  <h2 id="advanced">Changing the assumptions</h2>
+  <p>The map's <strong>Assumptions</strong> panel lets you change the down payment, mortgage rate, loan term, whether property tax is included, and which income costs are compared with (county median, town median, or HUD's 80% limit for a family of four). Your browser then recalculates every town's costs, scores and ranks with the same formulas as the published data. Nothing is saved or sent anywhere, the published dataset doesn't change, and the settings are kept in the page address so you can share them. While custom assumptions are on, the plain-English summaries and the rank ranges still describe the published figures, and downloaded files are marked as custom.</p>
 
   <h2 id="barriers">Barriers: zoning and obligations</h2>
   <p>These describe possible causes of unaffordability. They are shown as separate map layers and profile rows and are <strong>never part of either score</strong>.</p>
@@ -141,7 +166,7 @@
   <p>Every figure comes from a public source or is calculated from one. Missing data is shown as "Unavailable"; nothing is estimated, filled in or generated. The written summaries on each town profile come from fixed sentence templates filled with these numbers; no AI writes them. The full list of sources, with each one's data period, retrieval date and terms, is on the <a href="sources.html">Sources</a> page.</p>
 
   <h2 id="data">Downloading the data</h2>
-  <p>The full dataset, the home value history and the data manifest are on the <a href="data.html">Data</a> page.</p>
+  <p>The full dataset, the data dictionary, the affordability history, the regional summaries, every past release and the data manifest are on the <a href="data.html">Data</a> page.</p>
   <p>The data refreshes automatically each month and is published only after passing validation checks: exactly 564 towns, no unexpected gaps, values in plausible ranges, and an unchanged format.</p>
 </main>
 
@@ -152,7 +177,7 @@
   </div>
   <p class="notices" id="notices"></p>
 </footer>
-<script src="pages.js?v=20261119p"></script>
+<script src="pages.js?v=20261120b"></script>
 
 <script>
 (function () {
@@ -198,7 +223,10 @@
     }).join("");
     $("cv-text").textContent = "Up to " + Math.round(cr.cv_high_max * 100) + "% is high, up to " + Math.round(cr.cv_medium_max * 100) +
       "% medium, above that low. A score's flag is the weakest flag among its measures.";
-    $("unscored-text").textContent = "Currently: no ownership score for " + sc.ownership.unscored.join(", ") + "; no rental score for " + sc.rental.unscored.length + " towns, mostly with very few rental homes.";
+    $("unscored-text").textContent = "Currently: " + (sc.ownership.unscored.length ? "no ownership score for " + sc.ownership.unscored.join(", ") : "every town has an ownership score") +
+      "; no rental score for " + sc.rental.unscored.length + " towns, mostly with very few rental homes.";
+    var dcaN = (m.home_value_source_counts || {})["NJ DCA equalized average value"] || 0;
+    $("dca-text").textContent = dcaN ? "This currently applies to " + dcaN + " towns." : "No town currently needs it.";
   }).catch(function (e) {
     $("updated").textContent = "The current figures couldn't be loaded (" + e.message + "). The explanations below still apply.";
   });

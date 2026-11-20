@@ -8,7 +8,7 @@
 2. Checks that the three API key secrets exist.
 3. Installs the pinned Python packages from `requirements.txt`.
 4. Restores the download cache (`data/raw/`), so reruns don't hit the sources again and the 95 MB Zillow file is reused when it hasn't changed.
-5. Runs `python scripts/refresh_data.py`: geography → every source → index → **validation** → publish.
+5. Runs `python scripts/refresh_data.py`: geography → every source → index → **validation** → publish. Publishing also adds the release to `data/archive/` (dated copy, `index.json`, `CHANGELOG.md`) and rebuilds the per-town change history, so the archive is committed with the data.
 6. Runs the test suite (`pytest`).
 7. **Commits the updated `data/` only if steps 2–6 all passed.** The commit message lists every source's data period.
 8. **On any failure:** nothing is committed, so the site keeps the last good dataset. The workflow opens a GitHub Issue labelled `data-refresh-failure` saying which step failed and why. If such an issue is already open, it adds a comment instead of opening a duplicate. GitHub emails you about new issues on your own repository by default.
