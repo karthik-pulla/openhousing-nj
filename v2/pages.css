@@ -54,7 +54,11 @@ main.prose{padding-top:44px;padding-bottom:72px}
 .grid-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .grid-top figcaption{font-size:13px;color:var(--muted)}
 #dots{display:grid;grid-template-columns:repeat(47,1fr);gap:3px;min-height:150px}
-#dots i{display:block;aspect-ratio:1;border-radius:3px;background:var(--nodata);transition:background-color .45s ease}
+#dots i{display:block;aspect-ratio:1;border-radius:3px;background:var(--nodata);transition:background-color .45s ease,transform .12s ease;cursor:default}
+#dots i.hot{transform:scale(1.6);position:relative;z-index:2;box-shadow:0 0 0 2px var(--bg)}
+#dot-tip{position:absolute;pointer-events:none;display:none;white-space:nowrap}
+#dot-tip b{display:block}
+#dot-tip span{display:block;color:var(--muted)}
 .grid-cap{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--muted)}
 .ramp-l,.nd-l{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
 .ramp{display:inline-flex;gap:2px}

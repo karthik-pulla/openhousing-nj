@@ -14,8 +14,8 @@
     document.documentElement.classList.add("js");
   })();
 </script>
-<link href="app.css?v=20261119k" rel="stylesheet">
-<link href="pages.css?v=20261119k" rel="stylesheet">
+<link href="app.css?v=20261119l" rel="stylesheet">
+<link href="pages.css?v=20261119l" rel="stylesheet">
 </head>
 <body class="page home-page">
 <a class="skip" href="#main">Skip to content</a>
@@ -55,7 +55,7 @@
 
     <figure class="grid-wrap rise">
       <div class="grid-top">
-        <figcaption>Each square is one New Jersey municipality, sorted from most to least affordable.</figcaption>
+        <figcaption>Each square is one New Jersey municipality, sorted from most to least affordable. Hover a square to see the town.</figcaption>
         <div class="seg" role="group" aria-label="Score shown">
           <button type="button" class="segb" data-score="ownership_score" aria-pressed="true">Owning</button>
           <button type="button" class="segb" data-score="rental_score" aria-pressed="false">Renting</button>
@@ -66,6 +66,7 @@
         <span class="ramp-l">Less affordable <span class="ramp" id="ramp" aria-hidden="true"></span> More affordable</span>
         <span class="nd-l"><i aria-hidden="true"></i>Not enough data</span>
       </div>
+      <div class="tip glass" id="dot-tip" role="tooltip"></div>
     </figure>
   </section>
 
@@ -144,6 +145,6 @@
   </div>
   <p class="notices" id="notices"></p>
 </footer>
-<script src="pages.js?v=20261119k"></script>
+<script src="pages.js?v=20261119l"></script>
 </body>
 </html>
