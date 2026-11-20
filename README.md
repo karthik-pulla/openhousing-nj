@@ -120,7 +120,7 @@ Set `sources.zillow.cleared_for_publication: true` in `config.yaml`, add Zillow'
 
 ### Changing the website's code
 
-The pages load `app.js`, `app.css`, `pages.js` and `pages.css` with a version tag (`?v=20261119n`). After editing any of them, change the tag in every page in `v2/` (`index`, `map`, `methodology`, `sources`, `data`) (e.g. to today's date) so visitors' browsers load the new files instead of a cached copy. Data files don't need this; they are fetched fresh.
+The pages load `app.js`, `app.css`, `pages.js` and `pages.css` with a version tag (`?v=20261119o`). After editing any of them, change the tag in every page in `v2/` (`index`, `map`, `methodology`, `sources`, `data`) (e.g. to today's date) so visitors' browsers load the new files instead of a cached copy. Data files don't need this; they are fetched fresh.
 
 ### Changing an assumption or weight
 
