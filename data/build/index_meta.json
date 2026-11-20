@@ -6,16 +6,11 @@
       "measures": {
         "ownership_burden": 1
       },
-      "scored": 561,
-      "unscored": [
-        "Teterboro Borough",
-        "Tavistock Borough",
-        "Walpack Township"
-      ],
+      "scored": 564,
+      "unscored": [],
       "confidence_counts": {
         "medium": 554,
-        "low": 7,
-        "insufficient data": 3
+        "low": 10
       }
     },
     "rental": {
@@ -54,10 +49,11 @@
   ],
   "home_value_source_counts": {
     "ACS median value": 561,
-    "null": 3
+    "NJ DCA equalized average value": 3
   },
   "home_value_priority_used": [
-    "acs"
+    "acs",
+    "dca_equalized"
   ],
   "zillow_included": false,
   "zillow_cleared_for_publication": false,
@@ -89,10 +85,17 @@
     "overall_rule": "weakest_component",
     "value_disagreement_factor": 1.3
   },
+  "rank_range": {
+    "draws": 1000,
+    "seed": 20261119,
+    "interval": 0.9
+  },
   "vintages": {
     "acs_county": "ACS 2020-2024 5-year",
     "acs_home_value_history": "ACS 5-year releases 2005-2009 to 2020-2024",
+    "acs_income_history": "ACS 5-year releases 2005-2009 to 2020-2024",
     "acs_municipal": "ACS 2020-2024 5-year",
+    "acs_rent_history": "ACS 5-year releases 2005-2009 to 2020-2024",
     "fourth_round_municipal": "DCA Fourth Round calculation, October 2024 (obligations for 2025-2035)",
     "fred_mortgage30": "Freddie Mac PMMS, mean of 4 weeks 2026-10-29 to 2026-11-19",
     "hud_county": "HUD FY2026 Income Limits; FY2027 Fair Market Rents",

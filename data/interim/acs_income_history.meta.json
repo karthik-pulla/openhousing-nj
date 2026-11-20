@@ -1,0 +1,28 @@
+{
+  "name": "acs_income_history",
+  "fetched": "2026-11-19",
+  "fetched_at": "2026-11-20T01:08:31+00:00",
+  "key": "geo_year",
+  "vintage": "ACS 5-year releases 2005-2009 to 2020-2024",
+  "source": "U.S. Census Bureau, American Community Survey 5-year estimates, tables B19013, B25077, B25064 (county and state)",
+  "url": "https://api.census.gov/data/",
+  "attribution": "Source: U.S. Census Bureau, American Community Survey 5-year estimates.",
+  "columns": [
+    "geo",
+    "year",
+    "period",
+    "median_hh_income",
+    "moe",
+    "median_home_value",
+    "median_gross_rent"
+  ],
+  "coverage": {
+    "rows": 352
+  },
+  "notes": [
+    "geo = 5-digit county FIPS, or 34 for New Jersey statewide.",
+    "Statewide rows also carry the state median home value and median gross rent."
+  ],
+  "first_year": 2009,
+  "last_year": 2024
+}

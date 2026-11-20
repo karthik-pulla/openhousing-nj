@@ -1,6 +1,6 @@
 {
   "dataset": "OpenHousing NJ v2",
-  "published_at": "2026-11-19T21:57:37+00:00",
+  "published_at": "2026-11-20T01:08:42+00:00",
   "rows": 564,
   "files": {
     "csv": "data/published/openhousing_nj.csv",
@@ -8,23 +8,23 @@
     "summaries": "data/published/summaries.json",
     "web_data": "data/published/openhousing_nj.web.json",
     "web_summaries": "data/published/summaries.web.json",
-    "home_value_history": "data/published/home_value_history.csv"
+    "home_value_history": "data/published/home_value_history.csv",
+    "affordability_history": "data/published/affordability_history.csv",
+    "regions": "data/published/regions.csv",
+    "town_changes": "data/published/town_changes.web.json",
+    "archive_index": "data/archive/index.json",
+    "changelog": "data/archive/CHANGELOG.md"
   },
   "scores": {
     "ownership": {
       "measures": {
         "ownership_burden": 1
       },
-      "scored": 561,
-      "unscored": [
-        "Teterboro Borough",
-        "Tavistock Borough",
-        "Walpack Township"
-      ],
+      "scored": 564,
+      "unscored": [],
       "confidence_counts": {
         "medium": 554,
-        "low": 7,
-        "insufficient data": 3
+        "low": 10
       }
     },
     "rental": {
@@ -82,7 +82,7 @@
   },
   "home_value_source_counts": {
     "ACS median value": 561,
-    "null": 3
+    "NJ DCA equalized average value": 3
   },
   "zillow_included": false,
   "redfin_included": false,
@@ -131,6 +131,18 @@
       }
     },
     {
+      "name": "acs_income_history",
+      "source": "U.S. Census Bureau, American Community Survey 5-year estimates, tables B19013, B25077, B25064 (county and state)",
+      "vintage": "ACS 5-year releases 2005-2009 to 2020-2024",
+      "url": "https://api.census.gov/data/",
+      "attribution": "Source: U.S. Census Bureau, American Community Survey 5-year estimates.",
+      "fetched": "2026-11-19",
+      "fetched_at": "2026-11-20T01:08:31+00:00",
+      "coverage": {
+        "rows": 352
+      }
+    },
+    {
       "name": "acs_municipal",
       "source": "U.S. Census Bureau, American Community Survey 5-year estimates (Census Data API)",
       "vintage": "ACS 2020-2024 5-year",
@@ -143,6 +155,37 @@
         "municipalities_covered": 564,
         "municipalities_missing": 0,
         "missing_sample": []
+      }
+    },
+    {
+      "name": "acs_rent_history",
+      "source": "U.S. Census Bureau, American Community Survey 5-year estimates, table B25064 (median gross rent)",
+      "vintage": "ACS 5-year releases 2005-2009 to 2020-2024",
+      "url": "https://api.census.gov/data/",
+      "attribution": "Source: U.S. Census Bureau, American Community Survey 5-year estimates.",
+      "fetched": "2026-11-19",
+      "fetched_at": "2026-11-20T01:08:31+00:00",
+      "coverage": {
+        "rows": 9020,
+        "municipalities_covered": 564,
+        "years": [
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ]
       }
     },
     {
@@ -191,7 +234,7 @@
       "url": "https://github.com/mtmleczko/nzlud",
       "attribution": "Mleczko, Matthew, and Matthew Desmond. 2023. National Zoning and Land Use Database (NZLUD). https://github.com/mtmleczko/nzlud",
       "fetched": "2026-11-19",
-      "fetched_at": "2026-11-19T21:34:23+00:00",
+      "fetched_at": "2026-11-20T01:05:24+00:00",
       "coverage": {
         "rows": 105,
         "municipalities_covered": 105,
@@ -232,7 +275,7 @@
     }
   ],
   "validation": {
-    "validated_at": "2026-11-19T21:57:37+00:00",
+    "validated_at": "2026-11-20T01:08:42+00:00",
     "passed": true,
     "errors": 0,
     "warnings": 0,
@@ -314,6 +357,12 @@
         "level": "error",
         "passed": true,
         "detail": "564 towns, years 2009-2024; 0 towns missing; 0 duplicate rows; 0 implausible values"
+      },
+      {
+        "check": "trend",
+        "level": "error",
+        "passed": true,
+        "detail": "rent history 564 towns; county income 21 counties; 0 implausible rents"
       },
       {
         "check": "freshness",

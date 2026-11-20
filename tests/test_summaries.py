@@ -109,7 +109,7 @@ def test_topcoded_value_says_at_least(df, renderer):
 
 def test_missing_data_wording(df, renderer):
     t = _text(renderer, row(df, "Tavistock Borough"))
-    assert "There isn't enough data to estimate the typical home value" in t
+    assert "The Census has no home value estimate" in t and "not a median" in t
     assert "There isn't enough rental data" in t
 
 

@@ -8,7 +8,10 @@
 # the county Zillow reports. Evidence comes from scripts/review_unmatched.py (GNIS feature IDs below).
 # Borough/township twins sharing one plain name (Chatham, Chester, Freehold, Hopewell, Mendham,
 # Rockaway) are deliberately NOT assigned (decision 2026-11-19): Zillow's region likely covers both
-# towns, so its value can't be attributed to either. Those towns fall back to Redfin/ACS home values.
+# towns, so its value can't be attributed to either. Those towns fall back to ACS home values.
+# Rechecked statistically 2026-11-19 (scripts/twin_region_stats.py -> zillow_unmatched_stats.csv):
+# Zillow's size rank and price level do not single out one town for any of the eight excluded
+# regions (best likelihood ratio 4.2, Hopewell borough; 10 required), so they stay unassigned.
 source,region_id,region_name,mun_code,note
 zillow,3752,Boonton,1401,"Twin name (Boonton town / Boonton township). Zillow lists 'Boonton Township' separately (region 17117), so plain 'Boonton' is the town. Same as v1."
 zillow,831875,Andover,1902,"v1 decision (CLAUDE.md), not re-verified: twin name (Andover borough / Andover township, Sussex); assigned to the township"

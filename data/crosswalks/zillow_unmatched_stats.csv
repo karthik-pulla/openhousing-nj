@@ -1,0 +1,24 @@
+region_id,region_name,candidate,housing_units,region_units_estimated,size_z,acs_median_value,zhvi_2024,price_z,loglik,best,likelihood_ratio_vs_next,decision
+41940,Chatham,both towns,7112,5680,0.41,1035483,1137146,-0.51,-0.214,True,1.3,keep unassigned
+41940,Chatham,Chatham Township,4102,5680,-0.59,1072600,1137146,-0.76,-0.468,False,,keep unassigned
+41940,Chatham,Chatham Borough,3010,5680,-1.16,984900,1137146,-0.15,-0.683,False,,keep unassigned
+833172,Chester,both towns,3195,2803,0.24,766362,855752,-0.39,-0.104,True,1.1,keep unassigned
+833172,Chester,Chester Township,2597,2803,-0.14,790900,855752,-0.62,-0.199,False,,keep unassigned
+833172,Chester,Chester Borough,598,2803,-2.82,659800,855752,0.69,-4.218,False,,keep unassigned
+395552,Freehold,both towns,17827,20421,-0.25,519997,589502,-0.28,-0.07,True,1.6,keep unassigned
+395552,Freehold,Freehold Township,13448,20421,-0.76,553600,589502,-0.73,-0.558,False,,keep unassigned
+395552,Freehold,Freehold Borough,4379,20421,-2.81,416800,589502,1.32,-4.819,False,,keep unassigned
+836126,Hopewell,Hopewell Borough,809,1857,-1.52,586600,648157,-0.46,-1.259,True,4.2,keep unassigned
+836126,Hopewell,Hopewell Township,6612,1857,2.32,561900,648157,-0.15,-2.699,False,,keep unassigned
+836126,Hopewell,both towns,7421,1857,2.53,564593,648157,-0.19,-3.216,False,,keep unassigned
+833168,Mendham,Mendham Borough,1856,3073,-0.92,819800,972923,0.05,-0.425,True,1.3,keep unassigned
+833168,Mendham,both towns,3998,3073,0.48,954063,972923,-1.04,-0.66,False,,keep unassigned
+833168,Mendham,Mendham Township,2142,3073,-0.66,1070400,972923,-1.87,-1.973,False,,keep unassigned
+833175,Rockaway,Rockaway Township,10024,6318,0.84,466500,526566,-0.31,-0.403,True,1.6,keep unassigned
+833175,Rockaway,both towns,12785,6318,1.29,462526,526566,-0.25,-0.859,False,,keep unassigned
+833175,Rockaway,Rockaway Borough,2761,6318,-1.51,448100,526566,-0.02,-1.142,False,,keep unassigned
+399495,Asbury,Bethlehem Township,1392,1751,-0.42,496600,550503,-0.44,-0.097,True,1.1,keep unassigned
+399495,Asbury,Franklin Township,1146,1751,-0.77,428300,550503,0.63,-0.196,False,,keep unassigned
+399495,Asbury,Union Township,2278,1751,0.48,416600,550503,0.83,-0.342,False,,keep unassigned
+53566,Newfoundland,Jefferson Township,8674,946,4.05,428200,681201,2.17,-2.346,True,3.3,keep unassigned
+53566,Newfoundland,West Milford Township,10142,946,4.33,399700,681201,2.66,-3.546,False,,keep unassigned

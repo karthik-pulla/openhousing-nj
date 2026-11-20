@@ -13,6 +13,7 @@
 home_value: "In {name}, {county} County, the typical home is worth about {home_value}."
 home_value_topcoded: "In {name}, {county} County, the typical home is worth at least {home_value}."
 home_value_missing: "There isn't enough data to estimate the typical home value in {name}, {county} County."
+home_value_dca: "The Census has no home value estimate for {name}, {county} County, so OpenHousing uses the state's equalized average residential value: {home_value}. This is an average from tax assessments, not a median."
 
 ownership_cost: >-
   Owning it costs about {annual_ownership_cost} a year, including the average property tax bill of

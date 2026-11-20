@@ -68,6 +68,12 @@ index:
   denominator: county
   # A town needs at least this many of a score's measures to get that score.
   min_components: 1
+  # Rank ranges (pipeline/uncertainty.py): redraw the ACS inputs from their margins
+  # of error this many times and report the middle `interval` of each town's ranks.
+  rank_range:
+    draws: 1000
+    seed: 20261119
+    interval: 0.90
 
 ownership:
   # Annual ownership cost = mortgage principal & interest + average residential property tax bill.
@@ -77,7 +83,10 @@ ownership:
   excluded_costs: [homeowners insurance, private mortgage insurance, HOA or condo fees,
                    maintenance, utilities, closing costs]
   # Home value source priority (first available wins; Redfin is not used, see sources.redfin).
-  home_value_priority: [zillow, acs]
+  # dca_equalized = NJ DCA average residential assessment / the town's equalization ratio
+  # (an average, not a median). Last resort only, for towns the Census has no estimate for;
+  # always low confidence.
+  home_value_priority: [zillow, acs, dca_equalized]
 
 ami_view:
   # Third view (shown, not scored): can a household at HUD's 80% of area median income afford it?

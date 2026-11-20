@@ -1,5 +1,5 @@
 {
-  "validated_at": "2026-11-19T21:57:37+00:00",
+  "validated_at": "2026-11-20T01:08:42+00:00",
   "passed": true,
   "errors": 0,
   "warnings": 0,
@@ -81,6 +81,12 @@
       "level": "error",
       "passed": true,
       "detail": "564 towns, years 2009-2024; 0 towns missing; 0 duplicate rows; 0 implausible values"
+    },
+    {
+      "check": "trend",
+      "level": "error",
+      "passed": true,
+      "detail": "rent history 564 towns; county income 21 counties; 0 implausible rents"
     },
     {
       "check": "freshness",

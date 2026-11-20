@@ -629,7 +629,7 @@
 
   // Summary sentence template id -> section heading
   var SUMMARY_GROUP = {
-    home_value: "Owning", home_value_topcoded: "Owning", home_value_missing: "Owning", ownership_cost: "Owning",
+    home_value: "Owning", home_value_topcoded: "Owning", home_value_missing: "Owning", home_value_dca: "Owning", ownership_cost: "Owning",
     ownership_rank: "Owning", ownership_most: "Owning", ownership_least: "Owning",
     rent: "Renting", rent_most: "Renting", rent_least: "Renting", rent_missing: "Renting",
     renters_burdened: "Renting", renters_burdened_unreliable: "Renting",

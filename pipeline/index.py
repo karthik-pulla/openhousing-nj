@@ -137,8 +137,13 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
     df = df.merge(acs_c[["county_fips", "median_hh_income", "median_hh_income_moe"]].rename(columns={
         "median_hh_income": "county_median_hh_income", "median_hh_income_moe": "county_median_hh_income_moe"}),
         on="county_fips", how="left", validate="many_to_one")
-    df = df.merge(tax[["geoid", "avg_res_tax_bill", "tax_year"]].rename(
+    df = df.merge(tax[["geoid", "avg_res_tax_bill", "tax_year", "avg_res_assessed_value", "equalization_ratio"]].rename(
         columns={"avg_res_tax_bill": "avg_property_tax_bill"}), on="geoid", how="left", validate="one_to_one")
+    # NJ DCA equalized average residential value: assessed value brought to market level by the
+    # state's equalization ratio. An average (not a median); context for every town, and the
+    # last-resort home value where the Census has none.
+    df["dca_equalized_avg_res_value"] = df.avg_res_assessed_value / df.equalization_ratio.where(df.equalization_ratio > 0)
+    df = df.drop(columns=["avg_res_assessed_value", "equalization_ratio"])
     lim = f"{ami['income_limit']}_p{ami['household_size']}"
     df = df.merge(hud[["county_fips", "hud_area_name", lim, "fmr_2br"]].rename(columns={lim: "ami80_income_limit"}),
                   on="county_fips", how="left", validate="many_to_one")
@@ -164,12 +169,16 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
     df["home_value"] = np.nan
     df["home_value_source"] = None
     df["home_value_vintage"] = None
+    tax_vintage = _meta("property_tax_municipal")["vintage"]
+    HV = {"zillow": ("zhvi", "Zillow ZHVI", lambda: zmeta["vintage"]),
+          "acs": ("acs_median_home_value", "ACS median value", lambda: acs_vintage),
+          "dca_equalized": ("dca_equalized_avg_res_value", "NJ DCA equalized average value", lambda: tax_vintage)}
     for src in reversed(priority):            # later sources first, earlier ones overwrite
-        col = "zhvi" if src == "zillow" else "acs_median_home_value"
+        col, label, vint = HV[src]
         has = df[col].notna()
         df.loc[has, "home_value"] = df.loc[has, col]
-        df.loc[has, "home_value_source"] = "Zillow ZHVI" if src == "zillow" else "ACS median value"
-        df.loc[has, "home_value_vintage"] = (zmeta["vintage"] if src == "zillow" else acs_vintage)
+        df.loc[has, "home_value_source"] = label
+        df.loc[has, "home_value_vintage"] = vint()
 
     # Zillow vs ACS disagreement, relative to the statewide typical gap.
     ratio = df.zhvi / df.acs_median_home_value.where(~df.acs_median_home_value_topcoded.fillna(False))
@@ -194,6 +203,9 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
     df["rent_burden_town_income"] = df.annual_rent / df.town_median_hh_income
     df["ownership_burden_ami80"] = df.annual_ownership_cost / df.ami80_income_limit
     df["rent_burden_ami80"] = df.annual_rent / df.ami80_income_limit
+    # Price-to-income (v1's measure): how many years of income the typical home costs.
+    df["price_to_income"] = df.home_value / df.town_median_hh_income
+    df["price_to_county_income"] = df.home_value / df.county_median_hh_income
     share = ami["affordable_share"]
     df["ownership_affordable_at_ami80"] = (df.ownership_burden_ami80 <= share).where(df.ownership_burden_ami80.notna())
     df["rent_affordable_at_ami80"] = (df.rent_burden_ami80 <= share).where(df.rent_burden_ami80.notna())
@@ -212,6 +224,7 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
     cap = LEVELS[ccfg["acs_home_value_max_confidence"]]
     val_conf[acs_used] = val_conf[acs_used].map(lambda v: NAMES[min(LEVELS[v], cap)] if isinstance(v, str) else v)
     val_conf[acs_used & df.acs_median_home_value_topcoded.fillna(False)] = "low"
+    val_conf[df.home_value_source == "NJ DCA equalized average value"] = "low"
     comp_conf = pd.DataFrame({
         "ownership_burden": val_conf.where(df.ownership_burden.notna()),
         "rent_burden": cv_level(df.median_gross_rent, df.median_gross_rent_moe, ccfg).where(df.rent_burden.notna()),
@@ -244,6 +257,9 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
         if "ownership_burden" in used:
             if r.home_value_source == "ACS median value":
                 why.append("home value is the ACS 5-year owner-reported median, not a current market price")
+            if r.home_value_source == "NJ DCA equalized average value":
+                why.append("the Census has no home value for this town, so the home value is NJ DCA's equalized "
+                           "average residential assessment (an average, not a median)")
             if r.home_value_source == "ACS median value" and r.acs_median_home_value_topcoded in (True, "True"):
                 why.append("the Census reports only that the home value is at least $2,000,000")
             if isinstance(r.zillow_method, str) and r.zillow_method != "town region":
@@ -279,6 +295,18 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
             "unscored": df.loc[score.isna(), "name"].tolist(),
             "confidence_counts": conf.value_counts().to_dict()}
 
+    # ---------------------------------------------------------------- rank ranges
+    from .uncertainty import rank_ranges
+    rr = icfg["rank_range"]
+    df = df.join(rank_ranges(df, rate, own["down_payment_pct"], own["loan_term_years"],
+                             rr["draws"], rr["seed"], rr["interval"]))
+    # Towns at the extremes can only move toward the middle when others are redrawn, so their
+    # published rank can sit just outside the simulated range; the range always includes it.
+    for sname in icfg["scores"]:
+        rk, lo, hi = df[f"{sname}_rank"], df[f"{sname}_rank_low"], df[f"{sname}_rank_high"]
+        df[f"{sname}_rank_low"] = lo.where(lo.isna() | (lo <= rk), rk)
+        df[f"{sname}_rank_high"] = hi.where(hi.isna() | (hi >= rk), rk)
+
     # ---------------------------------------------------------------- B. barriers
     df = df.merge(nz, on="geoid", how="left", validate="one_to_one")
     df["zoning_data_available"] = df.zri.notna()
@@ -311,6 +339,7 @@ def build(include_uncleared: bool = False) -> tuple[pd.DataFrame, dict]:
                         "excluded_costs": own["excluded_costs"],
                         "ami_view": ami},
         "confidence_rules": ccfg,
+        "rank_range": rr,
         "vintages": {m.stem.replace(".meta", ""): json.loads(m.read_text())["vintage"]
                      for m in sorted(INTERIM.glob("*.meta.json"))
                      if "zillow" not in m.name or "zillow" in priority},

@@ -1,0 +1,375 @@
+{
+  "dataset": "OpenHousing NJ v2",
+  "published_at": "2026-11-20T01:08:42+00:00",
+  "rows": 564,
+  "files": {
+    "csv": "data/published/openhousing_nj.csv",
+    "index_meta": "data/published/index_meta.json",
+    "summaries": "data/published/summaries.json",
+    "web_data": "data/published/openhousing_nj.web.json",
+    "web_summaries": "data/published/summaries.web.json",
+    "home_value_history": "data/published/home_value_history.csv",
+    "affordability_history": "data/published/affordability_history.csv",
+    "regions": "data/published/regions.csv",
+    "town_changes": "data/published/town_changes.web.json",
+    "archive_index": "data/archive/index.json",
+    "changelog": "data/archive/CHANGELOG.md"
+  },
+  "scores": {
+    "ownership": {
+      "measures": {
+        "ownership_burden": 1
+      },
+      "scored": 564,
+      "unscored": [],
+      "confidence_counts": {
+        "medium": 554,
+        "low": 10
+      }
+    },
+    "rental": {
+      "measures": {
+        "rent_burden": 1
+      },
+      "scored": 548,
+      "unscored": [
+        "Buena Vista Township",
+        "Chesilhurst Borough",
+        "Tavistock Borough",
+        "Cape May Point Borough",
+        "Sea Isle City",
+        "Shiloh Borough",
+        "East Greenwich Township",
+        "Logan Township",
+        "Wenonah Borough",
+        "Alexandria Township",
+        "Delaware Township",
+        "Loch Arbour Village",
+        "Barnegat Light Borough",
+        "Harvey Cedars Borough",
+        "Mantoloking Borough",
+        "Walpack Township"
+      ],
+      "confidence_counts": {
+        "high": 413,
+        "medium": 106,
+        "low": 29,
+        "insufficient data": 16
+      }
+    }
+  },
+  "context_measures": [
+    "renters_cost_burdened"
+  ],
+  "assumptions": {
+    "down_payment_pct": 20,
+    "loan_term_years": 30,
+    "mortgage_rate_pct": 7.203,
+    "mortgage_rate_vintage": "Freddie Mac PMMS, mean of 4 weeks 2026-10-29 to 2026-11-19",
+    "excluded_costs": [
+      "homeowners insurance",
+      "private mortgage insurance",
+      "HOA or condo fees",
+      "maintenance",
+      "utilities",
+      "closing costs"
+    ],
+    "ami_view": {
+      "income_limit": "il80",
+      "household_size": 4,
+      "affordable_share": 0.3
+    }
+  },
+  "home_value_source_counts": {
+    "ACS median value": 561,
+    "NJ DCA equalized average value": 3
+  },
+  "zillow_included": false,
+  "redfin_included": false,
+  "sources": [
+    {
+      "name": "acs_county",
+      "source": "U.S. Census Bureau, American Community Survey 5-year estimates (Census Data API)",
+      "vintage": "ACS 2020-2024 5-year",
+      "url": "https://api.census.gov/data/2024/acs/acs5",
+      "attribution": "",
+      "fetched": "2026-11-19",
+      "fetched_at": "2026-11-19T21:34:19+00:00",
+      "coverage": {
+        "rows": 21
+      }
+    },
+    {
+      "name": "acs_home_value_history",
+      "source": "U.S. Census Bureau, American Community Survey 5-year estimates, table B25077 (median value)",
+      "vintage": "ACS 5-year releases 2005-2009 to 2020-2024",
+      "url": "https://api.census.gov/data/",
+      "attribution": "Source: U.S. Census Bureau, American Community Survey 5-year estimates.",
+      "fetched": "2026-11-19",
+      "fetched_at": "2026-11-19T21:34:20+00:00",
+      "coverage": {
+        "rows": 9020,
+        "municipalities_covered": 564,
+        "years": [
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ]
+      }
+    },
+    {
+      "name": "acs_income_history",
+      "source": "U.S. Census Bureau, American Community Survey 5-year estimates, tables B19013, B25077, B25064 (county and state)",
+      "vintage": "ACS 5-year releases 2005-2009 to 2020-2024",
+      "url": "https://api.census.gov/data/",
+      "attribution": "Source: U.S. Census Bureau, American Community Survey 5-year estimates.",
+      "fetched": "2026-11-19",
+      "fetched_at": "2026-11-20T01:08:31+00:00",
+      "coverage": {
+        "rows": 352
+      }
+    },
+    {
+      "name": "acs_municipal",
+      "source": "U.S. Census Bureau, American Community Survey 5-year estimates (Census Data API)",
+      "vintage": "ACS 2020-2024 5-year",
+      "url": "https://api.census.gov/data/2024/acs/acs5",
+      "attribution": "Source: U.S. Census Bureau, ACS 2020-2024 5-year.",
+      "fetched": "2026-11-19",
+      "fetched_at": "2026-11-19T21:34:19+00:00",
+      "coverage": {
+        "rows": 564,
+        "municipalities_covered": 564,
+        "municipalities_missing": 0,
+        "missing_sample": []
+      }
+    },
+    {
+      "name": "acs_rent_history",
+      "source": "U.S. Census Bureau, American Community Survey 5-year estimates, table B25064 (median gross rent)",
+      "vintage": "ACS 5-year releases 2005-2009 to 2020-2024",
+      "url": "https://api.census.gov/data/",
+      "attribution": "Source: U.S. Census Bureau, American Community Survey 5-year estimates.",
+      "fetched": "2026-11-19",
+      "fetched_at": "2026-11-20T01:08:31+00:00",
+      "coverage": {
+        "rows": 9020,
+        "municipalities_covered": 564,
+        "years": [
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ]
+      }
+    },
+    {
+      "name": "fourth_round_municipal",
+      "source": "New Jersey Department of Community Affairs, Affordable Housing Obligations for 2025-2035 (Fourth Round) Methodology and Background, October 2024, Appendix A",
+      "vintage": "DCA Fourth Round calculation, October 2024 (obligations for 2025-2035)",
+      "url": "data/static/fourth_round/FourthRoundCalculation_Methodology.pdf",
+      "attribution": "Source: New Jersey Department of Community Affairs, Affordable Housing Obligations for 2025-2035 (Fourth Round) Methodology and Background, October 2024, Appendix A.",
+      "fetched": "2026-11-19",
+      "fetched_at": "2026-11-19T21:34:23+00:00",
+      "coverage": {
+        "rows": 564,
+        "municipalities_covered": 564,
+        "municipalities_missing": 0,
+        "missing_sample": []
+      }
+    },
+    {
+      "name": "fred_mortgage30",
+      "source": "Freddie Mac Primary Mortgage Market Survey via FRED (series MORTGAGE30US)",
+      "vintage": "Freddie Mac PMMS, mean of 4 weeks 2026-10-29 to 2026-11-19",
+      "url": "https://fred.stlouisfed.org/series/MORTGAGE30US",
+      "attribution": "Freddie Mac, 30-Year Fixed Rate Mortgage Average in the United States [MORTGAGE30US], retrieved from FRED, Federal Reserve Bank of St. Louis. This product uses the FRED\u00ae API but is not endorsed or certified by the Federal Reserve Bank of St. Louis.",
+      "fetched": "2026-11-19",
+      "fetched_at": "2026-11-19T21:34:23+00:00",
+      "coverage": {
+        "rows": 260
+      }
+    },
+    {
+      "name": "hud_county",
+      "source": "U.S. Department of Housing and Urban Development, HUD USER API",
+      "vintage": "HUD FY2026 Income Limits; FY2027 Fair Market Rents",
+      "url": "https://www.huduser.gov/portal/dataset/fmr-api.html",
+      "attribution": "This product uses the HUD User Data API but is not endorsed or certified by HUD User.",
+      "fetched": "2026-11-19",
+      "fetched_at": "2026-11-19T21:34:23+00:00",
+      "coverage": {
+        "rows": 21
+      }
+    },
+    {
+      "name": "nzlud_municipal",
+      "source": "National Zoning and Land Use Database, Eviction Lab (Princeton University)",
+      "vintage": "NZLUD (municipal surveys 2019-2022; file 2023)",
+      "url": "https://github.com/mtmleczko/nzlud",
+      "attribution": "Mleczko, Matthew, and Matthew Desmond. 2023. National Zoning and Land Use Database (NZLUD). https://github.com/mtmleczko/nzlud",
+      "fetched": "2026-11-19",
+      "fetched_at": "2026-11-20T01:05:24+00:00",
+      "coverage": {
+        "rows": 105,
+        "municipalities_covered": 105,
+        "municipalities_missing": 459,
+        "missing_sample": [
+          "Buena Borough",
+          "Buena Vista Township",
+          "Corbin City",
+          "Egg Harbor Township",
+          "Egg Harbor City",
+          "Estell Manor City",
+          "Folsom Borough",
+          "Galloway Township",
+          "Hamilton Township",
+          "Linwood City",
+          "Longport Borough",
+          "Margate City",
+          "Mullica Township",
+          "Northfield City",
+          "Port Republic City"
+        ]
+      }
+    },
+    {
+      "name": "property_tax_municipal",
+      "source": "New Jersey Department of Community Affairs, Division of Local Government Services",
+      "vintage": "NJ DCA 2025 Property Tax Tables (tax year 2025)",
+      "url": "https://www.nj.gov/dca/dlgs/resources/Property_Tax_info.shtml",
+      "attribution": "Source: NJ Department of Community Affairs, 2025 Property Tax Tables.",
+      "fetched": "2026-11-19",
+      "fetched_at": "2026-11-19T21:34:23+00:00",
+      "coverage": {
+        "rows": 564,
+        "municipalities_covered": 564,
+        "municipalities_missing": 0,
+        "missing_sample": []
+      }
+    }
+  ],
+  "validation": {
+    "validated_at": "2026-11-20T01:08:42+00:00",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0,
+    "results": [
+      {
+        "check": "rows",
+        "level": "error",
+        "passed": true,
+        "detail": "564 rows (expected 564)"
+      },
+      {
+        "check": "geoids",
+        "level": "error",
+        "passed": true,
+        "detail": "0 malformed, 0 duplicate, 0 unknown, 0 missing"
+      },
+      {
+        "check": "schema",
+        "level": "error",
+        "passed": true,
+        "detail": "added [], removed [], kind changed [], order ok True"
+      },
+      {
+        "check": "required",
+        "level": "error",
+        "passed": true,
+        "detail": "nulls in required fields: none; absent columns: none"
+      },
+      {
+        "check": "missing",
+        "level": "error",
+        "passed": true,
+        "detail": "fields missing for more towns than allowed: none (limits {'home_value': 6, 'ownership_score': 6, 'median_gross_rent': 25, 'rental_score': 25, 'town_median_hh_income': 6})"
+      },
+      {
+        "check": "ranges",
+        "level": "error",
+        "passed": true,
+        "detail": "0 value(s) outside hard limits"
+      },
+      {
+        "check": "consistency",
+        "level": "error",
+        "passed": true,
+        "detail": "ok"
+      },
+      {
+        "check": "zillow_terms",
+        "level": "error",
+        "passed": true,
+        "detail": "ok (cleared_for_publication=False)"
+      },
+      {
+        "check": "sources",
+        "level": "error",
+        "passed": true,
+        "detail": "failed steps in last run: none"
+      },
+      {
+        "check": "coverage",
+        "level": "error",
+        "passed": true,
+        "detail": "towns scored, change vs published: {'ownership': 0, 'rental': 0} (error if a drop exceeds 10)"
+      },
+      {
+        "check": "jumps",
+        "level": "warning",
+        "passed": true,
+        "detail": "0 town score(s) moved more than 15 points"
+      },
+      {
+        "check": "summaries",
+        "level": "error",
+        "passed": true,
+        "detail": "564 summaries; 0 towns without one; 0 with problems; 0 with a sentence lacking sources"
+      },
+      {
+        "check": "history",
+        "level": "error",
+        "passed": true,
+        "detail": "564 towns, years 2009-2024; 0 towns missing; 0 duplicate rows; 0 implausible values"
+      },
+      {
+        "check": "trend",
+        "level": "error",
+        "passed": true,
+        "detail": "rent history 564 towns; county income 21 counties; 0 implausible rents"
+      },
+      {
+        "check": "freshness",
+        "level": "warning",
+        "passed": true,
+        "detail": "ok"
+      }
+    ]
+  }
+}

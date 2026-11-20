@@ -20,7 +20,11 @@ from ..crosswalk import build_nzlud
 from .base import FetchResult
 
 KEEP = {"zri": "zri", "min_lot_size": "nzlud_min_lot_size", "one_acre_more": "nzlud_one_acre_more",
-        "inclusionary": "nzlud_inclusionary", "open_space": "nzlud_open_space"}
+        "inclusionary": "nzlud_inclusionary", "open_space": "nzlud_open_space",
+        # Shown in v1's town panel; context only, never scored (NZLUD data dictionary):
+        "adu": "nzlud_adu",                    # 1 = accessory dwelling units allowed somewhere in the town
+        "parking_median": "nzlud_parking_median",  # median parking spaces required per residential unit
+        "mf_per": "nzlud_mf_per"}              # share of residential districts allowing multifamily by right
 CITATION = ("Mleczko, Matthew, and Matthew Desmond. 2023. National Zoning and Land Use Database "
             "(NZLUD). https://github.com/mtmleczko/nzlud")
 

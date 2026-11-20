@@ -1,0 +1,25 @@
+{
+  "dataset": "OpenHousing NJ v2",
+  "releases": [
+    {
+      "release": "2026-11-19",
+      "published_at": "2026-11-20T01:08:42+00:00",
+      "rows": 564,
+      "csv": "data/archive/releases/2026-11-19/openhousing_nj.csv.gz",
+      "manifest": "data/archive/releases/2026-11-19/manifest.json",
+      "vintages": {
+        "acs_county": "ACS 2020-2024 5-year",
+        "acs_home_value_history": "ACS 5-year releases 2005-2009 to 2020-2024",
+        "acs_income_history": "ACS 5-year releases 2005-2009 to 2020-2024",
+        "acs_municipal": "ACS 2020-2024 5-year",
+        "acs_rent_history": "ACS 5-year releases 2005-2009 to 2020-2024",
+        "fourth_round_municipal": "DCA Fourth Round calculation, October 2024 (obligations for 2025-2035)",
+        "fred_mortgage30": "Freddie Mac PMMS, mean of 4 weeks 2026-10-29 to 2026-11-19",
+        "hud_county": "HUD FY2026 Income Limits; FY2027 Fair Market Rents",
+        "nzlud_municipal": "NZLUD (municipal surveys 2019-2022; file 2023)",
+        "property_tax_municipal": "NJ DCA 2025 Property Tax Tables (tax year 2025)"
+      },
+      "changes": null
+    }
+  ]
+}

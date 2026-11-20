@@ -98,6 +98,10 @@
       "kind": "number"
     },
     {
+      "name": "dca_equalized_avg_res_value",
+      "kind": "number"
+    },
+    {
       "name": "hud_area_name",
       "kind": "text"
     },
@@ -194,6 +198,14 @@
       "kind": "number"
     },
     {
+      "name": "price_to_income",
+      "kind": "number"
+    },
+    {
+      "name": "price_to_county_income",
+      "kind": "number"
+    },
+    {
       "name": "ownership_affordable_at_ami80",
       "kind": "bool"
     },
@@ -258,6 +270,22 @@
       "kind": "text"
     },
     {
+      "name": "ownership_rank_low",
+      "kind": "number"
+    },
+    {
+      "name": "ownership_rank_high",
+      "kind": "number"
+    },
+    {
+      "name": "rental_rank_low",
+      "kind": "number"
+    },
+    {
+      "name": "rental_rank_high",
+      "kind": "number"
+    },
+    {
       "name": "zri",
       "kind": "number"
     },
@@ -275,6 +303,18 @@
     },
     {
       "name": "nzlud_open_space",
+      "kind": "number"
+    },
+    {
+      "name": "nzlud_adu",
+      "kind": "number"
+    },
+    {
+      "name": "nzlud_parking_median",
+      "kind": "number"
+    },
+    {
+      "name": "nzlud_mf_per",
       "kind": "number"
     },
     {

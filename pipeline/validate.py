@@ -254,6 +254,20 @@ def validate(df: pd.DataFrame, previous: pd.DataFrame | None, cfg: dict) -> Repo
                     f"{h.geoid.nunique()} towns, years {h.year.min()}-{h.year.max()}; {len(missing_towns)} towns missing; "
                     f"{dup} duplicate rows; {len(bad)} implausible values", missing_towns)
 
+    # affordability-over-time inputs
+    with guard(rep, "trend"):
+        miss = [n for n in ("acs_rent_history", "acs_income_history") if not (INTERIM / f"{n}.csv").exists()]
+        if miss:
+            rep.add("trend", "error", False, "missing " + ", ".join(miss))
+        else:
+            r = pd.read_csv(INTERIM / "acs_rent_history.csv", dtype={"geoid": str})
+            i = pd.read_csv(INTERIM / "acs_income_history.csv", dtype={"geo": str})
+            bad = r[(r.median_gross_rent < 100) | (r.median_gross_rent > 6000)]
+            ctys = i[i.geo != "34"].geo.nunique()
+            rep.add("trend", "error", r.geoid.nunique() == 564 and ctys == 21 and (i.geo == "34").any() and not len(bad),
+                    f"rent history {r.geoid.nunique()} towns; county income {ctys} counties; "
+                    f"{len(bad)} implausible rents")
+
     # freshness
     with guard(rep, "freshness"):
         stale = []
@@ -288,7 +302,12 @@ def build_manifest(df: pd.DataFrame, report: dict, published_at: str) -> dict:
                   "summaries": "data/published/summaries.json",
                   "web_data": "data/published/openhousing_nj.web.json",
                   "web_summaries": "data/published/summaries.web.json",
-                  "home_value_history": "data/published/home_value_history.csv"},
+                  "home_value_history": "data/published/home_value_history.csv",
+                  "affordability_history": "data/published/affordability_history.csv",
+                  "regions": "data/published/regions.csv",
+                  "town_changes": "data/published/town_changes.web.json",
+                  "archive_index": "data/archive/index.json",
+                  "changelog": "data/archive/CHANGELOG.md"},
         "scores": meta["scores"],
         "context_measures": meta["context_measures"],
         "assumptions": meta["assumptions"],
@@ -334,9 +353,57 @@ def publish(df: pd.DataFrame, report: dict) -> None:
     (PUBLISHED / "home_value_history.web.json").write_text(json.dumps(
         {"years": years, "vintage": hmeta["vintage"], "notes": hmeta["notes"], "towns": towns},
         separators=(",", ":")) + "\n")
+    publish_affordability_history()
+    from . import regions
+    reg = regions.build(df)
+    reg.to_csv(PUBLISHED / "regions.csv", index=False)
+    (PUBLISHED / "regions.web.json").write_text(reg.to_json(orient="split", index=False, double_precision=6) + "\n")
     write_json(PUBLISHED / "validation.json", report)
-    write_json(MANIFEST, build_manifest(df, report, published_at))
+    manifest = build_manifest(df, report, published_at)
+    write_json(MANIFEST, manifest)
+    from .archive import archive_release
+    archive_release(df, manifest)
     log.info("published %s (%d rows) and %s", PUBLISHED_CSV.name, len(df), MANIFEST.name)
+
+
+def publish_affordability_history() -> None:
+    """Price-to-income and rent-to-income for every town and statewide, in every ACS 5-year release.
+    Numerator and denominator come from the same release (same five-year period)."""
+    hv = pd.read_csv(INTERIM / "acs_home_value_history.csv", dtype={"geoid": str})
+    rent = pd.read_csv(INTERIM / "acs_rent_history.csv", dtype={"geoid": str})
+    inc = pd.read_csv(INTERIM / "acs_income_history.csv", dtype={"geo": str})
+    munis = pd.read_csv(GEO / "municipalities.csv", dtype=str)[["geoid", "county_fips"]]
+    t = hv.rename(columns={"moe": "home_value_moe", "topcoded": "home_value_topcoded"}).merge(
+        rent.rename(columns={"moe": "rent_moe", "topcoded": "rent_topcoded"}).drop(columns="period"),
+        on=["geoid", "year"], how="outer").merge(munis, on="geoid")
+    t["period"] = t.year.map(lambda y: f"{int(y) - 4}-{int(y)}")
+    t = t.merge(inc[["geo", "year", "median_hh_income"]].rename(
+        columns={"geo": "county_fips", "median_hh_income": "county_median_hh_income"}), on=["county_fips", "year"], how="left")
+    t["price_to_income"] = t.median_home_value / t.county_median_hh_income
+    t["rent_to_income"] = 12 * t.median_gross_rent / t.county_median_hh_income
+    cols = ["geoid", "year", "period", "median_home_value", "home_value_topcoded", "median_gross_rent", "rent_topcoded",
+            "county_median_hh_income", "price_to_income", "rent_to_income"]
+    t = t.sort_values(["geoid", "year"])[cols]
+    t.to_csv(PUBLISHED / "affordability_history.csv", index=False)
+    st = inc[inc.geo == "34"].sort_values("year")
+    years = sorted(int(y) for y in t.year.unique())
+    r4 = lambda v: None if pd.isna(v) else round(float(v), 4)
+    towns = {}
+    for g, grp in t.groupby("geoid"):
+        by = {int(r.year): r for r in grp.itertuples()}
+        towns[g] = [[r4(by[y].price_to_income), r4(by[y].rent_to_income),
+                     (1 if by[y].home_value_topcoded in (True, "True") else 0) + (2 if by[y].rent_topcoded in (True, "True") else 0)]
+                    if y in by else None for y in years]
+    sby = {int(r.year): r for r in st.itertuples()}
+    state = [[r4(sby[y].median_home_value / sby[y].median_hh_income), r4(12 * sby[y].median_gross_rent / sby[y].median_hh_income)]
+             if y in sby else None for y in years]
+    (PUBLISHED / "affordability_history.web.json").write_text(json.dumps(
+        {"years": years, "state": state, "towns": towns,
+         "notes": ["Price-to-income = ACS median home value / county median household income, same 5-year release.",
+                   "Rent-to-income = 12 x ACS median gross rent / county median household income, same release.",
+                   "Statewide = New Jersey's own ACS medians (not an average of towns).",
+                   "Third value per town-year: 1 = home value top-coded, 2 = rent top-coded, 3 = both."]},
+        separators=(",", ":")) + "\n")
 
 
 def run(publish_if_ok: bool = True) -> bool:

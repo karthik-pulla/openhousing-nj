@@ -37,7 +37,7 @@ BANNED = re.compile(r"\b(met|fail(ed|s|ing)?|complian(t|ce)|non-?compliant)\b", 
 
 # sentence id -> sources it draws on (keys of SOURCE_META)
 SENTENCE_SOURCES = {
-    "home_value": ["home_value"], "home_value_topcoded": ["home_value"], "home_value_missing": ["home_value"],
+    "home_value": ["home_value"], "home_value_topcoded": ["home_value"], "home_value_missing": ["home_value"], "home_value_dca": ["property_tax"],
     "ownership_cost": ["home_value", "fred", "property_tax", "acs"],
     "ownership_rank": ["home_value", "fred", "property_tax", "acs"],
     "ownership_most": ["home_value", "fred", "property_tax", "acs"],
@@ -190,6 +190,8 @@ class Renderer:
         if _has(r.home_value):
             sid = "home_value_topcoded" if (r.home_value_source == "ACS median value"
                                             and _true(r.acs_median_home_value_topcoded)) else "home_value"
+            if r.home_value_source == "NJ DCA equalized average value":
+                sid = "home_value_dca"
             S.append(self._fill(sid, {**base, "home_value": money(r.home_value)},
                                 ["home_value", "home_value_source", "home_value_vintage"]))
             if _has(r.ownership_score):

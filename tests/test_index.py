@@ -150,7 +150,24 @@ def test_urban_aid_zeros_are_real(built):
 
 
 def test_tiny_towns_kept_not_scored(built):
+    # No Census rent for these towns, so no rental score; their home value falls back to NJ DCA's
+    # equalized average (an official per-town figure), always flagged low confidence.
     for t in ["Tavistock Borough", "Walpack Township"]:
         r = built[built.name == t].iloc[0]
-        for score in SCORES:
-            assert r[f"{score}_confidence"] == "insufficient data" and np.isnan(r[f"{score}_score"])
+        assert r.rental_confidence == "insufficient data" and np.isnan(r.rental_score)
+        assert r.home_value_source == "NJ DCA equalized average value"
+        assert r.ownership_confidence == "low" and "NJ DCA" in r.ownership_confidence_reasons
+
+
+def test_dca_fallback_only_where_census_has_no_value(built):
+    dca = built.home_value_source == "NJ DCA equalized average value"
+    assert built.loc[dca, "acs_median_home_value"].isna().all()
+    assert (built.loc[built.acs_median_home_value.notna(), "home_value_source"] != "NJ DCA equalized average value").all()
+
+
+def test_rank_ranges_contain_published_rank(built):
+    for s in SCORES:
+        ok = built[f"{s}_rank"].notna()
+        b = built[ok]
+        assert (b[f"{s}_rank_low"] <= b[f"{s}_rank"]).all() and (b[f"{s}_rank"] <= b[f"{s}_rank_high"]).all()
+        assert built.loc[~ok, f"{s}_rank_low"].isna().all()

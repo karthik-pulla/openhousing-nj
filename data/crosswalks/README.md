@@ -8,6 +8,7 @@ Every dataset joins to `data/geo/municipalities.csv` on **GEOID** (10-digit Cens
 | `zillow_crosswalk.csv` | Zillow region ID → municipality, one row per link, with the rule used (`method`) | pipeline |
 | `zillow_unmatched.csv` | Every Zillow NJ region **not** linked, with the reason | pipeline |
 | `zillow_review.csv` | USGS GNIS evidence for unmatched regions (`python scripts/review_unmatched.py zillow`) | script |
+| `zillow_unmatched_stats.csv` | Statistical test of each excluded region against its candidate towns: Zillow size rank vs. housing units, and price level vs. ACS (`python scripts/twin_region_stats.py`) | script |
 | `nzlud_crosswalk.csv` | NZLUD code → GEOID (joined by FIPS code, name checked) | pipeline |
 | `*.meta.json` | Counts: regions in file, linked, unmatched, municipalities covered | pipeline |
 
