@@ -11,12 +11,13 @@
     try { t = localStorage.getItem("oh-theme"); } catch (e) {}
     if (!t) t = (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
     document.documentElement.dataset.theme = t;
+    document.documentElement.classList.add("js");
   })();
 </script>
-<link href="app.css?v=20261119i" rel="stylesheet">
-<link href="pages.css?v=20261119i" rel="stylesheet">
+<link href="app.css?v=20261119j" rel="stylesheet">
+<link href="pages.css?v=20261119j" rel="stylesheet">
 </head>
-<body class="page">
+<body class="page home-page">
 <a class="skip" href="#main">Skip to content</a>
 <header class="top">
   <div class="top-in">
@@ -31,6 +32,7 @@
       <a href="sources.html">Sources</a>
       <a href="data.html">Data</a>
     </nav>
+    <a class="btn primary hide-sm" href="map.html">Open the map</a>
     <button type="button" class="iconbtn" id="theme-btn" aria-label="Switch between light and dark theme">
       <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
@@ -38,34 +40,85 @@
   </div>
 </header>
 
-<main class="prose home wrap" id="main">
-  <h1>Housing affordability for every town in New Jersey</h1>
-  <p class="lede">OpenHousing is a free, open tool that shows how affordable it is to own or rent a home in each of New Jersey's 564 municipalities.</p>
-  <p class="updated" data-updated></p>
-  <div class="ctas">
-    <a class="btn primary lg" href="map.html">Open the map</a>
-    <a class="btn lg" href="methodology.html">How it's calculated</a>
-  </div>
+<main id="main">
+  <section class="hero">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="hero-in">
+      <h1 class="rise">Which New Jersey towns are <em>actually</em> affordable?</h1>
+      <p class="lede rise">OpenHousing is a free, open tool that scores all 564 New Jersey municipalities on what it costs to own or rent a home, compared with what people in the region earn. Every number comes from a public source.</p>
+      <div class="ctas rise">
+        <a class="btn primary lg" href="map.html">Explore the map</a>
+        <a class="btn lg" href="methodology.html">How it works</a>
+      </div>
+      <p class="updated rise" data-updated></p>
+    </div>
 
-  <h2>What it does</h2>
-  <ul class="does">
-    <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></span>
-      <div><b>Scores every town on owning and renting</b><span>Two 0–100 scores, so you can see where housing costs take the smallest and largest share of what people in the region earn.</span></div></li>
-    <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span>
-      <div><b>Explains each town in plain English</b><span>Home values, rents, property taxes, a price history and a short summary, with the source of every number one hover away.</span></div></li>
-    <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="16" rx="1.5"/><rect x="14" y="4" width="7" height="16" rx="1.5"/></svg></span>
-      <div><b>Lets you compare and download</b><span>Put up to three towns side by side, or download the full dataset or a single town as a spreadsheet.</span></div></li>
-    <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></span>
-      <div><b>Shows the barriers, too</b><span>Zoning rules and the state's affordable-housing obligations, shown as context. They never change a score.</span></div></li>
-  </ul>
+    <figure class="grid-wrap rise">
+      <div class="grid-top">
+        <figcaption>Each square is one New Jersey municipality, sorted from most to least affordable.</figcaption>
+        <div class="seg" role="group" aria-label="Score shown">
+          <button type="button" class="segb" data-score="ownership_score" aria-pressed="true">Owning</button>
+          <button type="button" class="segb" data-score="rental_score" aria-pressed="false">Renting</button>
+        </div>
+      </div>
+      <div id="dots" role="img" aria-label="Loading the affordability of every New Jersey town"></div>
+      <div class="grid-cap">
+        <span class="ramp-l">Less affordable <span class="ramp" id="ramp" aria-hidden="true"></span> More affordable</span>
+        <span class="nd-l"><i aria-hidden="true"></i>Not enough data</span>
+      </div>
+      <div class="tip glass" id="dot-tip" role="tooltip"></div>
+    </figure>
+  </section>
 
-  <h2>How it does it</h2>
-  <ol class="steps">
-    <li><b>Collects public data every month</b><span>From the U.S. Census Bureau, HUD, the NJ Department of Community Affairs and Freddie Mac, matched to towns by official ID.</span></li>
-    <li><b>Compares costs with regional income</b><span>The yearly cost of owning (mortgage plus property tax) or renting the typical home, divided by the county's median household income, then ranked across all towns.</span></li>
-    <li><b>Flags uncertainty and checks the result</b><span>Each score says how reliable it is. Nothing is published unless all 564 towns are present and the numbers pass checks. Missing data stays missing.</span></li>
-  </ol>
-  <p class="more"><a href="methodology.html">Read the full methodology</a> · <a href="sources.html">See every data source</a> · <a href="data.html">Download the data</a></p>
+  <section class="block">
+    <div class="eyebrow reveal">What it does</div>
+    <h2 class="h2 reveal">Built for anyone, not one audience</h2>
+    <p class="sub reveal">Simple enough for a homebuyer to explore in a minute, and specific enough for a researcher to cite.</p>
+    <div class="cards">
+      <div class="card reveal"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg></div>
+        <h3>Homebuyers and renters</h3><p>Search your town, see how it compares, and read a plain-English profile with home values, rents, property taxes and a price history.</p></div>
+      <div class="card reveal"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <h3>Advocates and policymakers</h3><p>Sourced numbers for every municipality, ready to quote. Zoning rules and the state's affordable-housing obligations sit alongside as context.</p></div>
+      <div class="card reveal"><div class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></div>
+        <h3>Researchers and local officials</h3><p>A full methodology, every source with its data period, and a downloadable dataset. Compare up to three towns side by side.</p></div>
+    </div>
+  </section>
+
+  <section class="block tight">
+    <div class="eyebrow reveal">How it works</div>
+    <h2 class="h2 reveal">Public data in, two scores out</h2>
+    <p class="sub reveal">Every town gets a score from 0 to 100 for owning and another for renting. Higher means more affordable.</p>
+    <div class="steps">
+      <div class="step reveal"><div class="n">1</div><h3>We gather public data</h3><p>Every month from the U.S. Census Bureau, HUD, the NJ Department of Community Affairs and Freddie Mac, matched to towns by official ID.</p></div>
+      <div class="step reveal"><div class="n">2</div><h3>We compare cost with income</h3><p>The yearly cost of owning (mortgage plus property tax) or renting the typical home, as a share of the county's median household income.</p></div>
+      <div class="step reveal"><div class="n">3</div><h3>Each town is ranked</h3><p>Towns are ranked against each other, and each score says how reliable it is. Nothing is published unless every check passes.</p></div>
+    </div>
+    <p class="note reveal"><b>Two markets, two scores.</b> Owning and renting are almost separate markets, so they're scored separately and never combined. Zoning and the state's affordable-housing obligations are shown as context, but never change a score.</p>
+  </section>
+
+  <section class="block tight">
+    <div class="eyebrow reveal">Why trust it</div>
+    <h2 class="h2 reveal">Nothing made up, nothing hidden</h2>
+    <div class="trust">
+      <div class="reveal"><b>Every number is sourced</b><span>Hover any statistic on the map to see where it came from and when. <a href="sources.html">See the sources</a>.</span></div>
+      <div class="reveal"><b>Uncertainty is flagged</b><span>Small towns have small survey samples. Each score carries a confidence flag and the reason for it.</span></div>
+      <div class="reveal"><b>Missing stays missing</b><span>When a source has no value for a town, it's shown as missing. OpenHousing never estimates or fills in a number.</span></div>
+    </div>
+  </section>
+
+  <div class="statbar"><div class="stats">
+    <div class="kpi reveal"><b data-kpi="towns">564</b><span>municipalities</span></div>
+    <div class="kpi reveal"><b data-kpi="own">–</b><span>with an ownership score</span></div>
+    <div class="kpi reveal"><b data-kpi="rent">–</b><span>with a rental score</span></div>
+    <div class="kpi reveal"><b data-kpi="sources">–</b><span>public datasets</span></div>
+  </div></div>
+
+  <section class="final">
+    <h2 class="reveal">See where your town stands.</h2>
+    <p class="reveal">An interactive map, rankings, and a full profile for every municipality in New Jersey.</p>
+    <div class="ctas center reveal"><a class="btn primary lg" href="map.html">Open the map</a></div>
+    <p class="more reveal"><a href="methodology.html">Methodology</a> · <a href="sources.html">Sources</a> · <a href="data.html">Download the data</a></p>
+  </section>
 </main>
 
 <footer class="foot">
@@ -75,6 +128,6 @@
   </div>
   <p class="notices" id="notices"></p>
 </footer>
-<script src="pages.js?v=20261119i"></script>
+<script src="pages.js?v=20261119j"></script>
 </body>
 </html>
