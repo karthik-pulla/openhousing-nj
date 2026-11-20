@@ -1,0 +1,86 @@
+/* Shared styles for the text pages: landing (index), methodology, sources.
+   Builds on app.css tokens. Simple and calm: no decorative animation. */
+body.page{display:block;height:auto;overflow-x:hidden;overflow-y:auto;font-size:16px;line-height:1.65;background:var(--bg)}
+.wrap{max-width:820px;margin:0 auto;padding:0 22px}
+
+/* header (same on every text page) */
+.top{position:sticky;top:0;z-index:50;background:var(--glass-strong,rgba(255,255,255,.88));
+  -webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--border)}
+.top-in{max-width:1080px;margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:6px;height:58px}
+.top .sp{flex:1}
+.nav{display:flex;gap:2px;margin-right:6px}
+.nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:550;padding:7px 10px;border-radius:8px}
+.nav a:hover{color:var(--text);background:var(--bg3)}
+.nav a[aria-current="page"]{color:var(--text);background:var(--bg3)}
+
+/* text */
+main.prose{padding-top:44px;padding-bottom:72px}
+.prose h1{font-size:clamp(28px,4vw,40px);line-height:1.12;letter-spacing:-.03em;font-weight:740;margin-bottom:10px}
+.prose .lede{color:var(--muted);font-size:17px;margin-bottom:8px}
+.prose h2{font-size:21px;letter-spacing:-.015em;margin:40px 0 10px;padding-top:14px;border-top:1px solid var(--border)}
+.prose h3{font-size:16.5px;margin:22px 0 6px}
+.prose p,.prose ul,.prose ol{margin:8px 0}
+.prose ul,.prose ol{padding-left:22px}
+.prose li{margin:5px 0}
+.prose .updated{font-size:13px;color:var(--muted)}
+.btn.lg{padding:12px 20px;font-size:15px;border-radius:11px}
+.ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+
+/* landing */
+.home h1{font-size:clamp(32px,5vw,50px)}
+.home .lede{font-size:18px;max-width:640px}
+.does{list-style:none;padding:0!important;display:grid;gap:10px;margin-top:14px!important}
+.does li{display:grid;grid-template-columns:28px 1fr;gap:12px;margin:0!important}
+.does .ic{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-ink)}
+.does .ic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.does b{display:block}
+.does span{color:var(--muted);font-size:15px}
+.steps{list-style:none;padding:0!important;counter-reset:s;display:grid;gap:12px;margin-top:14px!important}
+.steps li{position:relative;padding-left:40px;margin:0!important}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:1px;width:26px;height:26px;border-radius:8px;
+  display:grid;place-items:center;font-size:13px;font-weight:700;background:var(--bg3);color:var(--text)}
+.steps b{display:block}
+.steps span{color:var(--muted);font-size:15px}
+.more{margin-top:14px;font-size:15px}
+
+/* methodology */
+.formula{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14.5px;margin:10px 0;overflow-x:auto}
+.formula code,.prose code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:16px 0}
+.facts div{border:1px solid var(--border);border-radius:12px;padding:10px 12px}
+.facts b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.facts span{font-size:12.5px;color:var(--muted)}
+table.st{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0}
+table.st th,table.st td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--border);vertical-align:top}
+table.st th{font-weight:600;background:var(--bg2)}
+.callout{border-left:3px solid var(--accent);background:var(--accent-soft);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.toc{columns:2;font-size:14.5px;padding-left:18px}
+
+/* sources */
+.src{border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin:12px 0}
+.src h3{margin:0 0 4px;font-size:16px}
+.src dl{display:grid;grid-template-columns:130px 1fr;gap:4px 14px;margin:8px 0 0;font-size:14px}
+.src dt{color:var(--muted)}
+.src dd{margin:0}
+.src .q{font-size:13px;color:var(--muted);margin-top:8px;font-style:italic}
+.badge-s{display:inline-block;font-size:11.5px;font-weight:650;padding:1px 8px;border-radius:999px;margin-left:6px;vertical-align:2px}
+.badge-s.used{color:var(--c-high);border:1px solid currentColor}
+.badge-s.match{color:var(--muted);border:1px solid currentColor}
+.badge-s.not{color:var(--c-low);border:1px solid currentColor}
+
+/* footer */
+.foot{border-top:1px solid var(--border);padding:22px 0 28px;font-size:13.5px;color:var(--muted)}
+.foot-in{max-width:1080px;margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.foot a{color:var(--muted);text-decoration:none}
+.foot a:hover{color:var(--text)}
+.foot nav{display:flex;gap:16px}
+.foot .notices{max-width:1080px;margin:10px auto 0;padding:0 22px;font-size:12px}
+
+@media (max-width:600px){
+  .wrap,.top-in,.foot-in{padding:0 16px}
+  .nav a{padding:7px 7px;font-size:13.5px}
+  .toc{columns:1}
+  .src dl{grid-template-columns:1fr;gap:0}
+  .src dd{margin-bottom:6px}
+}
+@media (prefers-reduced-motion: reduce){ *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important} }

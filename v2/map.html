@@ -15,7 +15,7 @@
   })();
 </script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
-<link href="app.css?v=20261119g" rel="stylesheet">
+<link href="app.css?v=20261119i" rel="stylesheet">
 </head>
 <body>
 <a class="skip" href="#table-view" data-view-link="table">Skip to the table of all municipalities</a>
@@ -41,6 +41,7 @@
     </div>
   </div>
   <a class="btn ghost hide-sm" href="methodology.html">Methodology</a>
+  <a class="btn ghost hide-sm" href="data.html">Data</a>
   <div class="pop-wrap">
     <button type="button" class="btn ghost hide-sm" id="sources-btn" aria-expanded="false" aria-controls="sources-pop">Sources</button>
     <div class="popover" id="sources-pop" role="dialog" aria-label="Data sources and vintages">
@@ -48,7 +49,7 @@
       <p class="updated" id="updated-pop"></p>
       <ul class="srclist" id="source-list"></ul>
       <p class="notices" id="notices"></p>
-      <p><a href="methodology.html#sources">Full source list and methodology</a></p>
+      <p><a href="sources.html">All sources, data periods and terms</a></p>
     </div>
   </div>
   <button type="button" class="iconbtn" id="theme-btn" aria-label="Switch between light and dark theme">
@@ -93,7 +94,7 @@
       <ol class="list" id="list" aria-label="Municipalities, ranked by the selected layer"></ol>
       <footer class="side-foot">
         <p class="updated" id="updated"></p>
-        <span class="foot-links"><a class="dl-link show-sm" href="methodology.html">Methodology</a>
+        <span class="foot-links"><a class="dl-link show-sm" href="methodology.html">Methodology</a><a class="dl-link show-sm" href="sources.html">Sources</a>
         <a class="dl-link" id="dl-all" href="../data/published/openhousing_nj.csv" download>Download CSV</a></span>
       </footer>
     </aside>
@@ -162,6 +163,6 @@
 </main>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
-<script src="app.js?v=20261119g"></script>
+<script src="app.js?v=20261119i"></script>
 </body>
 </html>

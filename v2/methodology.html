@@ -13,47 +13,32 @@
     document.documentElement.dataset.theme = t;
   })();
 </script>
-<link href="app.css?v=20261119g" rel="stylesheet">
-<style>
-  body.page{overflow:auto;height:auto;display:block}
-  .prose{max-width:760px;margin:0 auto;padding:28px 20px 64px;font-size:15.5px;line-height:1.65}
-  .prose h1{font-size:28px;line-height:1.2;margin-bottom:6px}
-  .prose .lede{color:var(--muted);font-size:16px;margin-bottom:18px}
-  .prose h2{font-size:20px;margin:34px 0 8px;padding-top:6px;border-top:1px solid var(--border)}
-  .prose h3{font-size:16px;margin:20px 0 6px}
-  .prose p,.prose ul,.prose ol{margin:8px 0}
-  .prose ul,.prose ol{padding-left:22px}
-  .prose li{margin:4px 0}
-  .formula{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14.5px;margin:10px 0;overflow-x:auto}
-  .formula code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px}
-  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:14px 0}
-  .facts div{border:1px solid var(--border);border-radius:12px;padding:10px 12px}
-  .facts b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
-  .facts span{font-size:12.5px;color:var(--muted)}
-  table.st{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0}
-  table.st th,table.st td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--border);vertical-align:top}
-  table.st th{font-weight:600;background:var(--bg2)}
-  .callout{border-left:3px solid var(--accent);background:var(--accent-soft);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
-  .toc{columns:2;font-size:14px;padding-left:18px}
-  @media (max-width:600px){.toc{columns:1}}
-</style>
+<link href="app.css?v=20261119i" rel="stylesheet">
+<link href="pages.css?v=20261119i" rel="stylesheet">
 </head>
 <body class="page">
-<header class="bar">
-  <a class="logo" href="./" aria-label="OpenHousing NJ home">
-    <img class="lt" src="../OpenHousing_Normal.png" alt="OpenHousing">
-    <img class="dk" src="../OpenHousing_White.png" alt="OpenHousing">
-  </a>
-  <span class="tag">v2 preview</span>
-  <span class="sp"></span>
-  <a class="btn ghost" href="map.html">Open the map</a>
-  <button type="button" class="iconbtn" id="theme-btn" aria-label="Switch between light and dark theme">
-    <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-    <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
-  </button>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="top-in">
+    <a class="logo" href="./" aria-label="OpenHousing NJ home">
+      <img class="lt" src="../OpenHousing_Normal.png" alt="OpenHousing">
+      <img class="dk" src="../OpenHousing_White.png" alt="OpenHousing">
+    </a>
+    <span class="sp"></span>
+    <nav class="nav" aria-label="Main">
+      <a href="map.html">Map</a>
+      <a href="methodology.html" aria-current="page">Methodology</a>
+      <a href="sources.html">Sources</a>
+      <a href="data.html">Data</a>
+    </nav>
+    <button type="button" class="iconbtn" id="theme-btn" aria-label="Switch between light and dark theme">
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+    </button>
+  </div>
 </header>
 
-<main class="prose">
+<main class="prose wrap" id="main">
   <h1>How OpenHousing measures affordability</h1>
   <p class="lede">A plain-English guide to every number on the map: where it comes from, how it's calculated, and what it can and can't tell you.</p>
   <p class="updated" id="updated">Loading the current figures…</p>
@@ -70,7 +55,7 @@
     <li><a href="#confidence">Confidence flags</a></li>
     <li><a href="#barriers">Barriers: zoning and obligations</a></li>
     <li><a href="#limits">What this can't tell you</a></li>
-    <li><a href="#sources">Sources and data periods</a></li>
+    <li><a href="#sources">Sources</a></li>
     <li><a href="#data">Downloading the data</a></li>
   </ul>
 
@@ -152,32 +137,28 @@
     <li><strong>Mutual-housing townships</strong> (for example Winfield and Audubon Park) have unusual home values and assessments; read them with care.</li>
   </ul>
 
-  <h2 id="sources">Sources and data periods</h2>
-  <p>Every figure comes from one of these sources. Missing data is shown as "Unavailable"; nothing is estimated, filled in or generated.</p>
-  <table class="st" aria-label="Sources and data periods"><thead><tr><th>Source</th><th>Data period</th></tr></thead><tbody id="sources-table"></tbody></table>
-  <p class="note" id="attributions"></p>
-  <p>Boundaries: NJOGIS New Jersey Municipal Boundaries. Map: © Mapbox © OpenStreetMap.</p>
-  <p>The written summaries on each town profile are generated from fixed sentence templates filled with the numbers above. No AI writes them, and every sentence traces back to a number and a source.</p>
+  <h2 id="sources">Sources</h2>
+  <p>Every figure comes from a public source or is calculated from one. Missing data is shown as "Unavailable"; nothing is estimated, filled in or generated. The written summaries on each town profile come from fixed sentence templates filled with these numbers; no AI writes them. The full list of sources, with each one's data period, retrieval date and terms, is on the <a href="sources.html">Sources</a> page.</p>
 
   <h2 id="data">Downloading the data</h2>
-  <ul>
-    <li><a href="../data/published/openhousing_nj.csv" download>Full dataset (CSV)</a>: one row per municipality, every measure, score, flag and source column.</li>
-    <li><a href="../data/manifest.json">Data manifest (JSON)</a>: every source, its data period, when it was fetched, coverage, and the checks the data passed before publishing.</li>
-    <li>From the <a href="map.html">map</a>, you can also download a single town or a comparison of up to three towns.</li>
-  </ul>
+  <p>The full dataset, the home value history and the data manifest are on the <a href="data.html">Data</a> page.</p>
   <p>The data refreshes automatically each month and is published only after passing validation checks: exactly 564 towns, no unexpected gaps, values in plausible ranges, and an unchanged format.</p>
 </main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <span>OpenHousing NJ · free and open</span>
+    <nav aria-label="Footer"><a href="map.html">Map</a><a href="methodology.html">Methodology</a><a href="sources.html">Sources</a><a href="data.html">Data</a></nav>
+  </div>
+  <p class="notices" id="notices"></p>
+</footer>
+<script src="pages.js?v=20261119i"></script>
 
 <script>
 (function () {
   "use strict";
   var $ = function (id) { return document.getElementById(id); };
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]; }); }
-  $("theme-btn").addEventListener("click", function () {
-    var t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = t;
-    try { localStorage.setItem("oh-theme", t); } catch (e) {}
-  });
   var LABELS = { acs_municipal: "U.S. Census Bureau, American Community Survey (municipalities)", acs_county: "U.S. Census Bureau, American Community Survey (counties)",
     property_tax_municipal: "NJ Department of Community Affairs, Property Tax Tables", hud_county: "HUD Income Limits and Fair Market Rents (HUD USER API)",
     fred_mortgage30: "Freddie Mac Primary Mortgage Market Survey, 30-year fixed (via FRED)", nzlud_municipal: "National Zoning and Land Use Database (Eviction Lab)",
@@ -218,11 +199,6 @@
     $("cv-text").textContent = "Up to " + Math.round(cr.cv_high_max * 100) + "% is high, up to " + Math.round(cr.cv_medium_max * 100) +
       "% medium, above that low. A score's flag is the weakest flag among its measures.";
     $("unscored-text").textContent = "Currently: no ownership score for " + sc.ownership.unscored.join(", ") + "; no rental score for " + sc.rental.unscored.length + " towns, mostly with very few rental homes.";
-    $("sources-table").innerHTML = m.sources.map(function (s) {
-      return "<tr><td>" + esc(LABELS[s.name] || s.source) + "</td><td>" + esc(s.vintage) + "</td></tr>";
-    }).join("");
-    var notes = m.sources.map(function (s) { return s.attribution; }).filter(Boolean);
-    $("attributions").textContent = notes.filter(function (x, i) { return notes.indexOf(x) === i; }).join(" ");
   }).catch(function (e) {
     $("updated").textContent = "The current figures couldn't be loaded (" + e.message + "). The explanations below still apply.";
   });

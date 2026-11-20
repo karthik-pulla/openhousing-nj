@@ -8,7 +8,7 @@ from pipeline.common import DATA, ROOT
 
 V2 = ROOT / "v2"
 APP = (V2 / "app.js").read_text()
-LANDING = (V2 / "landing.js").read_text()
+PAGES_JS = (V2 / "pages.js").read_text()
 SCHEMA_COLS = {c["name"] for c in json.loads((DATA / "schema" / "openhousing_nj.schema.json").read_text())["columns"]}
 
 
@@ -29,16 +29,18 @@ def test_every_column_the_site_reads_exists():
 
 
 def test_site_reads_only_published_files():
-    paths = set(re.findall(r'"(\.\./data/[^"]+|data/[^"]+)"', APP + LANDING))
+    paths = set(re.findall(r'"(\.\./data/[^"]+|data/[^"]+)"', APP + PAGES_JS))
     assert paths, "no data paths found"
     for p in paths:
-        assert p.startswith(("../data/published/", "../data/manifest.json", "data/boundaries.geojson")), p
+        # published data, the manifest, boundaries, and the state's Fourth Round report (linked, not parsed)
+        assert p.startswith(("../data/published/", "../data/manifest.json", "data/boundaries.geojson",
+                             "../data/static/fourth_round/")), p
         target = (V2 / p).resolve()
         assert target.exists(), f"{p} does not exist (run the pipeline / build_boundaries.py)"
 
 
-@pytest.mark.parametrize("page", ["index.html", "map.html", "methodology.html", "app.js", "app.css",
-                                  "landing.js", "landing.css"])
+@pytest.mark.parametrize("page", ["index.html", "map.html", "methodology.html", "sources.html", "data.html",
+                                  "app.js", "app.css", "pages.js", "pages.css"])
 def test_no_secrets_or_private_terms_in_site(page):
     text = (V2 / page).read_text()
     assert not re.search(r"sk\.eyJ", text), "Mapbox SECRET token in public site"      # public pk. tokens are fine
@@ -55,7 +57,7 @@ def test_boundaries_join_on_geoid():
     assert len(gj["features"]) == 564 and ids == munis
 
 
-@pytest.mark.parametrize("src", [APP, LANDING], ids=["app.js", "landing.js"])
+@pytest.mark.parametrize("src", [APP, PAGES_JS], ids=["app.js", "pages.js"])
 def test_localstorage_is_guarded(src):
     """Every localStorage access is inside try/catch (private mode, blocked storage)."""
     for m in re.finditer(r"localStorage\.(getItem|setItem|removeItem)", src):
@@ -64,14 +66,24 @@ def test_localstorage_is_guarded(src):
 
 
 def test_pages_link_to_each_other():
-    landing, mapp, meth = ((V2 / f).read_text() for f in ("index.html", "map.html", "methodology.html"))
-    assert 'href="map.html"' in landing and 'href="methodology.html"' in landing
-    assert 'href="./"' in mapp and 'href="methodology.html"' in mapp
-    assert 'href="map.html"' in meth
+    """Every text page carries the same navigation: Map, Methodology, Sources, Data."""
+    for f in ("index.html", "methodology.html", "sources.html", "data.html"):
+        html = (V2 / f).read_text()
+        for target in ("map.html", "methodology.html", "sources.html", "data.html"):
+            assert f'href="{target}"' in html, f"{f} lacks a link to {target}"
+    mapp = (V2 / "map.html").read_text()
+    assert 'href="./"' in mapp and 'href="sources.html"' in mapp and 'href="data.html"' in mapp
+
+
+def test_data_page_downloads_published_files():
+    html = (V2 / "data.html").read_text()
+    for f in ("openhousing_nj.csv", "home_value_history.csv"):
+        assert f'href="../data/published/{f}" download' in html
+        assert (DATA / "published" / f).exists()
 
 
 def test_reduced_motion_respected():
-    for css in ("app.css", "landing.css"):
+    for css in ("app.css", "pages.css"):
         assert "prefers-reduced-motion" in (V2 / css).read_text(), css
 
 

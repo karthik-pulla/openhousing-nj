@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data · OpenHousing NJ</title>
+<meta name="description" content="Download the OpenHousing NJ dataset: one row per New Jersey municipality, built entirely from public sources.">
+<script>
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("oh-theme"); } catch (e) {}
+    if (!t) t = (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+<link href="app.css?v=20261119i" rel="stylesheet">
+<link href="pages.css?v=20261119i" rel="stylesheet">
+</head>
+<body class="page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="top-in">
+    <a class="logo" href="./" aria-label="OpenHousing NJ home">
+      <img class="lt" src="../OpenHousing_Normal.png" alt="OpenHousing">
+      <img class="dk" src="../OpenHousing_White.png" alt="OpenHousing">
+    </a>
+    <span class="sp"></span>
+    <nav class="nav" aria-label="Main">
+      <a href="map.html">Map</a>
+      <a href="methodology.html">Methodology</a>
+      <a href="sources.html">Sources</a>
+      <a href="data.html" aria-current="page">Data</a>
+    </nav>
+    <button type="button" class="iconbtn" id="theme-btn" aria-label="Switch between light and dark theme">
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="prose wrap" id="main">
+  <h1>Data</h1>
+  <p class="lede">Download everything behind the map as a spreadsheet: one row for each of New Jersey's 564 municipalities.</p>
+  <p class="updated" data-updated></p>
+
+  <div class="callout">
+    <p><strong>All of this data comes from public sources.</strong> Each value is either taken directly from a published source (the U.S. Census Bureau, HUD, the NJ Department of Community Affairs, Freddie Mac, the National Zoning and Land Use Database) or calculated from those values using the formulas in the <a href="methodology.html">methodology</a>. OpenHousing does not estimate, fill in or generate any numbers. Where a source has no value for a town, the cell is left empty.</p>
+  </div>
+
+  <h2>What the spreadsheet holds</h2>
+  <p>One row per municipality, identified by its official Census ID and New Jersey municipal code. The columns fall into these groups:</p>
+  <table class="st" aria-label="Column groups in the dataset">
+    <thead><tr><th>Group</th><th>What it includes</th><th>From</th></tr></thead>
+    <tbody>
+      <tr><td>Town</td><td>Name, type, county, population, households</td><td>Census Bureau, NJOGIS</td></tr>
+      <tr><td>Owning</td><td>Typical home value and where it came from, yearly mortgage payment, average property tax bill, yearly ownership cost</td><td>Census Bureau, Freddie Mac, NJ DCA</td></tr>
+      <tr><td>Renting</td><td>Median rent, share of renters paying 30% or more of income, HUD Fair Market Rent</td><td>Census Bureau, HUD</td></tr>
+      <tr><td>Income</td><td>Town and county median household income; HUD's moderate-income limit for a family of four</td><td>Census Bureau, HUD</td></tr>
+      <tr><td>Measures and scores</td><td>Cost as a share of income, the ownership and rental scores, ranks and percentiles</td><td>Calculated from the rows above</td></tr>
+      <tr><td>Reliability</td><td>Confidence flag and reason for each score, Census margins of error, and flags where the Census reports only "at least" a value</td><td>Census Bureau; calculated</td></tr>
+      <tr><td>Barriers (not scored)</td><td>Zoning restrictiveness (105 towns), Fourth Round present and prospective need, Qualified Urban Aid status</td><td>NZLUD, NJ DCA</td></tr>
+    </tbody>
+  </table>
+  <p>Every row also records the data period of its home value, the mortgage rate used, and the tax year. The full list of sources, with their data periods and terms, is on the <a href="sources.html">Sources</a> page.</p>
+
+  <h2>Good to know</h2>
+  <ul>
+    <li><strong>Empty means unavailable.</strong> Small towns sometimes have no Census estimate; those cells are blank, never zero.</li>
+    <li><strong>Check the confidence column.</strong> Estimates for small towns come from small survey samples and can be far off.</li>
+    <li><strong>Obligations are the state's calculation</strong> from October 2024, not records of homes built.</li>
+    <li><strong>The data refreshes monthly.</strong> The file below is always the latest version that passed every check.</li>
+    <li><strong>Credit the sources</strong> when you use the data, as listed on the Sources page.</li>
+  </ul>
+
+  <h2>Download</h2>
+  <p>Comma-separated (CSV) files open in Excel, Google Sheets, Numbers, R, Python and most other tools.</p>
+  <div class="ctas">
+    <a class="btn primary lg" href="../data/published/openhousing_nj.csv" download>Download the dataset (CSV)</a>
+    <a class="btn lg" href="../data/published/home_value_history.csv" download>Home value history (CSV)</a>
+  </div>
+  <p class="more">For researchers: the <a href="../data/manifest.json">data manifest</a> lists every source, its data period, when it was retrieved, and the checks the data passed. From the <a href="map.html">map</a> you can also download a single town or a comparison.</p>
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <span>OpenHousing NJ · free and open</span>
+    <nav aria-label="Footer"><a href="map.html">Map</a><a href="methodology.html">Methodology</a><a href="sources.html">Sources</a><a href="data.html">Data</a></nav>
+  </div>
+  <p class="notices" id="notices"></p>
+</footer>
+<script src="pages.js?v=20261119i"></script>
+</body>
+</html>

@@ -20,7 +20,7 @@ OpenHousing NJ is a free, open map and dataset that answers that question for ev
 | **Confidence flags** | High / medium / low / insufficient data for every score, with the reason. Small towns are flagged, never dropped. |
 | **Town summaries** | Plain-English paragraphs assembled from fixed templates and the town's numbers. No AI writes them. |
 
-The v2 site has a landing page with a 564-square overview (one square per town, ranked or placed on the map), and a map app with layer switching, a "New Jersey" reset button, an NJ snapshot, town profiles with sources and data periods, side-by-side comparison of up to three towns, favorites, CSV downloads, a sortable table view, keyboard navigation and a color-blind-safe palette. It is a static site with no accounts, no tracking and no backend.
+The v2 site has a short home page (what OpenHousing is, what it does, how), separate Methodology, Sources and Data pages, and a map app with layer switching, a "New Jersey" reset button, an NJ snapshot, town profiles with sources and data periods, side-by-side comparison of up to three towns, favorites, CSV downloads, a sortable table view, keyboard navigation and a color-blind-safe palette. It is a static site with no accounts, no tracking and no backend.
 
 ## Data sources
 
@@ -49,8 +49,9 @@ data/
   published/                 the validated, live dataset (CSV, web JSON, summaries)
   manifest.json              sources, vintages, fetch times, coverage, validation results
   raw/                       cached downloads (gitignored)
-v2/                          the v2 website: index.html (landing), map.html (map app), methodology.html,
-                             app.js/app.css (map + shared styles), landing.js/landing.css, data/boundaries.geojson
+v2/                          the v2 website: index.html (home), map.html (map app), methodology.html, sources.html,
+                             data.html; app.js/app.css (map + shared styles), pages.js/pages.css (text pages),
+                             data/boundaries.geojson
 tests/                       pytest suite
 docs/                        AUTOMATION.md, SOURCES_VERIFICATION.md
 legacy/                      the first prototype, kept for reference
@@ -119,7 +120,7 @@ Set `sources.zillow.cleared_for_publication: true` in `config.yaml`, add Zillow'
 
 ### Changing the website's code
 
-The pages load `app.js`, `app.css`, `landing.js` and `landing.css` with a version tag (`?v=20261119g`). After editing any of them, change the tag in `v2/index.html`, `v2/map.html` and `v2/methodology.html` (e.g. to today's date) so visitors' browsers load the new files instead of a cached copy. Data files don't need this; they are fetched fresh.
+The pages load `app.js`, `app.css`, `pages.js` and `pages.css` with a version tag (`?v=20261119i`). After editing any of them, change the tag in every page in `v2/` (`index`, `map`, `methodology`, `sources`, `data`) (e.g. to today's date) so visitors' browsers load the new files instead of a cached copy. Data files don't need this; they are fetched fresh.
 
 ### Changing an assumption or weight
 
