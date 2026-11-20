@@ -16,25 +16,66 @@
   });
   var paintDots = null;
 
-  // ---------------------------------------------------------------- figure "decode" animation (landing page)
-  // A figure is written with putNum(el, text). When it scrolls into view, its digits cycle
-  // through random values and lock in from left to right, then flash once. Only the
-  // display animates: the final text is always the real value. Reduced motion -> no animation.
+  // ---------------------------------------------------------------- figure "render" animation (landing page)
+  // A figure is written with putNum(el, text). When it scrolls into view, code rain falls through
+  // its tile, the digits cycle through glyphs and lock in left to right, then a scan line
+  // "renders" the final number. Only the display animates: the final text is always the real
+  // value. Reduced motion -> no animation.
   var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var GLYPHS = "0123456789$%#*+=<>/\\|:;ABCDEFabcdef";
+  var glyph = function () { return GLYPHS.charAt(Math.floor(Math.random() * GLYPHS.length)); };
+  var accent = function () { return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#3F6AFF"; };
+
+  var rain = function (box, ms) {
+    var cv = document.createElement("canvas"); cv.className = "mx"; cv.setAttribute("aria-hidden", "true");
+    box.insertBefore(cv, box.firstChild);
+    var w = box.clientWidth, h = box.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = w * dpr; cv.height = h * dpr;
+    var ctx = cv.getContext("2d"); ctx.scale(dpr, dpr);
+    var size = 11, cols = Math.ceil(w / size), col = accent(), head = document.documentElement.dataset.theme === "dark" ? "#ffffff" : "#0b1a4a";
+    var drops = []; for (var i = 0; i < cols; i++) drops.push({ y: -Math.random() * h * 1.2, v: 2.2 + Math.random() * 3.2 });
+    ctx.font = "600 " + size + "px ui-monospace, SFMono-Regular, Menlo, monospace"; ctx.textBaseline = "top";
+    var t0 = null;
+    var step = function (now) {
+      if (t0 === null) t0 = now;
+      var t = now - t0, spawning = t < ms;
+      ctx.globalCompositeOperation = "destination-out"; ctx.fillStyle = "rgba(0,0,0,.16)"; ctx.fillRect(0, 0, w, h);
+      ctx.globalCompositeOperation = "source-over";
+      var alive = false;
+      for (var i = 0; i < cols; i++) {
+        var d = drops[i];
+        if (d.y > -size && d.y < h) {
+          ctx.fillStyle = col; ctx.globalAlpha = .55; ctx.fillText(glyph(), i * size, d.y - size);
+          ctx.fillStyle = head; ctx.globalAlpha = .9; ctx.fillText(glyph(), i * size, d.y);
+        }
+        d.y += d.v;
+        if (d.y > h + size) { if (spawning && Math.random() > .25) { d.y = -Math.random() * 40; d.v = 2.2 + Math.random() * 3.2; } }
+        if (d.y <= h + size) alive = true;
+      }
+      ctx.globalAlpha = 1;
+      if (alive || t < ms + 600) requestAnimationFrame(step);
+      else { cv.classList.add("out"); setTimeout(function () { cv.remove(); }, 500); }
+    };
+    requestAnimationFrame(step);
+  };
+
   var decode = function (el) {
-    var target = el.dataset.final, n = target.length, t0 = null, dur = 900 + n * 70, last = 0;
-    var box = el.closest(".metric, .kpi"); if (box) box.classList.add("lit");
+    var target = el.dataset.final, n = target.length, t0 = null, last = 0;
+    var hold = 450, lockDur = 650 + n * 70;             // rain only, then glyphs lock in left to right
+    var box = el.closest(".metric, .kpi");
+    if (box) { box.classList.add("lit"); rain(box, hold + lockDur); }
     el.classList.remove("num-done"); el.classList.add("num-run");
     var frame = function (now) {
       if (t0 === null) t0 = now;
-      var p = Math.min(1, (now - t0) / dur);
-      if (now - last > 45 || p === 1) {
+      var t = now - t0, p = Math.max(0, Math.min(1, (t - hold) / lockDur));
+      if (now - last > 40 || p === 1) {
         last = now;
-        var locked = Math.floor(Math.pow(p, 1.4) * (n + 1)), html = "";
+        var locked = t < hold ? 0 : Math.floor(Math.pow(p, 1.3) * (n + 1)), html = "";
         for (var i = 0; i < n; i++) {
           var ch = target.charAt(i);
-          if (i < locked || !/[0-9]/.test(ch)) html += esc(ch);
-          else html += '<span class="nd">' + Math.floor(Math.random() * 10) + "</span>";
+          if (i < locked) html += esc(ch);
+          else if (t < hold && Math.random() < .5) html += '<span class="nd">&nbsp;</span>';
+          else html += '<span class="nd">' + esc(glyph()) + "</span>";
         }
         el.innerHTML = html;
       }
