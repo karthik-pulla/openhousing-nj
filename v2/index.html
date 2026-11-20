@@ -14,8 +14,8 @@
     document.documentElement.classList.add("js");
   })();
 </script>
-<link href="app.css?v=20261119j" rel="stylesheet">
-<link href="pages.css?v=20261119j" rel="stylesheet">
+<link href="app.css?v=20261119k" rel="stylesheet">
+<link href="pages.css?v=20261119k" rel="stylesheet">
 </head>
 <body class="page home-page">
 <a class="skip" href="#main">Skip to content</a>
@@ -66,8 +66,24 @@
         <span class="ramp-l">Less affordable <span class="ramp" id="ramp" aria-hidden="true"></span> More affordable</span>
         <span class="nd-l"><i aria-hidden="true"></i>Not enough data</span>
       </div>
-      <div class="tip glass" id="dot-tip" role="tooltip"></div>
     </figure>
+  </section>
+
+  <section class="block metrics-block" aria-labelledby="glance-h">
+    <div class="eyebrow reveal">By the numbers</div>
+    <h2 class="h2 reveal" id="glance-h">New Jersey housing at a glance</h2>
+    <p class="sub reveal">Calculated from the published dataset. Each figure is the middle value across New Jersey's municipalities.</p>
+    <div class="metrics">
+      <div class="metric reveal"><span class="m-l">Typical home value</span><b data-m="home_value">–</b><span class="m-s" data-ms="acs">Census ACS</span></div>
+      <div class="metric reveal"><span class="m-l">Yearly cost to own it</span><b data-m="own_cost">–</b><span class="m-s">Mortgage and property tax, 20% down</span></div>
+      <div class="metric reveal"><span class="m-l">Share of county income to own</span><b data-m="own_burden">–</b><span class="m-s">30% is the usual affordability line</span></div>
+      <div class="metric reveal"><span class="m-l">Share of county income to rent</span><b data-m="rent_burden">–</b><span class="m-s" data-ms="acs">Census ACS</span></div>
+      <div class="metric reveal"><span class="m-l">Average property tax bill</span><b data-m="tax">–</b><span class="m-s" data-ms="tax">NJ DCA</span></div>
+      <div class="metric reveal"><span class="m-l">30-year mortgage rate used</span><b data-m="rate">–</b><span class="m-s" data-ms="rate">Freddie Mac</span></div>
+      <div class="metric reveal"><span class="m-l">Towns out of reach at moderate income</span><b data-m="ami_out">–</b><span class="m-s" data-m2="ami_out_n">Family of four at 80% of area median income</span></div>
+      <div class="metric reveal"><span class="m-l">Renters paying 30%+ of income</span><b data-m="cost_burdened">–</b><span class="m-s" data-ms="acs">Census ACS</span></div>
+    </div>
+    <p class="m-foot reveal">Middle values across towns, not weighted by population. Owning costs leave out insurance, fees and maintenance. <a href="methodology.html">How these are calculated</a> · <a href="sources.html">Sources and data periods</a></p>
   </section>
 
   <section class="block">
@@ -128,6 +144,6 @@
   </div>
   <p class="notices" id="notices"></p>
 </footer>
-<script src="pages.js?v=20261119j"></script>
+<script src="pages.js?v=20261119k"></script>
 </body>
 </html>

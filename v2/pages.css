@@ -54,22 +54,25 @@ main.prose{padding-top:44px;padding-bottom:72px}
 .grid-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .grid-top figcaption{font-size:13px;color:var(--muted)}
 #dots{display:grid;grid-template-columns:repeat(47,1fr);gap:3px;min-height:150px}
-#dots a{display:block;aspect-ratio:1;border-radius:3px;background:var(--nodata);transition:background-color .45s ease,transform .15s ease}
-#dots a:hover{transform:scale(1.5);position:relative;z-index:2;box-shadow:0 0 0 2px var(--bg)}
+#dots i{display:block;aspect-ratio:1;border-radius:3px;background:var(--nodata);transition:background-color .45s ease}
 .grid-cap{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--muted)}
 .ramp-l,.nd-l{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
 .ramp{display:inline-flex;gap:2px}
 .ramp i{width:22px;height:8px;border-radius:2px}
 .nd-l i{width:12px;height:12px;border-radius:3px;background:var(--nodata)}
-#dot-tip{position:absolute;pointer-events:none;display:none}
-#dot-tip b{display:block}
-#dot-tip span{display:block;color:var(--muted)}
 
 .block{max-width:1060px;margin:0 auto;padding:80px 22px}
 .block.tight{padding-top:24px}
 .eyebrow{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--accent-ink);text-align:center;margin-bottom:10px}
 .h2{font-size:clamp(25px,3.4vw,36px);letter-spacing:-.025em;text-align:center;line-height:1.15;margin-bottom:12px}
 .sub{font-size:16px;color:var(--muted);text-align:center;max-width:620px;margin:0 auto 44px;line-height:1.55}
+.metrics-block{padding-top:72px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:18px;overflow:hidden;background:var(--border);gap:1px}
+.metric{background:var(--bg);padding:20px 20px 18px;display:flex;flex-direction:column;gap:6px;min-height:132px}
+.metric .m-l{font-size:13px;font-weight:600;color:var(--muted);line-height:1.35;min-height:2.7em}
+.metric b{font-size:clamp(26px,3vw,32px);font-weight:720;letter-spacing:-.025em;font-variant-numeric:tabular-nums;line-height:1.1}
+.metric .m-s{font-size:12px;color:var(--muted);line-height:1.4;margin-top:auto}
+.m-foot{font-size:12.5px;color:var(--muted);text-align:center;margin:16px auto 0;max-width:720px;line-height:1.55}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .card{border:1px solid var(--border);border-radius:18px;padding:26px 22px;background:var(--bg);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
 .card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:var(--shadow)}
@@ -144,6 +147,8 @@ table.st th{font-weight:600;background:var(--bg2)}
 }
 @media (max-width:720px){
   .cards,.steps,.trust{grid-template-columns:1fr}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .metric{padding:16px 14px;min-height:118px}
   .stats{grid-template-columns:repeat(2,1fr)}
   .grid-top{flex-direction:column;align-items:flex-start}
   .block{padding:56px 16px}
