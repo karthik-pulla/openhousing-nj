@@ -16,30 +16,28 @@
   });
   var paintDots = null;
 
-  // ---------------------------------------------------------------- figure "matrix" animation (landing page)
-  // A figure is written with putNum(el, text). When it scrolls into view, each character becomes
-  // a short falling column of code glyphs that lands on the real character, left to right.
-  // The effect stays inside the text itself. The final text is always the real value.
-  // Reduced motion -> no animation.
+  // ---------------------------------------------------------------- figure count-up (landing page)
+  // A figure is written with putNum(el, text). When it scrolls into view it counts up from zero
+  // to its value, keeping the same format ($, commas, decimals, %). The final text is always
+  // the real value. Reduced motion -> no animation.
   var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var GLYPHS = "0123456789$%#*+=<>/\\|:;ABCDEFabcdef";
-  var glyph = function () { return GLYPHS.charAt(Math.floor(Math.random() * GLYPHS.length)); };
-
   var decode = function (el) {
-    var target = el.dataset.final, n = target.length, end = 0, html = "";
-    for (var i = 0; i < n; i++) {
-      var ch = target.charAt(i), k = 9 + i * 2 + Math.floor(Math.random() * 4);
-      var dur = 900 + i * 110 + Math.floor(Math.random() * 120), delay = i * 35;
-      end = Math.max(end, dur + delay);
-      var reel = '<span class="mf">' + esc(ch) + "</span>";
-      for (var j = 1; j <= k; j++) reel += '<span class="mg" style="opacity:' + (1 - j / (k + 2)).toFixed(2) + '">' + esc(glyph()) + "</span>";
-      html += '<span class="mc"><span class="ms">' + esc(ch) + '</span><span class="mr" style="--k:' + k +
-        ";transition-duration:" + dur + "ms;transition-delay:" + delay + 'ms">' + reel + "</span></span>";
-    }
-    el.classList.add("mx-run"); el.innerHTML = html;
-    // Start one frame later so the columns begin above and fall into place.
-    requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.add("mx-go"); }); });
-    setTimeout(function () { el.textContent = target; el.classList.remove("mx-run", "mx-go"); }, end + 80);
+    var target = el.dataset.final, m = /^([^0-9]*)([0-9][0-9,]*(?:\.[0-9]+)?)(.*)$/.exec(target);
+    if (!m) { el.textContent = target; return; }
+    var pre = m[1], num = m[2], post = m[3], dec = (num.split(".")[1] || "").length, commas = num.indexOf(",") >= 0;
+    var to = parseFloat(num.replace(/,/g, "")), dur = 1100, t0 = null;
+    var show = function (v) {
+      var str = v.toFixed(dec);
+      if (commas) { var parts = str.split("."); parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","); str = parts.join("."); }
+      el.textContent = pre + str + post;
+    };
+    var frame = function (now) {
+      if (t0 === null) t0 = now;
+      var p = Math.min(1, (now - t0) / dur);
+      show(to * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(frame); else el.textContent = target;
+    };
+    requestAnimationFrame(frame);
   };
   var numIO = !calm && "IntersectionObserver" in window ? new IntersectionObserver(function (es) {
     es.forEach(function (e) {
