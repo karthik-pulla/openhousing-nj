@@ -578,3 +578,5 @@ td.rk .dot,.cmp .dot{margin-right:6px;vertical-align:-1px}
 .bar:has(.popover.open){z-index:95}
 /* the phone layout sets #map-view to block; keep it hidden when another view is open */
 #map-view[hidden]{display:none}
+/* the version tag next to the logo stays visible at every width (map tool only) */
+.bar .tag{display:inline-flex;align-items:center;flex:none;text-transform:none;letter-spacing:.02em}
