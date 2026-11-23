@@ -1,11 +1,24 @@
-# OpenHousing NJ
+# OpenHousing NJ v2
+
+> **This is version 2** of OpenHousing NJ: a rebuilt data pipeline, two separate affordability scores (owning and renting), confidence flags and rank ranges, an automated monthly refresh with validation, and a new website in [`v2/`](v2/). Version 1, the original site, is on the [`main`](../../tree/main) branch.
 
 **How affordable is it to own, or to rent, a home in each of New Jersey's 564 municipalities?**
 
 OpenHousing NJ is a free, open map and dataset that answers that question for every municipality in the state, with every number traceable to its source. It is built for housing advocates, researchers, policy analysts and residents.
 
+### What changed from v1
+
+| | v1 (`main`) | v2 (this branch) |
+|---|---|---|
+| Score | One combined index (price burden, price growth, zoning) | Two scores, owning and renting, never combined; zoning shown as context only |
+| Income compared with | Town income | County income (town income and HUD's 80% limit also shown) |
+| Uncertainty | None | Confidence flag with reasons, plus a likely rank range for every town |
+| Data | Assembled once | Rebuilt monthly by a GitHub Action, published only if validation passes, every release archived |
+| Matching towns | By name | By official Census ID, with a documented crosswalk |
+| Site | Map and methodology | Home, map (table, chart, regions, compare, adjustable assumptions), methodology, sources, data, dictionary |
+
 - **Live site (v1):** https://karthik-pulla.github.io/nj-housing-index/
-- **v2 preview:** `/v2/` (landing page) and `/v2/map.html` (the map) on the same site once published (this branch)
+- **v2 site:** `v2/index.html` (home) and `v2/map.html` (the map) in this branch
 - **How it's calculated:** [METHODOLOGY.md](METHODOLOGY.md), or the plain-English [v2 methodology page](v2/methodology.html)
 - **Download the data:** [data/published/openhousing_nj.csv](data/published/openhousing_nj.csv), one row per municipality
 
